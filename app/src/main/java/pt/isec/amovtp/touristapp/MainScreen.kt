@@ -32,10 +32,15 @@ import androidx.navigation.compose.rememberNavController
 
 enum class Screens(val display: String, val showAppBar : Boolean) {
     MENU("Menu", false),
-    LOGIN("Login", false),
+    LOGIN("Login", true),
+    REGISTER("Register", true),
+    USER("User", true),
     LOCATIONS("Locations", true),
+    ADD_LOCATIONS("Add Locations", true),
     POI("Point of Interest", true),
-    CREDITS("Credits", false);
+    ADD_POI("Add Points of Interest", true),
+    ADD_CATEGORY("Add Category", true),
+    CREDITS("Credits", true);
 
     val route : String
         get() = this.toString()
@@ -86,10 +91,10 @@ fun MainScreen(navController:NavHostController = rememberNavController()) {
                             )
                         }
                     },
-                    colors = topAppBarColors(
+                    colors = TopAppBarDefaults.topAppBarColors(
                         containerColor = MaterialTheme.colorScheme.primary,
                         titleContentColor = Color.White
-                    )
+                    ),
                 )
             }
         },
@@ -106,11 +111,26 @@ fun MainScreen(navController:NavHostController = rememberNavController()) {
             composable (Screens.LOGIN.route) {
                 Greeting(name = Screens.LOGIN.route)
             }
+            composable (Screens.REGISTER.route) {
+                Greeting(name = Screens.REGISTER.route)
+            }
+            composable (Screens.USER.route) {
+                Greeting(name = Screens.USER.route)
+            }
             composable (Screens.LOCATIONS.route) {
                 Greeting(name = Screens.LOCATIONS.route)
             }
+            composable (Screens.ADD_LOCATIONS.route) {
+                Greeting(name = Screens.ADD_LOCATIONS.route)
+            }
             composable (Screens.POI.route) {
                 Greeting(name = Screens.POI.route)
+            }
+            composable (Screens.ADD_POI.route) {
+                Greeting(name = Screens.ADD_POI.route)
+            }
+            composable (Screens.ADD_CATEGORY.route) {
+                Greeting(name = Screens.ADD_CATEGORY.route)
             }
             composable (Screens.CREDITS.route) {
                 Greeting(name = Screens.CREDITS.route)
