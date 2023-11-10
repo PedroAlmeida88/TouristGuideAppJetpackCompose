@@ -19,7 +19,7 @@ class MainActivity : ComponentActivity() {
         }
     }
 }
-//Tonico
+//Tonicou
 @Composable
 fun Greeting(name: String, modifier: Modifier = Modifier) {
     Text(
