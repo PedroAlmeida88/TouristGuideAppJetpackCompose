@@ -5,7 +5,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -13,7 +15,6 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -67,7 +68,7 @@ fun MainScreen(navController:NavHostController = rememberNavController()) {
         snackbarHost = { SnackbarHost (hostState = snackbarHostState) },
         topBar = {
             if(currentScreen != null && Screens.valueOf(currentScreen!!.destination.route!!).showAppBar) {
-                TopAppBar(
+                CenterAlignedTopAppBar(
                     title = {
                         Text(text = stringResource(R.string.app_name))
                     },
@@ -82,6 +83,7 @@ fun MainScreen(navController:NavHostController = rememberNavController()) {
                         }
                     },
                     actions = {
+                        if(Screens.valueOf(currentScreen!!.destination.route!!) == Screens.POI)
                         IconButton(onClick = {
                             /*TODO: Botao quando adiciona uma categoria em pontos de interesse*/
                         }) {
@@ -98,6 +100,20 @@ fun MainScreen(navController:NavHostController = rememberNavController()) {
                 )
             }
         },
+        floatingActionButton = {
+            if(currentScreen != null && (Screens.valueOf(currentScreen!!.destination.route!!) == Screens.POI ||
+                        Screens.valueOf(currentScreen!!.destination.route!!) == Screens.LOCATIONS))
+            FloatingActionButton(
+                onClick = {
+                    /*TODO: Quando é adicionada uma nova localizacao ou um novo ponto de interesse*/
+                }
+            ) {
+                Icon(
+                    Icons.Filled.Add,
+                    contentDescription = "Add"
+                )
+            }
+        },
         modifier = Modifier.fillMaxSize()
     ) {
         NavHost(
@@ -109,7 +125,7 @@ fun MainScreen(navController:NavHostController = rememberNavController()) {
                 Greeting(name = Screens.MENU.route)
             }
             composable (Screens.LOGIN.route) {
-                Greeting(name = Screens.LOGIN.route)
+                LoginScreen(navController)
             }
             composable (Screens.REGISTER.route) {
                 Greeting(name = Screens.REGISTER.route)
