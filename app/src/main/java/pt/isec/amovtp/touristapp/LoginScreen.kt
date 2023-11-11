@@ -28,6 +28,7 @@ fun LoginScreen(navController: NavHostController?) {
     var name by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
 
+
     Column (
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally,
