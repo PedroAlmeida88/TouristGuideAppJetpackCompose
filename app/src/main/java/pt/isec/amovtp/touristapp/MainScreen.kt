@@ -1,5 +1,6 @@
 package pt.isec.amovtp.touristapp
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
@@ -48,6 +49,7 @@ enum class Screens(val display: String, val showAppBar : Boolean) {
 }
 
 
+@SuppressLint("SuspiciousIndentation")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MainScreen(navController:NavHostController = rememberNavController()) {
@@ -73,8 +75,7 @@ fun MainScreen(navController:NavHostController = rememberNavController()) {
                         Text(text = stringResource(R.string.app_name))
                     },
                     navigationIcon = {
-                        IconButton(onClick = {
-                            /*TODO: Quando a aplicacao volta para trás*/
+                        IconButton(onClick = { navController.navigateUp()
                         }) {
                             Icon(
                                 Icons.Filled.ArrowBack,
@@ -122,7 +123,7 @@ fun MainScreen(navController:NavHostController = rememberNavController()) {
             modifier = Modifier.padding(it)
         ) {
             composable (Screens.MENU.route) {
-                Greeting(name = Screens.MENU.route)
+                MenuScreen(stringResource(R.string.msgHomeMenu),navController,Screens.LOGIN.route,Screens.LOCATIONS.route,Screens.CREDITS.route )//TODO:Alterar para tabela de STRINGS
             }
             composable (Screens.LOGIN.route) {
                 LoginScreen(navController)
