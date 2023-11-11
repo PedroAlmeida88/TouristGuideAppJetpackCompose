@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">TouristAPP</string>
+    <string name="msgLogin">Login</string>
+    <string name="btnLocations">Locations</string>
+    <string name="btnCredits">Credits</string>
+    <string name="btnSignIn">"Sign In "</string>
+    <string name="msgWB">Welcome Back</string>
+    <string name="msgUsername">Username</string>
+    <string name="msgPassword">Password</string>
+    <string name="msgHomeMenu">Home Menu</string>
+</resources>
