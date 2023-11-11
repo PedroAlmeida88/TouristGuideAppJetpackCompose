@@ -21,6 +21,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
@@ -48,6 +50,8 @@ fun MenuScreen(title: String, navController: NavHostController?, vararg options:
         ) {
 
             for (btnName in options) {
+                //val buttonText = stringResource(id = R.string.btn$btnName)
+                //stringResource(id = R.string.msgHomeMenu)
                 Button(
                     onClick = { navController?.navigate(btnName) },
                     shape = CutCornerShape(percent = 0),
@@ -57,16 +61,15 @@ fun MenuScreen(title: String, navController: NavHostController?, vararg options:
                         .padding(24.dp, 0.dp, 24.dp, 0.dp)
                 ) {
                     Text(
+                        /*text = buttonText,*/
                         text = btnName,
-                        color = Color.LightGray, //TODO Em light mode fica estranho,se possivel colocar uma coisa do genero: ButtonDefaults.buttonColors(MaterialTheme.colorScheme.primary),
-                        /*fontFamily = AppFont,*/
+                        color = Color.LightGray,
                         fontSize = 20.sp,
                         modifier = Modifier
                             .padding(16.dp)
                     )
                 }
                 Spacer(modifier = Modifier.height(16.dp))
-
             }
 
         }

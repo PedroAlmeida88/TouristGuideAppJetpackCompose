@@ -22,6 +22,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import androidx.compose.ui.res.stringResource
+
 
 @Composable
 fun LoginScreen(navController: NavHostController?) {
@@ -37,12 +39,12 @@ fun LoginScreen(navController: NavHostController?) {
             .padding(24.dp)
     ) {
         Text(
-            text = "Login",
+            text = stringResource(R.string.msgLogin),
             modifier = Modifier
                 .align(CenterHorizontally)
         )
         Text(
-            text = "Welcome Back",
+            text = stringResource(R.string.msgWB),
             modifier = Modifier
                 .align(CenterHorizontally)
         )
@@ -50,13 +52,13 @@ fun LoginScreen(navController: NavHostController?) {
         OutlinedTextField(
             value = name,
             onValueChange ={ name = it },
-            label = { Text(text = "Username") }
+            label = { Text(text = stringResource(R.string.msgUsername),) }
         )
         Spacer(modifier = Modifier.height(16.dp))
         OutlinedTextField(
             value = password,
             onValueChange ={ password = it },
-            label = { Text(text = "Password") }
+            label = { Text(text = stringResource(R.string.msgPassword),) }
         )
 
         Button(
@@ -65,7 +67,7 @@ fun LoginScreen(navController: NavHostController?) {
             },
             colors = buttonColors(MaterialTheme.colorScheme.primary),
         ) {
-            Text(text = "Sign In",
+            Text(text = stringResource(R.string.btnSignIn),
                 color = Color.LightGray
             )
         }

@@ -123,7 +123,7 @@ fun MainScreen(navController:NavHostController = rememberNavController()) {
             modifier = Modifier.padding(it)
         ) {
             composable (Screens.MENU.route) {
-                MenuScreen("Menu Inicial",navController,Screens.LOGIN.route,Screens.LOCATIONS.route,Screens.CREDITS.route )//TODO:Alterar para tabela de STRINGS
+                MenuScreen(stringResource(R.string.msgHomeMenu),navController,Screens.LOGIN.route,Screens.LOCATIONS.route,Screens.CREDITS.route )//TODO:Alterar para tabela de STRINGS
             }
             composable (Screens.LOGIN.route) {
                 LoginScreen(navController)
