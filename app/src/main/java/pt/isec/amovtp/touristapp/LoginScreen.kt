@@ -26,7 +26,10 @@ import androidx.compose.ui.res.stringResource
 
 
 @Composable
-fun LoginScreen(navController: NavHostController?) {
+fun LoginScreen(
+    navController: NavHostController?,
+    menu: String
+) {
     var name by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
 
@@ -63,7 +66,7 @@ fun LoginScreen(navController: NavHostController?) {
 
         Button(
             onClick = {
-                /*TODO: Voltar ao menu inicial*/
+                navController?.navigate(menu)
             },
             colors = buttonColors(MaterialTheme.colorScheme.primary),
         ) {

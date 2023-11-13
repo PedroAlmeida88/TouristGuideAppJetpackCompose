@@ -34,7 +34,7 @@ import androidx.navigation.compose.rememberNavController
 
 enum class Screens(val display: String, val showAppBar : Boolean) {
     MENU("Menu", false),
-    LOGIN("Login", true),
+    LOGIN("Login", false),
     REGISTER("Register", true),
     USER("User", true),
     LOCATIONS("Locations", true),
@@ -119,14 +119,14 @@ fun MainScreen(navController:NavHostController = rememberNavController()) {
     ) {
         NavHost(
             navController = navController,
-            startDestination = Screens.MENU.route,
+            startDestination = Screens.LOGIN.route,
             modifier = Modifier.padding(it)
         ) {
             composable (Screens.MENU.route) {
-                MenuScreen(stringResource(R.string.msgHomeMenu),navController,Screens.LOGIN.route,Screens.LOCATIONS.route,Screens.CREDITS.route )//TODO:Alterar para tabela de STRINGS
+                MenuScreen(stringResource(R.string.msgHomeMenu),Screens.LOGIN.route ,navController,Screens.LOCATIONS.route,Screens.CREDITS.route)
             }
             composable (Screens.LOGIN.route) {
-                LoginScreen(navController)
+                LoginScreen(navController,Screens.MENU.route)
             }
             composable (Screens.REGISTER.route) {
                 Greeting(name = Screens.REGISTER.route)

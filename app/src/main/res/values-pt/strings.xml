@@ -9,4 +9,5 @@
     <string name="msgUsername">Nome de Utilizador</string>
     <string name="msgPassword">Palavra-passe</string>
     <string name="msgHomeMenu">Menu Inicial</string>
+    <string name="msgLogout">Sair da Conta</string>
 </resources>
