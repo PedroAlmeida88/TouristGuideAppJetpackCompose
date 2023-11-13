@@ -8,4 +8,5 @@
     <string name="msgUsername">Username</string>
     <string name="msgPassword">Password</string>
     <string name="msgHomeMenu">Home Menu</string>
+    <string name="msgLogout">Logout</string>
 </resources>
