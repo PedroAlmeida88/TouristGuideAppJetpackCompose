@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.ExitToApp
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
@@ -93,6 +94,18 @@ fun MainScreen(navController:NavHostController = rememberNavController()) {
                                 contentDescription = "Add"
                             )
                         }
+
+                        if(Screens.valueOf(currentScreen!!.destination.route!!) != Screens.LOGIN)
+                        IconButton(onClick = {
+                            /*TODO: Botao de Logout */
+                            navController.clearBackStack(Screens.LOGIN.route)
+                            navController.navigate(Screens.LOGIN.route)
+                        }) {
+                            Icon(
+                                Icons.Default.ExitToApp,
+                                contentDescription = stringResource(R.string.msgLogout),
+                            )
+                        }
                     },
                     colors = TopAppBarDefaults.topAppBarColors(
                         containerColor = MaterialTheme.colorScheme.primary,
@@ -114,6 +127,20 @@ fun MainScreen(navController:NavHostController = rememberNavController()) {
                     contentDescription = "Add"
                 )
             }
+
+            if(currentScreen != null && Screens.valueOf(currentScreen!!.destination.route!!) == Screens.MENU)
+                FloatingActionButton(
+                onClick = {
+                    navController.clearBackStack(Screens.LOGIN.route)
+                    navController.navigate(Screens.LOGIN.route)
+                },
+                containerColor = MaterialTheme.colorScheme.primary
+                ) {
+                    Icon(
+                        Icons.Default.ExitToApp,
+                        contentDescription = stringResource(R.string.msgLogout)
+                    )
+                }
         },
         modifier = Modifier.fillMaxSize()
     ) {
@@ -123,7 +150,7 @@ fun MainScreen(navController:NavHostController = rememberNavController()) {
             modifier = Modifier.padding(it)
         ) {
             composable (Screens.MENU.route) {
-                MenuScreen(stringResource(R.string.msgHomeMenu),Screens.LOGIN.route ,navController,Screens.LOCATIONS.route,Screens.CREDITS.route)
+                MenuScreen(stringResource(R.string.msgHomeMenu), navController, Screens.LOCATIONS.route, Screens.CREDITS.route)
             }
             composable (Screens.LOGIN.route) {
                 LoginScreen(navController,Screens.MENU.route)

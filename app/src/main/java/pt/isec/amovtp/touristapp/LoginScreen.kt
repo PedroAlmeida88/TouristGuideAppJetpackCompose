@@ -19,10 +19,9 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
-import androidx.compose.ui.res.stringResource
 
 
 @Composable
@@ -70,9 +69,7 @@ fun LoginScreen(
             },
             colors = buttonColors(MaterialTheme.colorScheme.primary),
         ) {
-            Text(text = stringResource(R.string.btnSignIn),
-                color = Color.LightGray
-            )
+            Text(text = stringResource(R.string.btnSignIn))
         }
     }
 }
