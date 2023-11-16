@@ -23,7 +23,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 
-
 @Composable
 fun LoginScreen(
     navController: NavHostController?,
@@ -31,7 +30,6 @@ fun LoginScreen(
 ) {
     var name by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
-
 
     Column (
         verticalArrangement = Arrangement.Center,
@@ -70,6 +68,18 @@ fun LoginScreen(
             colors = buttonColors(MaterialTheme.colorScheme.primary),
         ) {
             Text(text = stringResource(R.string.btnSignIn))
+        }
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        Text(text = "If you don't have an account, click the button bellow")
+        Button(
+            onClick = {
+                navController?.navigate(Screens.REGISTER.route)
+            },
+            colors = buttonColors(MaterialTheme.colorScheme.primary),
+        ) {
+            Text(text = "Register Now")
         }
     }
 }

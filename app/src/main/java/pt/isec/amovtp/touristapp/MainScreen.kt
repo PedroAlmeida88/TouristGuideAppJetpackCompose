@@ -87,7 +87,7 @@ fun MainScreen(navController:NavHostController = rememberNavController()) {
                     actions = {
                         if(Screens.valueOf(currentScreen!!.destination.route!!) == Screens.POI)
                         IconButton(onClick = {
-                            /*TODO: Botao quando adiciona uma categoria em pontos de interesse*/
+                            navController.navigate(Screens.ADD_CATEGORY.route)
                         }) {
                             Icon(
                                 Icons.Filled.Add,
@@ -95,11 +95,11 @@ fun MainScreen(navController:NavHostController = rememberNavController()) {
                             )
                         }
 
-                        if(Screens.valueOf(currentScreen!!.destination.route!!) != Screens.LOGIN)
+                        if (Screens.valueOf(currentScreen!!.destination.route!!) != Screens.LOGIN)
                         IconButton(onClick = {
-                            /*TODO: Botao de Logout */
-                            navController.clearBackStack(Screens.LOGIN.route)
-                            navController.navigate(Screens.LOGIN.route)
+                            navController.navigate(Screens.LOGIN.route) {
+                                popUpTo(Screens.LOGIN.route) { inclusive = true }
+                            }
                         }) {
                             Icon(
                                 Icons.Default.ExitToApp,
@@ -119,8 +119,12 @@ fun MainScreen(navController:NavHostController = rememberNavController()) {
                         Screens.valueOf(currentScreen!!.destination.route!!) == Screens.LOCATIONS))
             FloatingActionButton(
                 onClick = {
-                    /*TODO: Quando é adicionada uma nova localizacao ou um novo ponto de interesse*/
-                }
+                    if(Screens.valueOf(currentScreen!!.destination.route!!) == Screens.POI)
+                        navController.navigate(Screens.ADD_POI.route)
+                    else
+                        navController.navigate(Screens.ADD_LOCATIONS.route)
+                },
+                containerColor = MaterialTheme.colorScheme.primary
             ) {
                 Icon(
                     Icons.Filled.Add,
@@ -156,7 +160,7 @@ fun MainScreen(navController:NavHostController = rememberNavController()) {
                 LoginScreen(navController,Screens.MENU.route)
             }
             composable (Screens.REGISTER.route) {
-                Greeting(name = Screens.REGISTER.route)
+                RegisterScreen(navController)
             }
             composable (Screens.USER.route) {
                 Greeting(name = Screens.USER.route)
