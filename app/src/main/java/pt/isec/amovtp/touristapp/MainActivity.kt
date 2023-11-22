@@ -11,6 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.core.content.ContextCompat
+import pt.isec.amovtp.touristapp.ui.screens.MainScreen
 import pt.isec.amovtp.touristapp.ui.theme.TouristAPPTheme
 
 class MainActivity : ComponentActivity() {

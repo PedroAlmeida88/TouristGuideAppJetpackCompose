@@ -1,11 +1,13 @@
-package pt.isec.amovtp.touristapp
+package pt.isec.amovtp.touristapp.ui.screens
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults.buttonColors
 import androidx.compose.material3.MaterialTheme
@@ -22,6 +24,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import pt.isec.amovtp.touristapp.R
 
 @Composable
 fun LoginScreen(
@@ -70,16 +73,23 @@ fun LoginScreen(
             Text(text = stringResource(R.string.btnSignIn))
         }
 
-        Spacer(modifier = Modifier.height(16.dp))
-
-        Text(text = "If you don't have an account, click the button bellow")
-        Button(
-            onClick = {
-                navController?.navigate(Screens.REGISTER.route)
-            },
-            colors = buttonColors(MaterialTheme.colorScheme.primary),
+        Column(
+            modifier = Modifier.fillMaxWidth()
+                .wrapContentHeight(Alignment.Bottom)
         ) {
-            Text(text = "Register Now")
+            Text(
+                text = "If you don't have an account, click the button bellow",
+                //modifier = Modifier.weight(3f, true)
+            )
+            Button(
+                onClick = {
+                    navController?.navigate(Screens.REGISTER.route)
+                },
+                colors = buttonColors(MaterialTheme.colorScheme.primary),
+                //modifier = Modifier.weight(2f, true)
+            ) {
+                Text(text = "Register Now")
+            }
         }
     }
 }

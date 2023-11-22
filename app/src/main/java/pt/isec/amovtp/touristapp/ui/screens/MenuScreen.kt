@@ -1,4 +1,4 @@
-package pt.isec.amovtp.touristapp
+package pt.isec.amovtp.touristapp.ui.screens
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
