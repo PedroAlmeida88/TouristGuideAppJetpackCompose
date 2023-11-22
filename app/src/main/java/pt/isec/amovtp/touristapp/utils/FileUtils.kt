@@ -5,7 +5,7 @@ import android.net.Uri
 import java.io.File
 import java.io.FileOutputStream
 
-class Utils {
+class FileUtils {
     companion object {
         fun getTempFilename(context: Context) : String =
             File.createTempFile(

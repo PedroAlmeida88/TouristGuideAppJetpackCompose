@@ -1,4 +1,4 @@
-package pt.isec.amovtp.touristapp
+package pt.isec.amovtp.touristapp.ui.screens
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.fillMaxSize
@@ -32,6 +32,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import pt.isec.amovtp.touristapp.Greeting
+import pt.isec.amovtp.touristapp.R
 
 enum class Screens(val display: String, val showAppBar : Boolean) {
     MENU("Menu", false),
@@ -135,8 +137,9 @@ fun MainScreen(navController:NavHostController = rememberNavController()) {
             if(currentScreen != null && Screens.valueOf(currentScreen!!.destination.route!!) == Screens.MENU)
                 FloatingActionButton(
                 onClick = {
-                    navController.clearBackStack(Screens.LOGIN.route)
-                    navController.navigate(Screens.LOGIN.route)
+                    navController.navigate(Screens.LOGIN.route) {
+                        popUpTo(Screens.LOGIN.route) { inclusive = true }
+                    }
                 },
                 containerColor = MaterialTheme.colorScheme.primary
                 ) {
@@ -157,7 +160,7 @@ fun MainScreen(navController:NavHostController = rememberNavController()) {
                 MenuScreen(stringResource(R.string.msgHomeMenu), navController, Screens.LOCATIONS.route, Screens.CREDITS.route)
             }
             composable (Screens.LOGIN.route) {
-                LoginScreen(navController,Screens.MENU.route)
+                LoginScreen(navController, Screens.MENU.route)
             }
             composable (Screens.REGISTER.route) {
                 RegisterScreen(navController)
@@ -181,7 +184,7 @@ fun MainScreen(navController:NavHostController = rememberNavController()) {
                 Greeting(name = Screens.ADD_CATEGORY.route)
             }
             composable (Screens.CREDITS.route) {
-                Greeting(name = Screens.CREDITS.route)
+                CreditsScreen(navController = navController)
             }
         }
     }
