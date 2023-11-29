@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
@@ -105,12 +106,14 @@ fun LocationsScreen(modifier: Modifier = Modifier, navController: NavHostControl
                         navController?.navigate(Screens.POI.route)
                     }
                 ) {
-                    Image(painter = painterResource(id = poi.imagesRes), contentDescription = "Barcelona")
+                    Image(painter = painterResource(id = poi.imagesRes), contentDescription = "city picture")
                     Column(
                         modifier = Modifier
                             .fillMaxSize()
-                            .padding(8.dp),
+                            .padding(8.dp)
+                            .wrapContentHeight(Alignment.Bottom),
                         horizontalAlignment = Alignment.CenterHorizontally
+
                     ) {
                         Text(text = poi.team, fontSize = 20.sp)
                         Text(text = "${poi.latitude} ${poi.longitude}", fontSize = 14.sp)
