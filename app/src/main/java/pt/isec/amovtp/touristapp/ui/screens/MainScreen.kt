@@ -1,4 +1,4 @@
-package pt.isec.amovtp.touristapp
+package pt.isec.amovtp.touristapp.ui.screens
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.fillMaxSize
@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.ExitToApp
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
@@ -31,6 +32,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import pt.isec.amovtp.touristapp.Greeting
+import pt.isec.amovtp.touristapp.R
 
 enum class Screens(val display: String, val showAppBar : Boolean) {
     MENU("Menu", false),
@@ -86,11 +89,23 @@ fun MainScreen(navController:NavHostController = rememberNavController()) {
                     actions = {
                         if(Screens.valueOf(currentScreen!!.destination.route!!) == Screens.POI)
                         IconButton(onClick = {
-                            /*TODO: Botao quando adiciona uma categoria em pontos de interesse*/
+                            navController.navigate(Screens.ADD_CATEGORY.route)
                         }) {
                             Icon(
                                 Icons.Filled.Add,
                                 contentDescription = "Add"
+                            )
+                        }
+
+                        if (Screens.valueOf(currentScreen!!.destination.route!!) != Screens.LOGIN)
+                        IconButton(onClick = {
+                            navController.navigate(Screens.LOGIN.route) {
+                                popUpTo(Screens.LOGIN.route) { inclusive = true }
+                            }
+                        }) {
+                            Icon(
+                                Icons.Default.ExitToApp,
+                                contentDescription = stringResource(R.string.msgLogout),
                             )
                         }
                     },
@@ -106,14 +121,33 @@ fun MainScreen(navController:NavHostController = rememberNavController()) {
                         Screens.valueOf(currentScreen!!.destination.route!!) == Screens.LOCATIONS))
             FloatingActionButton(
                 onClick = {
-                    /*TODO: Quando é adicionada uma nova localizacao ou um novo ponto de interesse*/
-                }
+                    if(Screens.valueOf(currentScreen!!.destination.route!!) == Screens.POI)
+                        navController.navigate(Screens.ADD_POI.route)
+                    else
+                        navController.navigate(Screens.ADD_LOCATIONS.route)
+                },
+                containerColor = MaterialTheme.colorScheme.primary
             ) {
                 Icon(
                     Icons.Filled.Add,
                     contentDescription = "Add"
                 )
             }
+
+            if(currentScreen != null && Screens.valueOf(currentScreen!!.destination.route!!) == Screens.MENU)
+                FloatingActionButton(
+                onClick = {
+                    navController.navigate(Screens.LOGIN.route) {
+                        popUpTo(Screens.LOGIN.route) { inclusive = true }
+                    }
+                },
+                containerColor = MaterialTheme.colorScheme.primary
+                ) {
+                    Icon(
+                        Icons.Default.ExitToApp,
+                        contentDescription = stringResource(R.string.msgLogout)
+                    )
+                }
         },
         modifier = Modifier.fillMaxSize()
     ) {
@@ -123,13 +157,13 @@ fun MainScreen(navController:NavHostController = rememberNavController()) {
             modifier = Modifier.padding(it)
         ) {
             composable (Screens.MENU.route) {
-                MenuScreen(stringResource(R.string.msgHomeMenu),Screens.LOGIN.route ,navController,Screens.LOCATIONS.route,Screens.CREDITS.route)
+                MenuScreen(stringResource(R.string.msgHomeMenu), navController, Screens.LOCATIONS.route, Screens.CREDITS.route)
             }
             composable (Screens.LOGIN.route) {
-                LoginScreen(navController,Screens.MENU.route)
+                LoginScreen(navController, Screens.MENU.route)
             }
             composable (Screens.REGISTER.route) {
-                Greeting(name = Screens.REGISTER.route)
+                RegisterScreen(navController)
             }
             composable (Screens.USER.route) {
                 Greeting(name = Screens.USER.route)
@@ -150,7 +184,7 @@ fun MainScreen(navController:NavHostController = rememberNavController()) {
                 Greeting(name = Screens.ADD_CATEGORY.route)
             }
             composable (Screens.CREDITS.route) {
-                Greeting(name = Screens.CREDITS.route)
+                CreditsScreen(navController = navController)
             }
         }
     }
