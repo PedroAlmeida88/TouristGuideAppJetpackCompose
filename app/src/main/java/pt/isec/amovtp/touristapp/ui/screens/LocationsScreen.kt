@@ -111,7 +111,7 @@ fun LocationsScreen(modifier: Modifier = Modifier, navController: NavHostControl
                         modifier = Modifier
                             .fillMaxSize()
                             .padding(8.dp)
-                            .wrapContentHeight(Alignment.Bottom) ,
+                            .wrapContentHeight(Alignment.Bottom),
                         horizontalAlignment = Alignment.CenterHorizontally
 
                     ) {
