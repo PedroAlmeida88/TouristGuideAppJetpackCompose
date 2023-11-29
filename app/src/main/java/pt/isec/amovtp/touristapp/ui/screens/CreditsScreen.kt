@@ -28,7 +28,7 @@ import androidx.navigation.NavHostController
 import pt.isec.amovtp.touristapp.R
 
 @Composable
-fun CreditsScreen(modifier: Modifier = Modifier, navController: NavHostController) {
+fun CreditsScreen(modifier: Modifier = Modifier) {
     Column (
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = modifier

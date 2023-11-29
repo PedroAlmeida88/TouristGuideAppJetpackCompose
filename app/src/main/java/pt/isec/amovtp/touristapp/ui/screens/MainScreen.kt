@@ -34,6 +34,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import pt.isec.amovtp.touristapp.Greeting
 import pt.isec.amovtp.touristapp.R
+import pt.isec.amovtp.touristapp.ui.viewmodels.LocationViewModel
 
 enum class Screens(val display: String, val showAppBar : Boolean) {
     MENU("Menu", false),
@@ -55,7 +56,7 @@ enum class Screens(val display: String, val showAppBar : Boolean) {
 @SuppressLint("SuspiciousIndentation")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MainScreen(navController:NavHostController = rememberNavController()) {
+fun MainScreen(navController:NavHostController = rememberNavController(), viewModel: LocationViewModel) {
     var showAdd by remember { mutableStateOf(false) }
 
     val currentScreen by navController.currentBackStackEntryAsState()
@@ -169,7 +170,7 @@ fun MainScreen(navController:NavHostController = rememberNavController()) {
                 Greeting(name = Screens.USER.route)
             }
             composable (Screens.LOCATIONS.route) {
-                Greeting(name = Screens.LOCATIONS.route)
+                LocationsScreen(navController = navController, viewModel = viewModel)
             }
             composable (Screens.ADD_LOCATIONS.route) {
                 Greeting(name = Screens.ADD_LOCATIONS.route)
@@ -184,8 +185,9 @@ fun MainScreen(navController:NavHostController = rememberNavController()) {
                 Greeting(name = Screens.ADD_CATEGORY.route)
             }
             composable (Screens.CREDITS.route) {
-                CreditsScreen(navController = navController)
+                CreditsScreen()
             }
         }
     }
 }
+
