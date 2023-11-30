@@ -26,6 +26,10 @@ class LocationViewModel(private val locationHandler: LocationHandler) : ViewMode
         Coordinates("Munich", 48.218775, 11.624753, R.drawable.munich),
         Coordinates("Barcelona", 41.38087, 2.122802, R.drawable.barcelona),
     )
+    val POIsBarcelona = listOf(
+        Coordinates("La Sagrada Familia", 41.4036, 2.1744, R.drawable.sb),
+        Coordinates("Camp Nou", 41.38087, 2.122802, R.drawable.cn),
+    )
     // Permissions
     var coarseLocationPermission = false
     var fineLocationPermission = false
