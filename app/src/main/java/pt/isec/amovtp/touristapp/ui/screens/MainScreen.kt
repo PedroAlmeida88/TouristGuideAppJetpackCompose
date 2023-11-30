@@ -46,6 +46,7 @@ enum class Screens(val display: String, val showAppBar : Boolean) {
     POI("Point of Interest", true),
     ADD_POI("Add Points of Interest", true),
     ADD_CATEGORY("Add Category", true),
+    SHOW_MAP("Show map", true),
     CREDITS("Credits", true);
 
     val route : String
@@ -175,8 +176,11 @@ fun MainScreen(navController:NavHostController = rememberNavController(), viewMo
             composable (Screens.ADD_LOCATIONS.route) {
                 Greeting(name = Screens.ADD_LOCATIONS.route)
             }
+            composable (Screens.SHOW_MAP.route) {
+                ShowMapScreen(navController = navController, viewModel = viewModel)
+            }
             composable (Screens.POI.route) {
-                Greeting(name = Screens.POI.route)
+                POIScreen(navController = navController, viewModel = viewModel)
             }
             composable (Screens.ADD_POI.route) {
                 Greeting(name = Screens.ADD_POI.route)
