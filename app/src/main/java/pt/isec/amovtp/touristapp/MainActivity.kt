@@ -24,7 +24,7 @@ import pt.isec.amovtp.touristapp.ui.viewmodels.LocationViewModel
 import pt.isec.amovtp.touristapp.ui.viewmodels.LocationViewModelFactory
 
 class MainActivity : ComponentActivity() {
-    val app by lazy { application as LocationMapsApp }
+    private val app by lazy { application as LocationMapsApp }
     private val viewModel : LocationViewModel by viewModels {
         LocationViewModelFactory(app.locationHandler)
     }
@@ -63,6 +63,11 @@ class MainActivity : ComponentActivity() {
             != PackageManager.PERMISSION_GRANTED) {
             verifyOnePermission.launch(android.Manifest.permission.READ_MEDIA_IMAGES)
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        viewModel.startLocationUpdates()
     }
 
     private val verifyMultiplePermissions = registerForActivityResult(
