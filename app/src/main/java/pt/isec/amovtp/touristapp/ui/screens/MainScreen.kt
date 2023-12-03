@@ -45,6 +45,7 @@ enum class Screens(val display: String, val showAppBar : Boolean) {
     ADD_LOCATIONS("Add Locations", true),
     POI("Point of Interest", true),
     ADD_POI("Add Points of Interest", true),
+    POI_DESCRIPTION("Point of Interest Description", true),
     ADD_CATEGORY("Add Category", true),
     SHOW_MAP("Show map", true),
     CREDITS("Credits", true);
@@ -89,16 +90,6 @@ fun MainScreen(navController:NavHostController = rememberNavController(), viewMo
                         }
                     },
                     actions = {
-                        if(Screens.valueOf(currentScreen!!.destination.route!!) == Screens.POI)
-                        IconButton(onClick = {
-                            navController.navigate(Screens.ADD_CATEGORY.route)
-                        }) {
-                            Icon(
-                                Icons.Filled.Add,
-                                contentDescription = "Add"
-                            )
-                        }
-
                         if (Screens.valueOf(currentScreen!!.destination.route!!) != Screens.LOGIN)
                         IconButton(onClick = {
                             navController.navigate(Screens.LOGIN.route) {
@@ -184,6 +175,9 @@ fun MainScreen(navController:NavHostController = rememberNavController(), viewMo
             }
             composable (Screens.ADD_POI.route) {
                 Greeting(name = Screens.ADD_POI.route)
+            }
+            composable (Screens.POI_DESCRIPTION.route) {
+                POIDescriptionScreen(modifier = Modifier, viewModel = viewModel)
             }
             composable (Screens.ADD_CATEGORY.route) {
                 Greeting(name = Screens.ADD_CATEGORY.route)
