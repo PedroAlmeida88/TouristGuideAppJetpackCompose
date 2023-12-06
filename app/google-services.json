@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "709969903424",
+    "project_id": "touristappamov",
+    "storage_bucket": "touristappamov.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:709969903424:android:c913c458ae2a489a4104a5",
+        "android_client_info": {
+          "package_name": "pt.isec.amovtp.touristapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBOneCZbQpRTXISsYj4GF_gCuaXKgdsEBQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
