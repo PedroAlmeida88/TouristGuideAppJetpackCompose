@@ -5,7 +5,7 @@
     <string name="btnCredits">Credits</string>
     <string name="btnSignIn">Sign In</string>
     <string name="msgLogin">Login</string>
-    <string name="msgUsername">Username</string>
+    <string name="msgUsername">Email</string>
     <string name="msgPassword">Password</string>
     <string name="msgHomeMenu">Home Menu</string>
     <string name="msgLogout">Logout</string>
