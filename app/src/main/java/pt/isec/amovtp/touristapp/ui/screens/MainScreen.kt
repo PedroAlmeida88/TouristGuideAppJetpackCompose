@@ -34,13 +34,13 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import pt.isec.amovtp.touristapp.Greeting
 import pt.isec.amovtp.touristapp.R
+import pt.isec.amovtp.touristapp.ui.viewmodels.FirebaseViewModel
 import pt.isec.amovtp.touristapp.ui.viewmodels.LocationViewModel
 
 enum class Screens(val display: String, val showAppBar : Boolean) {
     MENU("Menu", false),
     LOGIN("Login", false),
     REGISTER("Register", true),
-    USER("User", true),
     LOCATIONS("Locations", true),
     ADD_LOCATIONS("Add Locations", true),
     POI("Point of Interest", true),
@@ -58,7 +58,7 @@ enum class Screens(val display: String, val showAppBar : Boolean) {
 @SuppressLint("SuspiciousIndentation")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MainScreen(navController:NavHostController = rememberNavController(), viewModel: LocationViewModel) {
+fun MainScreen(navController:NavHostController = rememberNavController(), locationViewModel: LocationViewModel, firebaseViewModel: FirebaseViewModel) {
     var showAdd by remember { mutableStateOf(false) }
 
     val currentScreen by navController.currentBackStackEntryAsState()
@@ -92,6 +92,7 @@ fun MainScreen(navController:NavHostController = rememberNavController(), viewMo
                     actions = {
                         if (Screens.valueOf(currentScreen!!.destination.route!!) != Screens.LOGIN)
                         IconButton(onClick = {
+                            firebaseViewModel.signOut()
                             navController.navigate(Screens.LOGIN.route) {
                                 popUpTo(Screens.LOGIN.route) { inclusive = true }
                             }
@@ -130,6 +131,7 @@ fun MainScreen(navController:NavHostController = rememberNavController(), viewMo
             if(currentScreen != null && Screens.valueOf(currentScreen!!.destination.route!!) == Screens.MENU)
                 FloatingActionButton(
                 onClick = {
+                    firebaseViewModel.signOut()
                     navController.navigate(Screens.LOGIN.route) {
                         popUpTo(Screens.LOGIN.route) { inclusive = true }
                     }
@@ -153,31 +155,28 @@ fun MainScreen(navController:NavHostController = rememberNavController(), viewMo
                 MenuScreen(stringResource(R.string.msgHomeMenu), navController, Screens.LOCATIONS.route, Screens.CREDITS.route)
             }
             composable (Screens.LOGIN.route) {
-                LoginScreen(navController, Screens.MENU.route)
+                LoginScreen(navController, firebaseViewModel)
             }
             composable (Screens.REGISTER.route) {
-                RegisterScreen(navController)
-            }
-            composable (Screens.USER.route) {
-                Greeting(name = Screens.USER.route)
+                RegisterScreen(navController, firebaseViewModel)
             }
             composable (Screens.LOCATIONS.route) {
-                LocationsScreen(navController = navController, viewModel = viewModel)
+                LocationsScreen(navController = navController, viewModel = locationViewModel)
             }
             composable (Screens.ADD_LOCATIONS.route) {
                 Greeting(name = Screens.ADD_LOCATIONS.route)
             }
             composable (Screens.SHOW_MAP.route) {
-                ShowMapScreen(navController = navController, viewModel = viewModel)
+                ShowMapScreen(navController = navController, viewModel = locationViewModel)
             }
             composable (Screens.POI.route) {
-                POIScreen(navController = navController, viewModel = viewModel)
+                POIScreen(navController = navController, viewModel = locationViewModel)
             }
             composable (Screens.ADD_POI.route) {
                 Greeting(name = Screens.ADD_POI.route)
             }
             composable (Screens.POI_DESCRIPTION.route) {
-                POIDescriptionScreen(modifier = Modifier, viewModel = viewModel)
+                POIDescriptionScreen(modifier = Modifier, viewModel = locationViewModel)
             }
             composable (Screens.ADD_CATEGORY.route) {
                 Greeting(name = Screens.ADD_CATEGORY.route)

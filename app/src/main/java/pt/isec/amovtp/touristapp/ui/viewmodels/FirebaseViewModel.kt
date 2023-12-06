@@ -6,16 +6,14 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.auth.FirebaseUser
 import kotlinx.coroutines.launch
+import pt.isec.amovtp.touristapp.data.User
 import pt.isec.amovtp.touristapp.utils.FireAuthUtil
-
-data class User(val username: String, val email: String, val picture: String?)
 
 fun FirebaseUser.toUser() : User {
     val username = this.displayName ?: ""
     val strEmail = this.email ?: ""
-    val photoUrl = this.photoUrl?.toString()
 
-    return User(username, strEmail, photoUrl)
+    return User(username, strEmail)
 }
 
 class FirebaseViewModel : ViewModel() {
@@ -32,8 +30,6 @@ class FirebaseViewModel : ViewModel() {
             return
         viewModelScope.launch {
             FireAuthUtil.createUserWithEmail(email, password) { exception ->
-                if(exception == null)
-                    _user.value = FireAuthUtil.currentUser?.toUser()
                 _error.value = exception?.message
             }
         }
