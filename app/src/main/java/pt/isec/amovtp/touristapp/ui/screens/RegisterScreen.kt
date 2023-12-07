@@ -25,9 +25,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import pt.isec.amovtp.touristapp.R
+import pt.isec.amovtp.touristapp.ui.viewmodels.FirebaseViewModel
 
 @Composable
-fun RegisterScreen(navController: NavHostController) {
+fun RegisterScreen(navController: NavHostController, firebaseViewModel: FirebaseViewModel) {
     var firstName by remember { mutableStateOf("") }
     var lastName by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
@@ -72,7 +73,11 @@ fun RegisterScreen(navController: NavHostController) {
         )
         Spacer(modifier = Modifier.height(8.dp))
         Button(
-            onClick = { navController.navigate(Screens.LOGIN.route) },
+            onClick = {
+                firebaseViewModel.createUserWithEmail(email, password)
+                if(firebaseViewModel.error.value == null)
+                    navController.navigate(Screens.LOGIN.route)
+            },
             colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.primary),
         ) {
             Text(text = "Register")

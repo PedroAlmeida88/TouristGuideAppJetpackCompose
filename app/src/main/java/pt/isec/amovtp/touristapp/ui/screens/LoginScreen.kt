@@ -25,13 +25,14 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import pt.isec.amovtp.touristapp.R
+import pt.isec.amovtp.touristapp.ui.viewmodels.FirebaseViewModel
 
 @Composable
 fun LoginScreen(
     navController: NavHostController?,
-    menu: String
+    firebaseViewModel: FirebaseViewModel
 ) {
-    var name by remember { mutableStateOf("") }
+    var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
 
     Column (
@@ -53,8 +54,8 @@ fun LoginScreen(
         )
 
         OutlinedTextField(
-            value = name,
-            onValueChange ={ name = it },
+            value = email,
+            onValueChange ={ email = it },
             label = { Text(text = stringResource(R.string.msgUsername),) }
         )
         Spacer(modifier = Modifier.height(16.dp))
@@ -66,7 +67,10 @@ fun LoginScreen(
 
         Button(
             onClick = {
-                navController?.navigate(menu)
+                firebaseViewModel.signInWithEmail(email, password)
+                if (firebaseViewModel.user.value != null) {
+                    navController?.navigate(Screens.MENU.route)
+                }
             },
             colors = buttonColors(MaterialTheme.colorScheme.primary),
         ) {
@@ -74,7 +78,8 @@ fun LoginScreen(
         }
 
         Column(
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier
+                .fillMaxWidth()
                 .wrapContentHeight(Alignment.Bottom)
         ) {
             Text(
