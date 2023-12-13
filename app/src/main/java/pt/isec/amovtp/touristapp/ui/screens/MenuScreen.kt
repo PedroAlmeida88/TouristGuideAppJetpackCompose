@@ -19,7 +19,11 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 
 @Composable
-fun MenuScreen(title: String, navController: NavHostController?, vararg options: String) {
+fun MenuScreen(
+    title: String, navController: NavHostController?,
+    vararg options: String,
+
+) {
     Box(
         modifier = Modifier
             .fillMaxSize()

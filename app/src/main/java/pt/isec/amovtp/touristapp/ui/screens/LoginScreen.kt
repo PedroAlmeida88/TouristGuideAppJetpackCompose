@@ -14,6 +14,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -30,10 +31,18 @@ import pt.isec.amovtp.touristapp.ui.viewmodels.FirebaseViewModel
 @Composable
 fun LoginScreen(
     navController: NavHostController?,
-    firebaseViewModel: FirebaseViewModel
+    firebaseViewModel: FirebaseViewModel,
+    onSuccess: () -> Unit
 ) {
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
+    val error by remember { firebaseViewModel.error }
+    val user by remember { firebaseViewModel.user }
+
+    LaunchedEffect(key1 = user) {
+        if(user != null && error == null)
+            onSuccess()
+    }
 
     Column (
         verticalArrangement = Arrangement.Center,

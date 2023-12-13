@@ -58,7 +58,10 @@ enum class Screens(val display: String, val showAppBar : Boolean) {
 @SuppressLint("SuspiciousIndentation")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MainScreen(navController:NavHostController = rememberNavController(), locationViewModel: LocationViewModel, firebaseViewModel: FirebaseViewModel) {
+fun MainScreen(navController:NavHostController = rememberNavController(),
+               locationViewModel: LocationViewModel,
+               firebaseViewModel: FirebaseViewModel
+) {
     var showAdd by remember { mutableStateOf(false) }
 
     val currentScreen by navController.currentBackStackEntryAsState()
@@ -155,7 +158,9 @@ fun MainScreen(navController:NavHostController = rememberNavController(), locati
                 MenuScreen(stringResource(R.string.msgHomeMenu), navController, Screens.LOCATIONS.route, Screens.CREDITS.route)
             }
             composable (Screens.LOGIN.route) {
-                LoginScreen(navController, firebaseViewModel)
+                LoginScreen(navController, firebaseViewModel) {
+                    navController.navigate(Screens.MENU.route)
+                }
             }
             composable (Screens.REGISTER.route) {
                 RegisterScreen(navController, firebaseViewModel)
