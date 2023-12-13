@@ -166,7 +166,7 @@ fun MainScreen(navController:NavHostController = rememberNavController(),
                 RegisterScreen(navController, firebaseViewModel)
             }
             composable (Screens.LOCATIONS.route) {
-                LocationsScreen(navController = navController, viewModel = locationViewModel)
+                LocationsScreen(navController = navController, viewModel = locationViewModel, firebaseViewModel = firebaseViewModel)
             }
             composable (Screens.ADD_LOCATIONS.route) {
                 Greeting(name = Screens.ADD_LOCATIONS.route)

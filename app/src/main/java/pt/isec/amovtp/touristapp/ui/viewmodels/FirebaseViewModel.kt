@@ -6,8 +6,10 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.auth.FirebaseUser
 import kotlinx.coroutines.launch
+import pt.isec.amovtp.touristapp.data.Location
 import pt.isec.amovtp.touristapp.data.User
 import pt.isec.amovtp.touristapp.utils.FireAuthUtil
+import pt.isec.amovtp.touristapp.utils.StorageUtil
 
 fun FirebaseUser.toUser() : User {
     val username = this.displayName ?: ""
@@ -50,4 +52,18 @@ class FirebaseViewModel : ViewModel() {
         _error.value = null
         _user.value = null
     }
+
+    fun getLocationFromFirestore(){
+        viewModelScope.launch {
+            StorageUtil.getLocationFromFirestore()
+        }
+    }
+    fun addLocationsToFirestore(location:Location) {
+        viewModelScope.launch {
+            StorageUtil.addLocationToFirestore(location){ exception ->
+                _error.value = exception?.message
+            }
+        }
+    }
+
 }
