@@ -50,10 +50,4 @@ class FirebaseViewModel : ViewModel() {
         _error.value = null
         _user.value = null
     }
-
-    fun addDataToFirestore () {
-        viewModelScope.launch {
-
-        }
-    }
 }
