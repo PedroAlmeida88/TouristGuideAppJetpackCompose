@@ -25,6 +25,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -36,17 +37,25 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import org.osmdroid.util.GeoPoint
+import pt.isec.amovtp.touristapp.data.Location
+import pt.isec.amovtp.touristapp.ui.viewmodels.FirebaseViewModel
 import pt.isec.amovtp.touristapp.ui.viewmodels.LocationViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun LocationsScreen(modifier: Modifier = Modifier, navController: NavHostController?,viewModel : LocationViewModel) {
+fun LocationsScreen(modifier: Modifier = Modifier, navController: NavHostController?,viewModel : LocationViewModel,firebaseViewModel: FirebaseViewModel) {
     var autoEnabled by remember{ mutableStateOf(false) }
     val location = viewModel.currentLocation.observeAsState()
 
     var geoPoint by remember{ mutableStateOf(GeoPoint(
         30.00, 10.00
     )) }
+
+   /* val locations = remember {
+       mutableStateOf(
+           firebaseViewModel.getLocationFromFirestore()
+       )
+    }*/
     
     Column(
         verticalArrangement = Arrangement.Top,
@@ -61,7 +70,11 @@ fun LocationsScreen(modifier: Modifier = Modifier, navController: NavHostControl
             verticalAlignment = Alignment.Top
         ){
             Button(
-                onClick = {  }
+                onClick = {
+                    val location1 = Location("Leiria","????????",13.134,32.342,"-")
+
+                    firebaseViewModel.addLocationsToFirestore(location = location1)
+                }
             ) {
                 Text(text = "A...Z")
             }

@@ -43,7 +43,6 @@ fun LoginScreen(
         if(user != null && error == null)
             onSuccess()
     }
-
     Column (
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally,
