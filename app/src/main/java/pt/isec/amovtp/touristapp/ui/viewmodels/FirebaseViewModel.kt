@@ -1,5 +1,6 @@
 package pt.isec.amovtp.touristapp.ui.viewmodels
 
+import android.content.Context
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
@@ -65,5 +66,19 @@ class FirebaseViewModel : ViewModel() {
             }
         }
     }
+    fun uploadToStorage(imageName: String, path: String) {
+        viewModelScope.launch {
+            StorageUtil.getFileFromPath(path)?.let { inputStream ->
+                StorageUtil.uploadFile(inputStream, imageName)
+            }
+        }
+    }
+
+    fun updatePhotoUrl(location: Location, imageUrl: Unit) {
+        viewModelScope.launch {
+            StorageUtil.updatePhotoUrl(location,imageUrl);
+        }
+    }
+
 
 }

@@ -1,6 +1,8 @@
 package pt.isec.amovtp.touristapp.ui.viewmodels
 
 import android.location.Location
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -20,6 +22,8 @@ class LocationViewModelFactory (
 data class Coordinates(val team: String,val latitude : Double, val longitude: Double,val imagesRes: Int)
 
 class LocationViewModel(private val locationHandler: LocationHandler) : ViewModel() {
+    val imagePath : MutableState<String?> = mutableStateOf(null)//todo teste
+
     val POIs = listOf(
         Coordinates("Liverpool", 53.430819, -2.960828, R.drawable.liverpool),
         Coordinates("Manchester", 53.482989, -2.200292, R.drawable.manchester),

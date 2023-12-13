@@ -1,14 +1,19 @@
 package pt.isec.amovtp.touristapp.utils
 
 import android.content.ContentValues.TAG
+import android.content.res.AssetManager
 import android.util.Log
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.ktx.storage
 import kotlinx.coroutines.tasks.await
 import pt.isec.amovtp.touristapp.data.Comment
 import pt.isec.amovtp.touristapp.data.Location
 import pt.isec.amovtp.touristapp.data.PointOfInterest
 import pt.isec.amovtp.touristapp.data.User
+import java.io.FileInputStream
+import java.io.IOException
+import java.io.InputStream
 import java.util.Locale.Category
 
 enum class Collections(val collectionName: String){
@@ -93,6 +98,68 @@ class StorageUtil {
 
         fun getUserFromFirestore () : User? {
             return null
+        }
+        //Storage
+
+        fun getFileFromAsset(assetManager: AssetManager, strName: String): InputStream? {
+            var istr: InputStream? = null
+            try {
+                istr = assetManager.open(strName)
+            } catch (e: IOException) {
+                e.printStackTrace()
+            }
+            return istr
+        }
+
+        fun getFileFromPath(filePath: String): InputStream? {
+            return try {
+                FileInputStream(filePath)
+            } catch (e: IOException) {
+                e.printStackTrace()
+                null
+            }
+        }
+        fun uploadFile(inputStream: InputStream, imgFile: String) {
+            val storage = Firebase.storage
+            val ref1 = storage.reference
+            val ref2 = ref1.child("images")
+            val ref3 = ref2.child(imgFile)
+
+            val uploadTask = ref3.putStream(inputStream)
+            uploadTask.continueWithTask { task ->
+                if (!task.isSuccessful) {
+                    task.exception?.let {
+                        throw it
+                    }
+                }
+                ref3.downloadUrl
+            }.addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    val downloadUri = task.result
+                    println(downloadUri.toString())
+                    // something like:
+                    //   https://firebasestorage.googleapis.com/v0/b/p0405ansamov.appspot.com/o/images%2Fimage.png?alt=media&token=302c7119-c3a9-426d-b7b4-6ab5ac25fed9
+                } else {
+                    // Handle failures
+                    // ...
+                }
+            }
+
+
+        }
+
+        fun updatePhotoUrl(location: Location, imageUrl: Unit) {
+            val db = Firebase.firestore
+
+            val locationData = hashMapOf(
+                "Description" to location.description,
+                "Latitude" to location.latitude,
+                "Longitude" to location.longitude,
+                "PhotoUrl" to imageUrl,  // Atualiza a URL da foto
+            )
+
+            db.collection(Collections.Locations.route).document(location.name).set(locationData)
+                .addOnCompleteListener { }
         }
     }
 }

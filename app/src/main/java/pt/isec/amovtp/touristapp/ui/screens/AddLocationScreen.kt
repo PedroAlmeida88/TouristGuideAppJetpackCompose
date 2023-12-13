@@ -1,17 +1,21 @@
 package pt.isec.amovtp.touristapp.ui.screens
 
+import android.util.Log
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CutCornerShape
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
@@ -26,12 +30,13 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import pt.isec.amovtp.touristapp.R
 import pt.isec.amovtp.touristapp.data.Location
+import pt.isec.amovtp.touristapp.ui.composables.SelectGalleryImage
+import pt.isec.amovtp.touristapp.ui.composables.TakePhoto
 import pt.isec.amovtp.touristapp.ui.viewmodels.FirebaseViewModel
 import pt.isec.amovtp.touristapp.ui.viewmodels.LocationViewModel
+
 
 @Composable
 fun AddLocationScreen(modifier: Modifier.Companion, locationViewModel: LocationViewModel, firebaseViewModel: FirebaseViewModel) {
@@ -43,6 +48,7 @@ fun AddLocationScreen(modifier: Modifier.Companion, locationViewModel: LocationV
     var isFormValid by remember { mutableStateOf(false) }
     var isInputEnabled by remember { mutableStateOf(false) }
     var isError by remember { mutableStateOf(false) }
+    var type by remember { mutableStateOf("gallery") }
 
     val location = locationViewModel.currentLocation.observeAsState()
 
@@ -54,7 +60,17 @@ fun AddLocationScreen(modifier: Modifier.Companion, locationViewModel: LocationV
         isFormValid = locationName.isNotBlank() &&
                 locationDescription.isNotBlank() &&
                 longitudeDouble != null &&
-                latitudeDouble != null
+                latitudeDouble != null &&
+                locationViewModel.imagePath.value != null
+        /*
+        Log.i("FormValidation", "Location Name: $locationName")
+        Log.i("FormValidation", "Location Description: $locationDescription")
+        Log.i("FormValidation", "Longitude: $longitude")
+        Log.i("FormValidation", "Longitude Double: $longitudeDouble")
+        Log.i("FormValidation", "Longitude: $latitude")
+        Log.i("FormValidation", "Longitude Double: $latitudeDouble")
+
+         */
     }
 
     Column (
@@ -63,7 +79,9 @@ fun AddLocationScreen(modifier: Modifier.Companion, locationViewModel: LocationV
         modifier = Modifier
             .fillMaxSize()
             .padding(24.dp)
+            .verticalScroll(rememberScrollState())
     ) {
+
         if(isError)
             Text(
                 text = "Preencher todos os campos (corretamente)",
@@ -112,6 +130,8 @@ fun AddLocationScreen(modifier: Modifier.Companion, locationViewModel: LocationV
                     isInputEnabled = false;
                     latitude = (location.value?.latitude ?: 0.0).toString()
                     longitude = (location.value?.longitude ?: 0.0).toString()
+                    validateForm()
+
                 },
                 modifier = Modifier
                     .weight(1f)
@@ -124,11 +144,14 @@ fun AddLocationScreen(modifier: Modifier.Companion, locationViewModel: LocationV
             }
 
             Button(
-                onClick = {isInputEnabled = true},
+                onClick = {
+                    isInputEnabled = true
+                    validateForm()
+                },
                 modifier = Modifier
                     .weight(1f)
                     .height(96.dp)
-                    .padding(start = 8.dp),
+                    .padding(end = 8.dp),
                 colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.primary),
                 shape = CutCornerShape(percent = 0)
                 ) {
@@ -154,22 +177,55 @@ fun AddLocationScreen(modifier: Modifier.Companion, locationViewModel: LocationV
             label = { Text(text = "Latitude") },
             enabled = isInputEnabled
         )
-        Button(
-            onClick = {},
+        Row(
             modifier = Modifier
-                .weight(1f)
-                .height(48.dp)
-                .padding(8.dp),
-            colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.primary),
+                .fillMaxWidth()
+                .height(IntrinsicSize.Min)
+                .padding(16.dp)
         ) {
-            Text(text = "Take Photo")
+            Button(
+                onClick = {type = "picture" },
+                modifier = Modifier
+                    .weight(1f)
+                    .height(48.dp)
+                    .padding(8.dp),
+                colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.primary),
+            ) {
+                Text(text = "Take Photo")
+            }
+            Button(
+                onClick = {
+                          type = "galerry"
+                },
+                modifier = Modifier
+                    .weight(1f)
+                    .height(48.dp)
+                    .padding(8.dp),
+                colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.primary),
+            ) {
+                Text(text = "Load Photo from Gallery")
+            }
         }
-
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .border(1.dp, Color.Gray, RoundedCornerShape(4.dp))
+                .padding(8.dp)
+                .weight(1f)
+        ) {
+            if (type.equals("picture")) {
+                TakePhoto(locationViewModel.imagePath, Modifier.fillMaxSize())
+                validateForm()
+            } else {
+                SelectGalleryImage(locationViewModel.imagePath, Modifier.fillMaxSize())
+                validateForm()
+            }
+        }
         Button(
             onClick = {
-                if(!isFormValid){
+                if (!isFormValid) {
                     isError = true
-                }else {
+                } else {
                     isError = false
                     var location = Location(
                         name = locationName,
@@ -177,13 +233,15 @@ fun AddLocationScreen(modifier: Modifier.Companion, locationViewModel: LocationV
                         latitude = latitude.toDouble(),
                         longitude = longitude.toDouble(),
                         photoUrl = ""
-                        )
+                    )
                     firebaseViewModel.addLocationsToFirestore(location)
-                }
+                    firebaseViewModel.uploadToStorage( imageName = locationName, path = locationViewModel.imagePath.value ?: "")
+                    //Todo: Obter o url da foto e coloar na base de dados
 
+                }
             },
             modifier = Modifier
-                .weight(1f)
+                .fillMaxWidth()
                 .height(48.dp)
                 .padding(8.dp),
             colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.primary),
