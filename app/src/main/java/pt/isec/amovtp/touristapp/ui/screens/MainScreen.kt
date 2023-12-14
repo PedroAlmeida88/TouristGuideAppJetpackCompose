@@ -169,7 +169,7 @@ fun MainScreen(navController:NavHostController = rememberNavController(),
                 LocationsScreen(navController = navController, viewModel = locationViewModel, firebaseViewModel = firebaseViewModel)
             }
             composable (Screens.ADD_LOCATIONS.route) {
-                Greeting(name = Screens.ADD_LOCATIONS.route)
+                AddLocationScreen(modifier = Modifier,locationViewModel = locationViewModel, firebaseViewModel = firebaseViewModel)
             }
             composable (Screens.SHOW_MAP.route) {
                 ShowMapScreen(navController = navController, viewModel = locationViewModel)

@@ -71,9 +71,8 @@ fun LocationsScreen(modifier: Modifier = Modifier, navController: NavHostControl
         ){
             Button(
                 onClick = {
-                    val location1 = Location("Leiria","????????",13.134,32.342,"-")
-
-                    firebaseViewModel.addLocationsToFirestore(location = location1)
+                    //val location1 = Location("Leiria","????????",13.134,32.342,"-")
+                    //firebaseViewModel.addLocationsToFirestore(location = location1)
                 }
             ) {
                 Text(text = "A...Z")
