@@ -16,7 +16,6 @@ class FireAuthUtil {
                 .addOnCompleteListener { result ->
                     onResult(result.exception)
                 }
-            auth.signOut()
         }
 
         fun signInWithEmail(email: String, password: String, onResult: (Throwable?) -> Unit) {

@@ -6,7 +6,6 @@ import android.util.Log
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
-import kotlinx.coroutines.tasks.await
 import pt.isec.amovtp.touristapp.data.Comment
 import pt.isec.amovtp.touristapp.data.Location
 import pt.isec.amovtp.touristapp.data.PointOfInterest
@@ -29,6 +28,7 @@ enum class Collections(val collectionName: String){
 }
 class StorageUtil {
     companion object {
+        //private val db = Firebase.firestore
         /*
          *  Adicionar Novos dados na Firebase
          */
@@ -60,8 +60,18 @@ class StorageUtil {
 
         }
 
-        fun addUserToFirestore (onResult: (Throwable?) -> Unit) {
+        fun addUserToFirestore (uid: String, user: User, onResult: (Throwable?) -> Unit) {
+            val db = Firebase.firestore
+            val userData = hashMapOf(
+                "Email" to user.email,
+                "FirstName" to user.firstName,
+                "LastName" to user.lastName,
+            )
 
+            db.collection(Collections.Users.route).document(uid).set(userData)
+                .addOnCompleteListener { result ->
+                    onResult(result.exception)
+                }
         }
 
         /*
@@ -96,9 +106,18 @@ class StorageUtil {
             return emptyList()
         }
 
-        fun getUserFromFirestore () : User? {
-            return null
+        fun getUserFromFirestore (userUID: String, userData: (User) -> Unit){
+            val db = Firebase.firestore
+
+            db.collection(Collections.Users.route).document(userUID).get()
+                .addOnSuccessListener { doc ->
+                    if(doc.exists()) {
+                        val user = User("acacio@isec.pt", "Acácio", "Coutinho") //doc.toObject<User>()!!
+                        userData(user)
+                    }
+                }
         }
+
         //Storage
 
         fun getFileFromAsset(assetManager: AssetManager, strName: String): InputStream? {
