@@ -99,6 +99,7 @@ class FirebaseViewModel : ViewModel() {
             }
         }
     }
+
     fun uploadToStorage(imageName: String, path: String) {
         viewModelScope.launch {
             StorageUtil.getFileFromPath(path)?.let { inputStream ->
@@ -107,11 +108,7 @@ class FirebaseViewModel : ViewModel() {
         }
     }
 
-    fun updatePhotoUrl(location: Location, imageUrl: Unit) {
-        viewModelScope.launch {
-            StorageUtil.updatePhotoUrl(location,imageUrl);
-        }
-    }
+
 
 
 }
