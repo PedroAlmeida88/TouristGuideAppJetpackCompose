@@ -1,5 +1,6 @@
 package pt.isec.amovtp.touristapp.ui.viewmodels
 
+import android.util.Log
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
@@ -87,9 +88,12 @@ class FirebaseViewModel : ViewModel() {
         return userReceived
     }
 
-    fun getLocationFromFirestore(){
+    fun getLocationFromFirestore(callback: (List<Location>) -> Unit){
         viewModelScope.launch {
-            StorageUtil.getLocationFromFirestore()
+            StorageUtil.getLocationFromFirestore { locations ->
+                //Log.i("FIREBASEVIEWMODEL", "getLocationFromFirestore: " + locations.toString())
+                callback(locations)
+            }
         }
     }
     fun addLocationsToFirestore(location:Location) {

@@ -103,7 +103,31 @@ class StorageUtil {
                     Log.i(TAG, "ERROR"+ e.toString())
                 }
         }
+        fun getLocationFromFirestore(callback: (List<Location>) -> Unit) {
+            val db = Firebase.firestore
 
+            db.collection(Collections.Locations.route)
+                .get()
+                .addOnSuccessListener { result ->
+                    val locations = mutableListOf<Location>()
+
+                    for (document in result) {
+                        Log.i(TAG, "getLocationFromFirestore: " +document.data.toString())
+                        val name = document.id
+                        val description = document.getString("Description") ?: ""
+                        val latitude = document.getDouble("Latitude") ?: 0.0
+                        val longitude = document.getDouble("Longitude") ?: 0.0
+                        val imageResource = document.getString("PhotoUrl") ?: ""
+                        val location = Location(name, description, latitude, longitude, imageResource)
+                        locations.add(location)
+                    }
+                    callback(locations)
+                }
+                .addOnFailureListener { e ->
+                    Log.i(TAG, "ERROR: ${e.toString()}")
+                    callback(emptyList())
+                }
+        }
         fun getPOIFromFirestore () : List<PointOfInterest> {
             return emptyList()
         }
