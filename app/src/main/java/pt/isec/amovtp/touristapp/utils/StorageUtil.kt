@@ -2,6 +2,7 @@ package pt.isec.amovtp.touristapp.utils
 
 import android.content.ContentValues.TAG
 import android.content.res.AssetManager
+import android.net.Uri
 import android.util.Log
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
@@ -46,6 +47,15 @@ class StorageUtil {
                 .addOnCompleteListener { result ->
                     onResult(result.exception)
                 }
+        }
+        fun addPhotoUrlToFirestore(name: String ,photoUrl: Uri) {
+            val db = Firebase.firestore
+            val newPhotoUrl = photoUrl.toString()
+            val updateData = hashMapOf(
+                "PhotoUrl" to newPhotoUrl as Any
+            )
+            db.collection(Collections.Locations.route).document(name)
+                .update(updateData)
         }
 
         fun addPOIToFirestore (onResult: (Throwable?) -> Unit) {
@@ -93,7 +103,31 @@ class StorageUtil {
                     Log.i(TAG, "ERROR"+ e.toString())
                 }
         }
+        fun getLocationFromFirestore(callback: (List<Location>) -> Unit) {
+            val db = Firebase.firestore
 
+            db.collection(Collections.Locations.route)
+                .get()
+                .addOnSuccessListener { result ->
+                    val locations = mutableListOf<Location>()
+
+                    for (document in result) {
+                        Log.i(TAG, "getLocationFromFirestore: " +document.data.toString())
+                        val name = document.id
+                        val description = document.getString("Description") ?: ""
+                        val latitude = document.getDouble("Latitude") ?: 0.0
+                        val longitude = document.getDouble("Longitude") ?: 0.0
+                        val imageResource = document.getString("PhotoUrl") ?: ""
+                        val location = Location(name, description, latitude, longitude, imageResource)
+                        locations.add(location)
+                    }
+                    callback(locations)
+                }
+                .addOnFailureListener { e ->
+                    Log.i(TAG, "ERROR: ${e.toString()}")
+                    callback(emptyList())
+                }
+        }
         fun getPOIFromFirestore () : List<PointOfInterest> {
             return emptyList()
         }
@@ -156,7 +190,10 @@ class StorageUtil {
                 if (task.isSuccessful) {
                     val downloadUri = task.result
                     println(downloadUri.toString())
-                    // something like:
+                    //add Uti to database
+                    addPhotoUrlToFirestore(imgFile,downloadUri)
+
+
                     //   https://firebasestorage.googleapis.com/v0/b/p0405ansamov.appspot.com/o/images%2Fimage.png?alt=media&token=302c7119-c3a9-426d-b7b4-6ab5ac25fed9
                 } else {
                     // Handle failures
@@ -167,18 +204,5 @@ class StorageUtil {
 
         }
 
-        fun updatePhotoUrl(location: Location, imageUrl: Unit) {
-            val db = Firebase.firestore
-
-            val locationData = hashMapOf(
-                "Description" to location.description,
-                "Latitude" to location.latitude,
-                "Longitude" to location.longitude,
-                "PhotoUrl" to imageUrl,  // Atualiza a URL da foto
-            )
-
-            db.collection(Collections.Locations.route).document(location.name).set(locationData)
-                .addOnCompleteListener { }
-        }
     }
 }

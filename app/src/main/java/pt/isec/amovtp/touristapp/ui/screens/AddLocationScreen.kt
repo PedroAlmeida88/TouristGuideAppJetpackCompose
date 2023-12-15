@@ -236,8 +236,6 @@ fun AddLocationScreen(modifier: Modifier.Companion, locationViewModel: LocationV
                     )
                     firebaseViewModel.addLocationsToFirestore(location)
                     firebaseViewModel.uploadToStorage( imageName = locationName, path = locationViewModel.imagePath.value ?: "")
-                    //Todo: Obter o url da foto e coloar na base de dados
-
                 }
             },
             modifier = Modifier
