@@ -112,7 +112,7 @@ class StorageUtil {
             db.collection(Collections.Users.route).document(userUID).get()
                 .addOnSuccessListener { doc ->
                     if(doc.exists()) {
-                        val user = User("acacio@isec.pt", "Acácio", "Coutinho") //doc.toObject<User>()!!
+                        val user = User(doc.get("Email").toString(), doc.get("FirstName").toString(), doc.get("LastName").toString()) //doc.toObject<User>()!!
                         userData(user)
                     }
                 }
