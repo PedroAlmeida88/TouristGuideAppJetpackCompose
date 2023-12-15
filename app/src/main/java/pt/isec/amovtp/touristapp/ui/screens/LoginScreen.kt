@@ -37,12 +37,14 @@ fun LoginScreen(
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     val error by remember { firebaseViewModel.error }
+    val authUser by remember { firebaseViewModel.authUser }
     val user by remember { firebaseViewModel.user }
 
     LaunchedEffect(key1 = user) {
-        if(user != null && error == null)
+        if(authUser != null && error == null/* && user != null*/)
             onSuccess()
     }
+
     Column (
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -76,7 +78,7 @@ fun LoginScreen(
         Button(
             onClick = {
                 firebaseViewModel.signInWithEmail(email, password)
-                if (firebaseViewModel.user.value != null) {
+                if (firebaseViewModel.authUser.value != null) {
                     navController?.navigate(Screens.MENU.route)
                 }
             },
