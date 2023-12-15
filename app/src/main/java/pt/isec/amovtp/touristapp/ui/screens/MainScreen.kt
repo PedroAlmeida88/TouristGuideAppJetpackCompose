@@ -155,7 +155,7 @@ fun MainScreen(navController:NavHostController = rememberNavController(),
             modifier = Modifier.padding(it)
         ) {
             composable (Screens.MENU.route) {
-                MenuScreen(stringResource(R.string.msgHomeMenu), navController, Screens.LOCATIONS.route, Screens.CREDITS.route)
+                MenuScreen(stringResource(R.string.msgHomeMenu), navController, firebaseViewModel, Screens.LOCATIONS.route, Screens.CREDITS.route)
             }
             composable (Screens.LOGIN.route) {
                 LoginScreen(navController, firebaseViewModel) {

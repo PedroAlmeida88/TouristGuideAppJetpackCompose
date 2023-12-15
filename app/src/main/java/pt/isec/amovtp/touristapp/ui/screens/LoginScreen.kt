@@ -41,7 +41,7 @@ fun LoginScreen(
     val user by remember { firebaseViewModel.user }
 
     LaunchedEffect(key1 = user) {
-        if(authUser != null && error == null/* && user != null*/)
+        if(authUser != null && error == null /*&& user != null*/)
             onSuccess()
     }
 
