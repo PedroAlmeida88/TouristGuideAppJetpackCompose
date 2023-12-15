@@ -25,6 +25,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import pt.isec.amovtp.touristapp.R
+import pt.isec.amovtp.touristapp.data.User
 import pt.isec.amovtp.touristapp.ui.viewmodels.FirebaseViewModel
 
 @Composable
@@ -74,7 +75,8 @@ fun RegisterScreen(navController: NavHostController, firebaseViewModel: Firebase
         Spacer(modifier = Modifier.height(8.dp))
         Button(
             onClick = {
-                firebaseViewModel.createUserWithEmail(email, password)
+                val user = User(email, firstName, lastName)
+                firebaseViewModel.createUserWithEmail(user, password)
                 if(firebaseViewModel.error.value == null)
                     navController.navigate(Screens.LOGIN.route)
             },
