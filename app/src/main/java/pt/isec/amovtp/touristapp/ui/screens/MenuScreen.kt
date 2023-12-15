@@ -22,6 +22,7 @@ import pt.isec.amovtp.touristapp.ui.viewmodels.FirebaseViewModel
 @Composable
 fun MenuScreen(
     title: String, navController: NavHostController?,
+    firebaseViewModel: FirebaseViewModel,
     vararg options: String,
 
 ) {
@@ -43,6 +44,9 @@ fun MenuScreen(
                 .fillMaxSize()
                 .padding(24.dp)
         ) {
+            Text(
+                text = "Olá, ${firebaseViewModel.user.value?.firstName}"
+            )
 
             for (btnName in options) {
                 Button(

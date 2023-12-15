@@ -29,7 +29,7 @@ class FirebaseViewModel : ViewModel() {
     val authUser : MutableState<AuthUser?>
         get() = _authUser
 
-    private val _user = mutableStateOf<User?>(null)
+    private val _user = mutableStateOf<User?>(/*getUserFromFirestore(_authUser.value!!.uid)*/null)
     val user : MutableState<User?>
         get() = _user
 
@@ -53,14 +53,18 @@ class FirebaseViewModel : ViewModel() {
     fun signInWithEmail(email: String, password: String) {
         if(email.isBlank() || password.isBlank())
             return
-        FireAuthUtil.signInWithEmail(email, password) { exception ->
-            if(exception == null)
-                _authUser.value = FireAuthUtil.currentUser?.toAuthUser()
-            _error.value = exception?.message
-        }
-        /*StorageUtil.getUserFromFirestore (_authUser.value!!.uid) { user ->
-            _user.value = user
-        }*/
+        //viewModelScope.launch {
+            FireAuthUtil.signInWithEmail(email, password) { exception ->
+                if(exception == null) {
+                    _authUser.value = FireAuthUtil.currentUser?.toAuthUser()
+                    StorageUtil.getUserFromFirestore(_authUser.value!!.uid) { user ->
+                        _user.value = user
+                    }
+
+                }
+                _error.value = exception?.message
+            }
+        //}
     }
 
     fun signOut () {
@@ -70,12 +74,17 @@ class FirebaseViewModel : ViewModel() {
         _user.value = null
     }
 
-    fun getUserFromFirestore(userUID: String) {
+    fun getUserFromFirestore(userUID: String) : User? {
+        if(userUID.isEmpty()){
+            return null
+        }
+        lateinit var userReceived: User
         viewModelScope.launch {
             StorageUtil.getUserFromFirestore(userUID){ user ->
-                _user.value = user
+                userReceived = user
             }
         }
+        return userReceived
     }
 
     fun getLocationFromFirestore(){
