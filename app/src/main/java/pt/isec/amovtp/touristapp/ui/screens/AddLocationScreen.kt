@@ -170,40 +170,6 @@ fun AddLocationScreen(modifier: Modifier.Companion, navController: NavHostContro
             label = { Text(text = "Latitude") },
             enabled = isInputEnabled
         )
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(IntrinsicSize.Min)
-                .padding(16.dp)
-        ) {
-            /*
-            Button(
-                onClick = {type = "picture" },
-                modifier = Modifier
-                    .weight(1f)
-                    .height(48.dp)
-                    .padding(8.dp),
-                colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.primary),
-            ) {
-                Text(text = "Take Photo")
-            }
-            Button(
-                onClick = {
-                          type = "galerry"
-                },
-                modifier = Modifier
-                    .weight(1f)
-                    .height(48.dp)
-                    .padding(8.dp),
-                colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.primary),
-            ) {
-                Text(text = "Load Photo from Gallery")
-            }
-
-             */
-
-
-        }
         Box(
             modifier = Modifier
                 .fillMaxSize()
@@ -212,6 +178,7 @@ fun AddLocationScreen(modifier: Modifier.Companion, navController: NavHostContro
                 .weight(1f)
         ) {
             TakePhotoOrLoadFromGallery(locationViewModel.imagePath, Modifier.fillMaxSize())
+            validateForm()
         }
         Button(
             onClick = {
@@ -227,7 +194,7 @@ fun AddLocationScreen(modifier: Modifier.Companion, navController: NavHostContro
                         photoUrl = ""
                     )
                     firebaseViewModel.addLocationsToFirestore(location)
-                    firebaseViewModel.uploadToStorage( imageName = locationName, path = locationViewModel.imagePath.value ?: "")
+                    firebaseViewModel.uploadToStorage(directory = "images/"+locationName ,imageName = locationName, path = locationViewModel.imagePath.value ?: "")
                     navController?.popBackStack()
                     Toast.makeText(context,"Localização adicionada com sucesso!",Toast.LENGTH_LONG).show()
                 }

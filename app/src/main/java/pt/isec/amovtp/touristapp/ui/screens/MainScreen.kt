@@ -175,7 +175,7 @@ fun MainScreen(navController:NavHostController = rememberNavController(),
                 ShowMapScreen(navController = navController, viewModel = locationViewModel)
             }
             composable (Screens.POI.route) {
-                POIScreen(navController = navController, viewModel = locationViewModel)
+                POIScreen(navController = navController, viewModel = locationViewModel,firebaseViewModel = firebaseViewModel)
             }
             composable (Screens.ADD_POI.route) {
                 Greeting(name = Screens.ADD_POI.route)

@@ -117,8 +117,8 @@ class StorageUtil {
                         val description = document.getString("Description") ?: ""
                         val latitude = document.getDouble("Latitude") ?: 0.0
                         val longitude = document.getDouble("Longitude") ?: 0.0
-                        val imageResource = document.getString("PhotoUrl") ?: ""
-                        val location = Location(name, description, latitude, longitude, imageResource)
+                        val imageUrl = document.getString("PhotoUrl") ?: ""
+                        val location = Location(name, description, latitude, longitude, imageUrl)
                         locations.add(location)
                     }
                     callback(locations)
@@ -128,8 +128,37 @@ class StorageUtil {
                     callback(emptyList())
                 }
         }
-        fun getPOIFromFirestore () : List<PointOfInterest> {
-            return emptyList()
+        fun getPoisFromFirestore(location: Location?, callback: (List<PointOfInterest>) -> Unit) {
+            val db = Firebase.firestore
+            val idDocument = location?.name ?: ""
+
+            db.collection(Collections.Locations.route)
+                .document(idDocument)
+                .collection(Collections.POIs.route)
+                .get()
+                .addOnSuccessListener { result ->
+                    val pois = mutableListOf<PointOfInterest>()
+
+                    for (document in result) {
+                        try {
+                            val name = document.id
+                            val description = document.getString("Description") ?: ""
+                            val latitude = document.getDouble("Latitude") ?: 0.0
+                            val longitude = document.getDouble("Longitude") ?: 0.0
+                            val imageUrl = document.getString("PhotoUrl") ?: ""
+                            val pointOfInterest = PointOfInterest(name, description, latitude, longitude, imageUrl)
+                            pois.add(pointOfInterest)
+                        } catch (e: Exception) {
+                            Log.e(TAG, "Error parsing POI document: ${e.message}")
+                        }
+                    }
+
+                    callback(pois)
+                }
+                .addOnFailureListener { e ->
+                    Log.e(TAG, "Error fetching POIs: ${e.message}")
+                    callback(emptyList())
+                }
         }
 
         fun getCategoryFromFirestore () : List<Category> {
@@ -172,10 +201,10 @@ class StorageUtil {
                 null
             }
         }
-        fun uploadFile(inputStream: InputStream, imgFile: String) {
+        fun uploadFile(directory: String,inputStream: InputStream, imgFile: String) {
             val storage = Firebase.storage
             val ref1 = storage.reference
-            val ref2 = ref1.child("images")
+            val ref2 = ref1.child(directory)
             val ref3 = ref2.child(imgFile)
 
             val uploadTask = ref3.putStream(inputStream)
@@ -203,6 +232,8 @@ class StorageUtil {
 
 
         }
+
+
 
     }
 }

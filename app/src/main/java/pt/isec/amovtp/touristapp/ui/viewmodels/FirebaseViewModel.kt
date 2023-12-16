@@ -9,6 +9,7 @@ import com.google.firebase.auth.FirebaseUser
 import kotlinx.coroutines.launch
 import pt.isec.amovtp.touristapp.data.AuthUser
 import pt.isec.amovtp.touristapp.data.Location
+import pt.isec.amovtp.touristapp.data.PointOfInterest
 import pt.isec.amovtp.touristapp.data.User
 import pt.isec.amovtp.touristapp.utils.FireAuthUtil
 import pt.isec.amovtp.touristapp.utils.StorageUtil
@@ -91,7 +92,6 @@ class FirebaseViewModel : ViewModel() {
     fun getLocationFromFirestore(callback: (List<Location>) -> Unit){
         viewModelScope.launch {
             StorageUtil.getLocationFromFirestore { locations ->
-                //Log.i("FIREBASEVIEWMODEL", "getLocationFromFirestore: " + locations.toString())
                 callback(locations)
             }
         }
@@ -104,15 +104,21 @@ class FirebaseViewModel : ViewModel() {
         }
     }
 
-    fun uploadToStorage(imageName: String, path: String) {
+    fun uploadToStorage(directory: String,imageName: String, path: String) {
         viewModelScope.launch {
             StorageUtil.getFileFromPath(path)?.let { inputStream ->
-                StorageUtil.uploadFile(inputStream, imageName)
+                StorageUtil.uploadFile(directory,inputStream, imageName)
             }
         }
     }
 
-
+    fun getPoisFromFirestore(selectedLocation: Location?, callback: (List<PointOfInterest>) -> Unit) {
+        viewModelScope.launch {
+            StorageUtil.getPoisFromFirestore(selectedLocation) { pois ->
+                callback(pois)
+            }
+        }
+    }
 
 
 }

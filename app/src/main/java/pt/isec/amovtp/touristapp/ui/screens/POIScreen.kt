@@ -1,5 +1,6 @@
 package pt.isec.amovtp.touristapp.ui.screens
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -23,6 +24,11 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -30,12 +36,27 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import coil.compose.AsyncImage
+import pt.isec.amovtp.touristapp.R
+import pt.isec.amovtp.touristapp.data.Location
+import pt.isec.amovtp.touristapp.data.PointOfInterest
+import pt.isec.amovtp.touristapp.ui.viewmodels.FirebaseViewModel
 import pt.isec.amovtp.touristapp.ui.viewmodels.LocationViewModel
+import kotlin.math.log
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun POIScreen(modifier: Modifier = Modifier, navController: NavHostController?, viewModel : LocationViewModel) {
+fun POIScreen(modifier: Modifier = Modifier, navController: NavHostController?, viewModel : LocationViewModel,firebaseViewModel: FirebaseViewModel) {
+    val selectedLocation = viewModel.selectedLocation
+    var pois by remember { mutableStateOf<List<PointOfInterest>>(emptyList()) }
 
+    //sempre que é iniciado, carrega os POIS
+    LaunchedEffect(Unit) {
+        firebaseViewModel.getPoisFromFirestore(selectedLocation) { loadedPois ->
+            pois = loadedPois
+            //Log.i("TAG", "POIScreen: " + pois)
+        }
+    }
     Column(
         verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -49,6 +70,7 @@ fun POIScreen(modifier: Modifier = Modifier, navController: NavHostController?, 
             verticalAlignment = Alignment.Top
         ) {
             //Fazer ciclo com butões
+
             Button(
                 onClick = { }
             ) {
@@ -76,7 +98,7 @@ fun POIScreen(modifier: Modifier = Modifier, navController: NavHostController?, 
             modifier = Modifier
                 .fillMaxSize()
         ) {
-            items(viewModel.POIsBarcelona) { poi ->
+            items(pois) { poi ->
                 Card(
                     modifier = Modifier
                         //.fillMaxHeight(0,5f) // Use 50% of the screen height
@@ -90,14 +112,10 @@ fun POIScreen(modifier: Modifier = Modifier, navController: NavHostController?, 
                     ),
 
                     onClick = {
-                        //geoPoint = GeoPoint(poi.latitude, poi.longitude)
                         navController?.navigate(Screens.POI_DESCRIPTION.route)
                     }
                 ) {
-                    Image(
-                        painter = painterResource(id = poi.imagesRes),
-                        contentDescription = "city picture",
-                    )
+                    AsyncImage(model = poi.photoUrl, contentDescription = "Point of Interest Picture")
                     Column(
                         modifier = Modifier
                             .fillMaxSize()
@@ -106,7 +124,7 @@ fun POIScreen(modifier: Modifier = Modifier, navController: NavHostController?, 
                         horizontalAlignment = Alignment.CenterHorizontally
 
                     ) {
-                        Text(text = poi.team, fontSize = 20.sp)
+                        Text(text = poi.name, fontSize = 20.sp)
                         Text(text = "${poi.latitude} ${poi.longitude}", fontSize = 14.sp)
 
                     }
