@@ -32,8 +32,8 @@ class LocationViewModel(private val locationHandler: LocationHandler) : ViewMode
         LocationData("Barcelona", "Barcelona description", 41.38087, 2.122802, "")
     )
     val POIsBarcelona = listOf(
-        Coordinates("La Sagrada Familia", 41.4036, 2.1744, R.drawable.liverpool),
-        Coordinates("Camp Nou", 41.38087, 2.122802, R.drawable.liverpool),
+        Coordinates("La Sagrada Familia", 41.4036, 2.1744, R.drawable.acacio),
+        Coordinates("Camp Nou", 41.38087, 2.122802, R.drawable.acacio),
     )
     // Permissions
     var coarseLocationPermission = false

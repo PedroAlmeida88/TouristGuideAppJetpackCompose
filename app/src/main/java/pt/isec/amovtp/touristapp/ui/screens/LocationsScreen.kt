@@ -44,16 +44,14 @@ import pt.isec.amovtp.touristapp.R
 import pt.isec.amovtp.touristapp.data.Location
 import pt.isec.amovtp.touristapp.ui.viewmodels.FirebaseViewModel
 import pt.isec.amovtp.touristapp.ui.viewmodels.LocationViewModel
+import pt.isec.amovtp.touristapp.utils.location.FusedLocationHandler
+import pt.isec.amovtp.touristapp.utils.location.LocationUtils
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LocationsScreen(modifier: Modifier = Modifier, navController: NavHostController?,viewModel : LocationViewModel,firebaseViewModel: FirebaseViewModel) {
-    var autoEnabled by remember{ mutableStateOf(false) }
-    val location = viewModel.currentLocation.observeAsState()
+    val myLocation = viewModel.currentLocation.observeAsState()
     var locations by remember { mutableStateOf<List<Location>>(emptyList())}
-    var geoPoint by remember{ mutableStateOf(GeoPoint(
-        30.00, 10.00
-    )) }
 
 
 
@@ -78,16 +76,23 @@ fun LocationsScreen(modifier: Modifier = Modifier, navController: NavHostControl
 
             Button(
                 onClick = {
-                    firebaseViewModel.getLocationFromFirestore(){location->
-
-                    }
+                    locations = locations.sortedBy { it.name }
                 }
             ) {
-                Text(text = "A...Z")
+                Text(text = "Ordem Alfabética")
             }
             Spacer(modifier = Modifier.width(12.dp))
             Button(
-                onClick = {  }
+                onClick = {
+                    locations = locations.sortedBy { location ->
+                        LocationUtils().haversine(
+                            myLocation.value?.latitude ?: 0.0,
+                            myLocation.value?.longitude ?: 0.0,
+                            location.latitude,
+                            location.longitude
+                        )
+                    }
+                }
             ) {
                 Text(text = "Perto de mim")
             }
