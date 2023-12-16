@@ -1,6 +1,6 @@
 package pt.isec.amovtp.touristapp.ui.screens
 
-import android.util.Log
+import android.widget.Toast
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -30,17 +30,18 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
 import pt.isec.amovtp.touristapp.data.Location
-import pt.isec.amovtp.touristapp.ui.composables.SelectGalleryImage
-import pt.isec.amovtp.touristapp.ui.composables.TakePhoto
+import pt.isec.amovtp.touristapp.ui.composables.TakePhotoOrLoadFromGallery
 import pt.isec.amovtp.touristapp.ui.viewmodels.FirebaseViewModel
 import pt.isec.amovtp.touristapp.ui.viewmodels.LocationViewModel
 
 
 @Composable
-fun AddLocationScreen(modifier: Modifier.Companion, locationViewModel: LocationViewModel, firebaseViewModel: FirebaseViewModel) {
-
+fun AddLocationScreen(modifier: Modifier.Companion, navController: NavHostController?,locationViewModel: LocationViewModel, firebaseViewModel: FirebaseViewModel) {
+    val context = LocalContext.current
     var locationName by remember { mutableStateOf("") }
     var locationDescription by remember { mutableStateOf("") }
     var longitude by remember { mutableStateOf("") }
@@ -62,15 +63,7 @@ fun AddLocationScreen(modifier: Modifier.Companion, locationViewModel: LocationV
                 longitudeDouble != null &&
                 latitudeDouble != null &&
                 locationViewModel.imagePath.value != null
-        /*
-        Log.i("FormValidation", "Location Name: $locationName")
-        Log.i("FormValidation", "Location Description: $locationDescription")
-        Log.i("FormValidation", "Longitude: $longitude")
-        Log.i("FormValidation", "Longitude Double: $longitudeDouble")
-        Log.i("FormValidation", "Longitude: $latitude")
-        Log.i("FormValidation", "Longitude Double: $latitudeDouble")
 
-         */
     }
 
     Column (
@@ -183,6 +176,7 @@ fun AddLocationScreen(modifier: Modifier.Companion, locationViewModel: LocationV
                 .height(IntrinsicSize.Min)
                 .padding(16.dp)
         ) {
+            /*
             Button(
                 onClick = {type = "picture" },
                 modifier = Modifier
@@ -205,6 +199,10 @@ fun AddLocationScreen(modifier: Modifier.Companion, locationViewModel: LocationV
             ) {
                 Text(text = "Load Photo from Gallery")
             }
+
+             */
+
+
         }
         Box(
             modifier = Modifier
@@ -213,13 +211,7 @@ fun AddLocationScreen(modifier: Modifier.Companion, locationViewModel: LocationV
                 .padding(8.dp)
                 .weight(1f)
         ) {
-            if (type.equals("picture")) {
-                TakePhoto(locationViewModel.imagePath, Modifier.fillMaxSize())
-                validateForm()
-            } else {
-                SelectGalleryImage(locationViewModel.imagePath, Modifier.fillMaxSize())
-                validateForm()
-            }
+            TakePhotoOrLoadFromGallery(locationViewModel.imagePath, Modifier.fillMaxSize())
         }
         Button(
             onClick = {
@@ -236,6 +228,8 @@ fun AddLocationScreen(modifier: Modifier.Companion, locationViewModel: LocationV
                     )
                     firebaseViewModel.addLocationsToFirestore(location)
                     firebaseViewModel.uploadToStorage( imageName = locationName, path = locationViewModel.imagePath.value ?: "")
+                    navController?.popBackStack()
+                    Toast.makeText(context,"Localização adicionada com sucesso!",Toast.LENGTH_LONG).show()
                 }
             },
             modifier = Modifier
