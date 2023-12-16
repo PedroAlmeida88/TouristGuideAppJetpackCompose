@@ -48,7 +48,27 @@ class StorageUtil {
                     onResult(result.exception)
                 }
         }
-        fun addPhotoUrlToFirestore(name: String ,photoUrl: Uri) {
+        fun addPOIToFirestore(locationName: String, poi: PointOfInterest,onResult: (Throwable?) -> Unit) {
+            val db = Firebase.firestore
+
+            val poisData = hashMapOf(
+                "Description" to poi.description,
+                "Category" to poi.category,
+                "Latitude" to poi.latitude,
+                "Longitude" to poi.longitude,
+                "PhotoUrl" to poi.photoUrl,
+            )
+
+            db.collection(Collections.Locations.route)
+                .document(locationName)
+                .collection(Collections.POIs.route)
+                .document(poi.name)
+                .set(poisData)
+                .addOnCompleteListener { result ->
+                    onResult(result.exception)
+                }
+        }
+        fun addLocationPhotoUrlToFirestore(name: String ,photoUrl: Uri) {
             val db = Firebase.firestore
             val newPhotoUrl = photoUrl.toString()
             val updateData = hashMapOf(
@@ -58,8 +78,17 @@ class StorageUtil {
                 .update(updateData)
         }
 
-        fun addPOIToFirestore (onResult: (Throwable?) -> Unit) {
-
+        fun addPOIPhotoUrlToFirestore(name: String ,photoUrl: Uri,locationName: String) {
+            val db = Firebase.firestore
+            val newPhotoUrl = photoUrl.toString()
+            val updateData = hashMapOf(
+                "PhotoUrl" to newPhotoUrl as Any
+            )
+            db.collection(Collections.Locations.route)
+                .document(locationName)
+                .collection(Collections.POIs.route)
+                .document(name)
+                .update(updateData)
         }
 
         fun addCategoryToFirestore (onResult: (Throwable?) -> Unit) {
@@ -146,7 +175,15 @@ class StorageUtil {
                             val latitude = document.getDouble("Latitude") ?: 0.0
                             val longitude = document.getDouble("Longitude") ?: 0.0
                             val imageUrl = document.getString("PhotoUrl") ?: ""
-                            val pointOfInterest = PointOfInterest(name, description, latitude, longitude, imageUrl)
+
+                            val category = pt.isec.amovtp.touristapp.data.Category(
+                                "Categoria Teste",
+                                2,
+                                "Alterar no StorageUtil",
+                                ""
+                            )
+
+                            val pointOfInterest = PointOfInterest(name, description, latitude, longitude, imageUrl,category)
                             pois.add(pointOfInterest)
                         } catch (e: Exception) {
                             Log.e(TAG, "Error parsing POI document: ${e.message}")
@@ -201,7 +238,7 @@ class StorageUtil {
                 null
             }
         }
-        fun uploadFile(directory: String,inputStream: InputStream, imgFile: String) {
+        fun uploadLocationFile(directory: String,inputStream: InputStream, imgFile: String) {
             val storage = Firebase.storage
             val ref1 = storage.reference
             val ref2 = ref1.child(directory)
@@ -220,7 +257,7 @@ class StorageUtil {
                     val downloadUri = task.result
                     println(downloadUri.toString())
                     //add Uti to database
-                    addPhotoUrlToFirestore(imgFile,downloadUri)
+                    addLocationPhotoUrlToFirestore(imgFile,downloadUri)
 
 
                     //   https://firebasestorage.googleapis.com/v0/b/p0405ansamov.appspot.com/o/images%2Fimage.png?alt=media&token=302c7119-c3a9-426d-b7b4-6ab5ac25fed9
@@ -233,6 +270,37 @@ class StorageUtil {
 
         }
 
+        fun uploadPOIFile(directory: String,inputStream: InputStream, imgFile: String,locationName: String) {
+            val storage = Firebase.storage
+            val ref1 = storage.reference
+            val ref2 = ref1.child(directory)
+            val ref3 = ref2.child(imgFile)
+
+            val uploadTask = ref3.putStream(inputStream)
+            uploadTask.continueWithTask { task ->
+                if (!task.isSuccessful) {
+                    task.exception?.let {
+                        throw it
+                    }
+                }
+                ref3.downloadUrl
+            }.addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    val downloadUri = task.result
+                    println(downloadUri.toString())
+                    //add Uti to database
+                    addPOIPhotoUrlToFirestore(imgFile,downloadUri,locationName)
+
+
+                    //   https://firebasestorage.googleapis.com/v0/b/p0405ansamov.appspot.com/o/images%2Fimage.png?alt=media&token=302c7119-c3a9-426d-b7b4-6ab5ac25fed9
+                } else {
+                    // Handle failures
+                    // ...
+                }
+            }
+
+
+        }
 
 
     }

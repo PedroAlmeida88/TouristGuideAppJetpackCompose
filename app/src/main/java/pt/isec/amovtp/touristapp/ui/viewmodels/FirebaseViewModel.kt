@@ -103,11 +103,26 @@ class FirebaseViewModel : ViewModel() {
             }
         }
     }
+    fun addPOIToFirestore(locationName:String, poi: PointOfInterest) {
+        viewModelScope.launch {
+            StorageUtil.addPOIToFirestore(locationName,poi){ exception ->
+                _error.value = exception?.message
+            }
+        }
+    }
 
-    fun uploadToStorage(directory: String,imageName: String, path: String) {
+    fun uploadLocationToStorage(directory: String,imageName: String, path: String) {
         viewModelScope.launch {
             StorageUtil.getFileFromPath(path)?.let { inputStream ->
-                StorageUtil.uploadFile(directory,inputStream, imageName)
+                StorageUtil.uploadLocationFile(directory,inputStream, imageName)
+            }
+        }
+    }
+
+    fun uploadPOIToStorage(directory: String,imageName: String, path: String,locationName: String) {
+        viewModelScope.launch {
+            StorageUtil.getFileFromPath(path)?.let { inputStream ->
+                StorageUtil.uploadPOIFile(directory,inputStream, imageName, locationName )
             }
         }
     }
@@ -119,6 +134,8 @@ class FirebaseViewModel : ViewModel() {
             }
         }
     }
+
+
 
 
 }

@@ -194,7 +194,7 @@ fun AddLocationScreen(modifier: Modifier.Companion, navController: NavHostContro
                         photoUrl = ""
                     )
                     firebaseViewModel.addLocationsToFirestore(location)
-                    firebaseViewModel.uploadToStorage(directory = "images/"+locationName ,imageName = locationName, path = locationViewModel.imagePath.value ?: "")
+                    firebaseViewModel.uploadLocationToStorage(directory = "images/"+locationName ,imageName = locationName, path = locationViewModel.imagePath.value ?: "")
                     navController?.popBackStack()
                     Toast.makeText(context,"Localização adicionada com sucesso!",Toast.LENGTH_LONG).show()
                 }
