@@ -44,9 +44,10 @@ fun MenuScreen(
                 .fillMaxSize()
                 .padding(24.dp)
         ) {
-            Text(
-                text = "Olá, ${firebaseViewModel.user.value?.firstName}"
-            )
+            if(firebaseViewModel.user.value != null)
+                Text(
+                    text = "Olá, ${firebaseViewModel.user.value?.firstName} ${firebaseViewModel.user.value?.lastName}"
+                )
 
             for (btnName in options) {
                 Button(

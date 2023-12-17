@@ -159,6 +159,7 @@ fun MainScreen(navController:NavHostController = rememberNavController(),
             }
             composable (Screens.LOGIN.route) {
                 LoginScreen(navController, firebaseViewModel) {
+                    firebaseViewModel.getUserFromFirestore(firebaseViewModel.authUser.value!!.uid)
                     navController.navigate(Screens.MENU.route)
                 }
             }
