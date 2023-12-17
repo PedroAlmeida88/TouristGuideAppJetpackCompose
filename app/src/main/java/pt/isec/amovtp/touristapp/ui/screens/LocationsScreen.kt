@@ -1,5 +1,6 @@
 package pt.isec.amovtp.touristapp.ui.screens
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -23,6 +24,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateListOf
@@ -36,27 +38,29 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import coil.compose.AsyncImage
 import org.osmdroid.util.GeoPoint
+import pt.isec.amovtp.touristapp.R
 import pt.isec.amovtp.touristapp.data.Location
 import pt.isec.amovtp.touristapp.ui.viewmodels.FirebaseViewModel
 import pt.isec.amovtp.touristapp.ui.viewmodels.LocationViewModel
+import pt.isec.amovtp.touristapp.utils.location.FusedLocationHandler
+import pt.isec.amovtp.touristapp.utils.location.LocationUtils
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LocationsScreen(modifier: Modifier = Modifier, navController: NavHostController?,viewModel : LocationViewModel,firebaseViewModel: FirebaseViewModel) {
-    var autoEnabled by remember{ mutableStateOf(false) }
-    val location = viewModel.currentLocation.observeAsState()
+    val myLocation = viewModel.currentLocation.observeAsState()
+    var locations by remember { mutableStateOf<List<Location>>(emptyList())}
 
-    var geoPoint by remember{ mutableStateOf(GeoPoint(
-        30.00, 10.00
-    )) }
 
-   /* val locations = remember {
-       mutableStateOf(
-           firebaseViewModel.getLocationFromFirestore()
-       )
-    }*/
-    
+
+    //sempre que é iniciado, carrega as localizações
+    LaunchedEffect(Unit) {
+        firebaseViewModel.getLocationFromFirestore { loadedLocations ->
+            locations = loadedLocations
+        }
+    }
     Column(
         verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -69,17 +73,26 @@ fun LocationsScreen(modifier: Modifier = Modifier, navController: NavHostControl
             horizontalArrangement = Arrangement.Start,
             verticalAlignment = Alignment.Top
         ){
+
             Button(
                 onClick = {
-                    //val location1 = Location("Leiria","????????",13.134,32.342,"-")
-                    //firebaseViewModel.addLocationsToFirestore(location = location1)
+                    locations = locations.sortedBy { it.name }
                 }
             ) {
-                Text(text = "A...Z")
+                Text(text = "Ordem Alfabética")
             }
             Spacer(modifier = Modifier.width(12.dp))
             Button(
-                onClick = {  }
+                onClick = {
+                    locations = locations.sortedBy { location ->
+                        LocationUtils().haversine(
+                            myLocation.value?.latitude ?: 0.0,
+                            myLocation.value?.longitude ?: 0.0,
+                            location.latitude,
+                            location.longitude
+                        )
+                    }
+                }
             ) {
                 Text(text = "Perto de mim")
             }
@@ -89,7 +102,7 @@ fun LocationsScreen(modifier: Modifier = Modifier, navController: NavHostControl
             modifier = Modifier
                 .fillMaxSize()
         ) {
-            items(viewModel.POIs) { poi ->
+            items(locations) { location ->
                 Card(
                     modifier = Modifier
                         //.fillMaxHeight(0,5f) // Use 50% of the screen height
@@ -104,7 +117,7 @@ fun LocationsScreen(modifier: Modifier = Modifier, navController: NavHostControl
                     ),
 
                     onClick = {
-                        //geoPoint = GeoPoint(poi.latitude, poi.longitude)
+                        viewModel.selectedLocation = location
                         navController?.navigate(Screens.POI.route)
                     }
                 ) {
@@ -116,12 +129,13 @@ fun LocationsScreen(modifier: Modifier = Modifier, navController: NavHostControl
                         horizontalAlignment = Alignment.CenterHorizontally
 
                     ) {
-                        Image(painter = painterResource(id = poi.imagesRes), contentDescription = "city picture")
-
-                        Text(text = poi.team, fontSize = 20.sp)
-                        Text(text = "${poi.latitude} ${poi.longitude}", fontSize = 14.sp)
+                        //Image(painter = painterResource(u = ), contentDescription = "city picture")
+                        AsyncImage(model = location.photoUrl, contentDescription = "City Picture")
+                        Text(text = location.name, fontSize = 20.sp)
+                        Text(text = "${location.latitude} ${location.longitude}", fontSize = 14.sp)
+                        /*
                         Button(
-                            onClick = { navController?.navigate(Screens.SHOW_MAP.route) },
+                            onClick = { navController?.navigate(Screens.SHOW_MAP.route,la) },
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .fillParentMaxHeight(0.05f),
@@ -130,6 +144,8 @@ fun LocationsScreen(modifier: Modifier = Modifier, navController: NavHostControl
                             ) {
                             Text(text = "Ver no mapa")
                         }
+
+                         */
                     }
                     
                 }

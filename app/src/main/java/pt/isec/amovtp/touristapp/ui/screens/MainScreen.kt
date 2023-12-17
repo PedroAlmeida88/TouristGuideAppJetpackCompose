@@ -169,16 +169,16 @@ fun MainScreen(navController:NavHostController = rememberNavController(),
                 LocationsScreen(navController = navController, viewModel = locationViewModel, firebaseViewModel = firebaseViewModel)
             }
             composable (Screens.ADD_LOCATIONS.route) {
-                AddLocationScreen(modifier = Modifier,locationViewModel = locationViewModel, firebaseViewModel = firebaseViewModel)
+                AddLocationScreen(modifier = Modifier,navController = navController,locationViewModel = locationViewModel, firebaseViewModel = firebaseViewModel)
             }
             composable (Screens.SHOW_MAP.route) {
                 ShowMapScreen(navController = navController, viewModel = locationViewModel)
             }
             composable (Screens.POI.route) {
-                POIScreen(navController = navController, viewModel = locationViewModel)
+                POIScreen(navController = navController, viewModel = locationViewModel,firebaseViewModel = firebaseViewModel)
             }
             composable (Screens.ADD_POI.route) {
-                Greeting(name = Screens.ADD_POI.route)
+                AddPOIScreen(modifier = Modifier,navController = navController,locationViewModel = locationViewModel, firebaseViewModel = firebaseViewModel)
             }
             composable (Screens.POI_DESCRIPTION.route) {
                 POIDescriptionScreen(modifier = Modifier, viewModel = locationViewModel)

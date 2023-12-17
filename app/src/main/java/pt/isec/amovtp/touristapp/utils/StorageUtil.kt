@@ -2,6 +2,7 @@ package pt.isec.amovtp.touristapp.utils
 
 import android.content.ContentValues.TAG
 import android.content.res.AssetManager
+import android.net.Uri
 import android.util.Log
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
@@ -47,9 +48,47 @@ class StorageUtil {
                     onResult(result.exception)
                 }
         }
+        fun addPOIToFirestore(locationName: String, poi: PointOfInterest,onResult: (Throwable?) -> Unit) {
+            val db = Firebase.firestore
 
-        fun addPOIToFirestore (onResult: (Throwable?) -> Unit) {
+            val poisData = hashMapOf(
+                "Description" to poi.description,
+                "Category" to poi.category,
+                "Latitude" to poi.latitude,
+                "Longitude" to poi.longitude,
+                "PhotoUrl" to poi.photoUrl,
+            )
 
+            db.collection(Collections.Locations.route)
+                .document(locationName)
+                .collection(Collections.POIs.route)
+                .document(poi.name)
+                .set(poisData)
+                .addOnCompleteListener { result ->
+                    onResult(result.exception)
+                }
+        }
+        fun addLocationPhotoUrlToFirestore(name: String ,photoUrl: Uri) {
+            val db = Firebase.firestore
+            val newPhotoUrl = photoUrl.toString()
+            val updateData = hashMapOf(
+                "PhotoUrl" to newPhotoUrl as Any
+            )
+            db.collection(Collections.Locations.route).document(name)
+                .update(updateData)
+        }
+
+        fun addPOIPhotoUrlToFirestore(name: String ,photoUrl: Uri,locationName: String) {
+            val db = Firebase.firestore
+            val newPhotoUrl = photoUrl.toString()
+            val updateData = hashMapOf(
+                "PhotoUrl" to newPhotoUrl as Any
+            )
+            db.collection(Collections.Locations.route)
+                .document(locationName)
+                .collection(Collections.POIs.route)
+                .document(name)
+                .update(updateData)
         }
 
         fun addCategoryToFirestore (onResult: (Throwable?) -> Unit) {
@@ -93,9 +132,70 @@ class StorageUtil {
                     Log.i(TAG, "ERROR"+ e.toString())
                 }
         }
+        fun getLocationFromFirestore(callback: (List<Location>) -> Unit) {
+            val db = Firebase.firestore
 
-        fun getPOIFromFirestore () : List<PointOfInterest> {
-            return emptyList()
+            db.collection(Collections.Locations.route)
+                .get()
+                .addOnSuccessListener { result ->
+                    val locations = mutableListOf<Location>()
+
+                    for (document in result) {
+                        Log.i(TAG, "getLocationFromFirestore: " +document.data.toString())
+                        val name = document.id
+                        val description = document.getString("Description") ?: ""
+                        val latitude = document.getDouble("Latitude") ?: 0.0
+                        val longitude = document.getDouble("Longitude") ?: 0.0
+                        val imageUrl = document.getString("PhotoUrl") ?: ""
+                        val location = Location(name, description, latitude, longitude, imageUrl)
+                        locations.add(location)
+                    }
+                    callback(locations)
+                }
+                .addOnFailureListener { e ->
+                    Log.i(TAG, "ERROR: ${e.toString()}")
+                    callback(emptyList())
+                }
+        }
+        fun getPoisFromFirestore(location: Location?, callback: (List<PointOfInterest>) -> Unit) {
+            val db = Firebase.firestore
+            val idDocument = location?.name ?: ""
+
+            db.collection(Collections.Locations.route)
+                .document(idDocument)
+                .collection(Collections.POIs.route)
+                .get()
+                .addOnSuccessListener { result ->
+                    val pois = mutableListOf<PointOfInterest>()
+
+                    for (document in result) {
+                        try {
+                            val name = document.id
+                            val description = document.getString("Description") ?: ""
+                            val latitude = document.getDouble("Latitude") ?: 0.0
+                            val longitude = document.getDouble("Longitude") ?: 0.0
+                            val imageUrl = document.getString("PhotoUrl") ?: ""
+
+                            val category = pt.isec.amovtp.touristapp.data.Category(
+                                "Categoria Teste",
+                                2,
+                                "Alterar no StorageUtil",
+                                ""
+                            )
+
+                            val pointOfInterest = PointOfInterest(name, description, latitude, longitude, imageUrl,category)
+                            pois.add(pointOfInterest)
+                        } catch (e: Exception) {
+                            Log.e(TAG, "Error parsing POI document: ${e.message}")
+                        }
+                    }
+
+                    callback(pois)
+                }
+                .addOnFailureListener { e ->
+                    Log.e(TAG, "Error fetching POIs: ${e.message}")
+                    callback(emptyList())
+                }
         }
 
         fun getCategoryFromFirestore () : List<Category> {
@@ -138,10 +238,10 @@ class StorageUtil {
                 null
             }
         }
-        fun uploadFile(inputStream: InputStream, imgFile: String) {
+        fun uploadLocationFile(directory: String,inputStream: InputStream, imgFile: String) {
             val storage = Firebase.storage
             val ref1 = storage.reference
-            val ref2 = ref1.child("images")
+            val ref2 = ref1.child(directory)
             val ref3 = ref2.child(imgFile)
 
             val uploadTask = ref3.putStream(inputStream)
@@ -156,7 +256,10 @@ class StorageUtil {
                 if (task.isSuccessful) {
                     val downloadUri = task.result
                     println(downloadUri.toString())
-                    // something like:
+                    //add Uti to database
+                    addLocationPhotoUrlToFirestore(imgFile,downloadUri)
+
+
                     //   https://firebasestorage.googleapis.com/v0/b/p0405ansamov.appspot.com/o/images%2Fimage.png?alt=media&token=302c7119-c3a9-426d-b7b4-6ab5ac25fed9
                 } else {
                     // Handle failures
@@ -167,18 +270,38 @@ class StorageUtil {
 
         }
 
-        fun updatePhotoUrl(location: Location, imageUrl: Unit) {
-            val db = Firebase.firestore
+        fun uploadPOIFile(directory: String,inputStream: InputStream, imgFile: String,locationName: String) {
+            val storage = Firebase.storage
+            val ref1 = storage.reference
+            val ref2 = ref1.child(directory)
+            val ref3 = ref2.child(imgFile)
 
-            val locationData = hashMapOf(
-                "Description" to location.description,
-                "Latitude" to location.latitude,
-                "Longitude" to location.longitude,
-                "PhotoUrl" to imageUrl,  // Atualiza a URL da foto
-            )
+            val uploadTask = ref3.putStream(inputStream)
+            uploadTask.continueWithTask { task ->
+                if (!task.isSuccessful) {
+                    task.exception?.let {
+                        throw it
+                    }
+                }
+                ref3.downloadUrl
+            }.addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    val downloadUri = task.result
+                    println(downloadUri.toString())
+                    //add Uti to database
+                    addPOIPhotoUrlToFirestore(imgFile,downloadUri,locationName)
 
-            db.collection(Collections.Locations.route).document(location.name).set(locationData)
-                .addOnCompleteListener { }
+
+                    //   https://firebasestorage.googleapis.com/v0/b/p0405ansamov.appspot.com/o/images%2Fimage.png?alt=media&token=302c7119-c3a9-426d-b7b4-6ab5ac25fed9
+                } else {
+                    // Handle failures
+                    // ...
+                }
+            }
+
+
         }
+
+
     }
 }

@@ -1,5 +1,6 @@
 package pt.isec.amovtp.touristapp.ui.viewmodels
 
+import android.util.Log
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
@@ -8,6 +9,7 @@ import com.google.firebase.auth.FirebaseUser
 import kotlinx.coroutines.launch
 import pt.isec.amovtp.touristapp.data.AuthUser
 import pt.isec.amovtp.touristapp.data.Location
+import pt.isec.amovtp.touristapp.data.PointOfInterest
 import pt.isec.amovtp.touristapp.data.User
 import pt.isec.amovtp.touristapp.utils.FireAuthUtil
 import pt.isec.amovtp.touristapp.utils.StorageUtil
@@ -87,9 +89,11 @@ class FirebaseViewModel : ViewModel() {
         return userReceived
     }
 
-    fun getLocationFromFirestore(){
+    fun getLocationFromFirestore(callback: (List<Location>) -> Unit){
         viewModelScope.launch {
-            StorageUtil.getLocationFromFirestore()
+            StorageUtil.getLocationFromFirestore { locations ->
+                callback(locations)
+            }
         }
     }
     fun addLocationsToFirestore(location:Location) {
@@ -99,19 +103,39 @@ class FirebaseViewModel : ViewModel() {
             }
         }
     }
-    fun uploadToStorage(imageName: String, path: String) {
+    fun addPOIToFirestore(locationName:String, poi: PointOfInterest) {
         viewModelScope.launch {
-            StorageUtil.getFileFromPath(path)?.let { inputStream ->
-                StorageUtil.uploadFile(inputStream, imageName)
+            StorageUtil.addPOIToFirestore(locationName,poi){ exception ->
+                _error.value = exception?.message
             }
         }
     }
 
-    fun updatePhotoUrl(location: Location, imageUrl: Unit) {
+    fun uploadLocationToStorage(directory: String,imageName: String, path: String) {
         viewModelScope.launch {
-            StorageUtil.updatePhotoUrl(location,imageUrl);
+            StorageUtil.getFileFromPath(path)?.let { inputStream ->
+                StorageUtil.uploadLocationFile(directory,inputStream, imageName)
+            }
         }
     }
+
+    fun uploadPOIToStorage(directory: String,imageName: String, path: String,locationName: String) {
+        viewModelScope.launch {
+            StorageUtil.getFileFromPath(path)?.let { inputStream ->
+                StorageUtil.uploadPOIFile(directory,inputStream, imageName, locationName )
+            }
+        }
+    }
+
+    fun getPoisFromFirestore(selectedLocation: Location?, callback: (List<PointOfInterest>) -> Unit) {
+        viewModelScope.launch {
+            StorageUtil.getPoisFromFirestore(selectedLocation) { pois ->
+                callback(pois)
+            }
+        }
+    }
+
+
 
 
 }
