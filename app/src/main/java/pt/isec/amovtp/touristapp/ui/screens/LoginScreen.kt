@@ -38,10 +38,9 @@ fun LoginScreen(
     var password by remember { mutableStateOf("") }
     val error by remember { firebaseViewModel.error }
     val authUser by remember { firebaseViewModel.authUser }
-    val user by remember { firebaseViewModel.user }
 
-    LaunchedEffect(key1 = user) {
-        if(authUser != null && error == null /*&& user != null*/)
+    LaunchedEffect(key1 = authUser) {
+        if(authUser != null && error == null)
             onSuccess()
     }
 

@@ -117,7 +117,7 @@ fun LocationsScreen(modifier: Modifier = Modifier, navController: NavHostControl
                     ),
 
                     onClick = {
-                        //geoPoint = GeoPoint(poi.latitude, poi.longitude)
+                        viewModel.selectedLocation = location
                         navController?.navigate(Screens.POI.route)
                     }
                 ) {
@@ -133,8 +133,9 @@ fun LocationsScreen(modifier: Modifier = Modifier, navController: NavHostControl
                         AsyncImage(model = location.photoUrl, contentDescription = "City Picture")
                         Text(text = location.name, fontSize = 20.sp)
                         Text(text = "${location.latitude} ${location.longitude}", fontSize = 14.sp)
+                        /*
                         Button(
-                            onClick = { navController?.navigate(Screens.SHOW_MAP.route) },
+                            onClick = { navController?.navigate(Screens.SHOW_MAP.route,la) },
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .fillParentMaxHeight(0.05f),
@@ -143,6 +144,8 @@ fun LocationsScreen(modifier: Modifier = Modifier, navController: NavHostControl
                             ) {
                             Text(text = "Ver no mapa")
                         }
+
+                         */
                     }
                     
                 }

@@ -1,5 +1,6 @@
 package pt.isec.amovtp.touristapp.ui.screens
 
+import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -33,24 +34,29 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
-import pt.isec.amovtp.touristapp.data.Location
+import pt.isec.amovtp.touristapp.data.Category
+import pt.isec.amovtp.touristapp.data.PointOfInterest
 import pt.isec.amovtp.touristapp.ui.composables.TakePhotoOrLoadFromGallery
 import pt.isec.amovtp.touristapp.ui.viewmodels.FirebaseViewModel
 import pt.isec.amovtp.touristapp.ui.viewmodels.LocationViewModel
 
 
 @Composable
-fun AddLocationScreen(modifier: Modifier.Companion, navController: NavHostController?,locationViewModel: LocationViewModel, firebaseViewModel: FirebaseViewModel) {
+fun AddPOIScreen(modifier: Modifier.Companion, navController: NavHostController?,locationViewModel: LocationViewModel, firebaseViewModel: FirebaseViewModel) {
     val context = LocalContext.current
-    var locationName by remember { mutableStateOf("") }
-    var locationDescription by remember { mutableStateOf("") }
+    val selectedLocation = locationViewModel.selectedLocation
+
+    var poiName by remember { mutableStateOf("") }
+    var poiDescription by remember { mutableStateOf("") }
+    var categorySelected by remember { mutableStateOf("") }
     var longitude by remember { mutableStateOf("") }
     var latitude by remember { mutableStateOf("") }
+
     var isFormValid by remember { mutableStateOf(false) }
     var isInputEnabled by remember { mutableStateOf(false) }
     var isError by remember { mutableStateOf(false) }
-    var type by remember { mutableStateOf("gallery") }
 
+    //coordenadas
     val location = locationViewModel.currentLocation.observeAsState()
 
 
@@ -58,8 +64,8 @@ fun AddLocationScreen(modifier: Modifier.Companion, navController: NavHostContro
         val longitudeDouble: Double? = longitude.toDoubleOrNull()
         val latitudeDouble: Double? = latitude.toDoubleOrNull()
 
-        isFormValid = locationName.isNotBlank() &&
-                locationDescription.isNotBlank() &&
+        isFormValid = poiName.isNotBlank() &&
+                poiDescription.isNotBlank() &&
                 longitudeDouble != null &&
                 latitudeDouble != null &&
                 locationViewModel.imagePath.value != null
@@ -83,40 +89,56 @@ fun AddLocationScreen(modifier: Modifier.Companion, navController: NavHostContro
                 color = Color.Red
             )
         Text(
-            text = "Location Name",
+            text = "POI Name",
             modifier = Modifier
                 .align(Alignment.CenterHorizontally)
         )
 
         OutlinedTextField(
-            value = locationName,
+            value = poiName,
             onValueChange ={
-                locationName = it
+                poiName = it
                 validateForm()
             },
-            label = { Text(text = "Location Name") },
+            label = { Text(text = "POI Name") },
 
         )
         Spacer(modifier = Modifier.height(16.dp))
         Text(
-            text = "Location Description",
+            text = "POI Description",
             modifier = Modifier
                 .align(Alignment.CenterHorizontally)
         )
         OutlinedTextField(
-            value = locationDescription,
+            value = poiDescription,
             onValueChange ={
-                locationDescription = it
+                poiDescription = it
                 validateForm()
             },
             label = { Text(text = "Location Description") },
+        )
+        //TODO:Verificação da categoria, dropdown?
+        Spacer(modifier = Modifier.height(16.dp))
+        Text(
+            text = "Category",
+            modifier = Modifier
+                .align(Alignment.CenterHorizontally)
+
+        )
+        OutlinedTextField(
+            value = categorySelected,
+            onValueChange ={
+                categorySelected = it
+                validateForm()
+            },
+            label = { Text(text = "Category") },
         )
 
         Row(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(IntrinsicSize.Min)
-                .padding(16.dp)
+                .padding(8.dp)
         ) {
             Button(
                 onClick = {
@@ -152,24 +174,34 @@ fun AddLocationScreen(modifier: Modifier.Companion, navController: NavHostContro
             }
         }
 
-        OutlinedTextField(
-            value = longitude,
-            onValueChange ={
-                longitude = it
-                validateForm()
-            },
-            label = { Text(text = "Longitude") },
-            enabled = isInputEnabled
-        )
-        OutlinedTextField(
-            value = latitude,
-            onValueChange ={
-                latitude = it
-                validateForm()
-            },
-            label = { Text(text = "Latitude") },
-            enabled = isInputEnabled
-        )
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(IntrinsicSize.Min)
+                .padding(8.dp)
+        ) {
+            OutlinedTextField(
+                value = longitude,
+                onValueChange = {
+                    longitude = it
+                    validateForm()
+                },
+                label = { Text(text = "Longitude") },
+                enabled = isInputEnabled,
+                modifier = Modifier.weight(1f)
+            )
+            OutlinedTextField(
+                value = latitude,
+                onValueChange = {
+                    latitude = it
+                    validateForm()
+                },
+                label = { Text(text = "Latitude") },
+                enabled = isInputEnabled,
+                modifier = Modifier.weight(1f)
+
+            )
+        }
         Box(
             modifier = Modifier
                 .fillMaxSize()
@@ -186,17 +218,20 @@ fun AddLocationScreen(modifier: Modifier.Companion, navController: NavHostContro
                     isError = true
                 } else {
                     isError = false
-                    var location = Location(
-                        name = locationName,
-                        description = locationDescription,
+                    var POI = PointOfInterest(
+                        name = poiName,
+                        description = poiDescription,
+                        category = Category("tetse",2,"",""),
                         latitude = latitude.toDouble(),
                         longitude = longitude.toDouble(),
                         photoUrl = ""
                     )
-                    firebaseViewModel.addLocationsToFirestore(location)
-                    firebaseViewModel.uploadLocationToStorage(directory = "images/"+locationName ,imageName = locationName, path = locationViewModel.imagePath.value ?: "")
+                    Log.i("TAG", "AddPOIScreen: " + POI)
+
+                    firebaseViewModel.addPOIToFirestore(selectedLocation?.name ?: ""  ,POI)
+                    firebaseViewModel.uploadPOIToStorage(directory = "images/" + selectedLocation?.name +"/pois/",imageName = poiName, path = locationViewModel.imagePath.value ?: "", locationName = selectedLocation?.name ?: "" )
                     navController?.popBackStack()
-                    Toast.makeText(context,"Localização adicionada com sucesso!",Toast.LENGTH_LONG).show()
+                    Toast.makeText(context,"POI adicionada com sucesso!",Toast.LENGTH_LONG).show()
                 }
             },
             modifier = Modifier
