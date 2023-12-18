@@ -50,9 +50,9 @@ import pt.isec.amovtp.touristapp.utils.location.LocationUtils
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LocationsScreen(modifier: Modifier = Modifier, navController: NavHostController?,viewModel : LocationViewModel,firebaseViewModel: FirebaseViewModel) {
+    //geopoin
     val myLocation = viewModel.currentLocation.observeAsState()
     var locations by remember { mutableStateOf<List<Location>>(emptyList())}
-
 
 
     //sempre que é iniciado, carrega as localizações

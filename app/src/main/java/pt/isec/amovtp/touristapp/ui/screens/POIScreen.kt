@@ -48,6 +48,7 @@ import kotlin.math.log
 @Composable
 fun POIScreen(modifier: Modifier = Modifier, navController: NavHostController?, viewModel : LocationViewModel,firebaseViewModel: FirebaseViewModel) {
     val selectedLocation = viewModel.selectedLocation
+
     var pois by remember { mutableStateOf<List<PointOfInterest>>(emptyList()) }
 
     //sempre que é iniciado, carrega os POIS
@@ -112,6 +113,7 @@ fun POIScreen(modifier: Modifier = Modifier, navController: NavHostController?, 
                     ),
 
                     onClick = {
+                        viewModel.selectedPoi = poi
                         navController?.navigate(Screens.POI_DESCRIPTION.route)
                     }
                 ) {
