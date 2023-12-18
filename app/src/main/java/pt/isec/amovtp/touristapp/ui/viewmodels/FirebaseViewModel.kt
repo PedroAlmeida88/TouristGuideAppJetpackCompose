@@ -1,6 +1,5 @@
 package pt.isec.amovtp.touristapp.ui.viewmodels
 
-import android.util.Log
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
@@ -31,7 +30,7 @@ class FirebaseViewModel : ViewModel() {
     val authUser : MutableState<AuthUser?>
         get() = _authUser
 
-    private val _user = mutableStateOf<User?>(/*getUserFromFirestore(_authUser.value!!.uid)*/null)
+    private val _user = mutableStateOf<User?>(null)
     val user : MutableState<User?>
         get() = _user
 
@@ -76,17 +75,12 @@ class FirebaseViewModel : ViewModel() {
         _user.value = null
     }
 
-    fun getUserFromFirestore(userUID: String) : User? {
-        if(userUID.isEmpty()){
-            return null
-        }
-        lateinit var userReceived: User
+    fun getUserFromFirestore(userUID: String) {
         viewModelScope.launch {
             StorageUtil.getUserFromFirestore(userUID){ user ->
-                userReceived = user
+                _user.value = user
             }
         }
-        return userReceived
     }
 
     fun getLocationFromFirestore(callback: (List<Location>) -> Unit){

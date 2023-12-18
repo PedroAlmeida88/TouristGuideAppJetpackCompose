@@ -32,7 +32,6 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import pt.isec.amovtp.touristapp.Greeting
 import pt.isec.amovtp.touristapp.R
 import pt.isec.amovtp.touristapp.ui.viewmodels.FirebaseViewModel
 import pt.isec.amovtp.touristapp.ui.viewmodels.LocationViewModel
@@ -48,7 +47,8 @@ enum class Screens(val display: String, val showAppBar : Boolean) {
     POI_DESCRIPTION("Point of Interest Description", true),
     ADD_CATEGORY("Add Category", true),
     SHOW_MAP("Show map", true),
-    CREDITS("Credits", true);
+    CREDITS("Credits", true),
+    ADD_COMMENTS("Add Comments", true);
 
     val route : String
         get() = this.toString()
@@ -159,6 +159,7 @@ fun MainScreen(navController:NavHostController = rememberNavController(),
             }
             composable (Screens.LOGIN.route) {
                 LoginScreen(navController, firebaseViewModel) {
+                    firebaseViewModel.getUserFromFirestore(firebaseViewModel.authUser.value!!.uid)
                     navController.navigate(Screens.MENU.route)
                 }
             }
@@ -184,7 +185,10 @@ fun MainScreen(navController:NavHostController = rememberNavController(),
                 POIDescriptionScreen(modifier = Modifier, viewModel = locationViewModel)
             }
             composable (Screens.ADD_CATEGORY.route) {
-                Greeting(name = Screens.ADD_CATEGORY.route)
+                AddCategoryScreen(modifier = Modifier, navController = navController, firebaseViewModel = firebaseViewModel)
+            }
+            composable (Screens.ADD_COMMENTS.route) {
+                AddComments(modfier = Modifier, firebaseViewModel = firebaseViewModel)
             }
             composable (Screens.CREDITS.route) {
                 CreditsScreen()
@@ -192,4 +196,3 @@ fun MainScreen(navController:NavHostController = rememberNavController(),
         }
     }
 }
-
