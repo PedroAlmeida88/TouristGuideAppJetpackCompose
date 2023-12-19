@@ -31,9 +31,8 @@ fun DropDownComposable(modifier: Modifier = Modifier, navController: NavHostCont
         mutableStateOf<List<Category>>(emptyList())
     }
 
-    var selectd by remember {
-        mutableStateOf("")
-    }
+
+
 
 
     //sempre que é iniciado, carrega as categorias
@@ -47,7 +46,7 @@ fun DropDownComposable(modifier: Modifier = Modifier, navController: NavHostCont
         onExpandedChange = {isExpanded = it}
     ) {
         TextField(
-            value = selectd,
+            value = viewModel.selectedCategory,
             onValueChange = {},
             readOnly = true,
             trailingIcon = {
@@ -65,7 +64,7 @@ fun DropDownComposable(modifier: Modifier = Modifier, navController: NavHostCont
                 DropdownMenuItem(
                     text = { Text(text = c.name) },
                     onClick = {
-                        selectd = c.name
+                        viewModel.selectedCategory = c.name
                         isExpanded=false
                     }
                 )

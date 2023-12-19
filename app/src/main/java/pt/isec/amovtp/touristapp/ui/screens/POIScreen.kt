@@ -54,18 +54,11 @@ import kotlin.math.log
 @Composable
 fun POIScreen(modifier: Modifier = Modifier, navController: NavHostController?, viewModel : LocationViewModel,firebaseViewModel: FirebaseViewModel) {
     val selectedLocation = viewModel.selectedLocation
-
-    //var isExpanded by remember {
-    //    mutableStateOf(false)
-    //}
-
+    var selectedCategory = viewModel.selectedCategory
+    
     var categories by remember {
         mutableStateOf<List<Category>>(emptyList())
     }
-
-    //var selectd by remember {
-    //    mutableStateOf("")
-    //}
 
     var pois by remember { mutableStateOf<List<PointOfInterest>>(emptyList()) }
 
@@ -79,6 +72,7 @@ fun POIScreen(modifier: Modifier = Modifier, navController: NavHostController?, 
             categories = loadedCategories
         }
     }
+    Text(text = selectedCategory)
     Column(
         verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.CenterHorizontally,
