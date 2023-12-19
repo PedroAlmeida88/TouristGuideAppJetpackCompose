@@ -46,7 +46,7 @@ fun DropDownComposable(modifier: Modifier = Modifier, navController: NavHostCont
         onExpandedChange = {isExpanded = it}
     ) {
         TextField(
-            value = viewModel.selectedCategory,
+            value = viewModel.selectedCategory?.name ?: "",
             onValueChange = {},
             readOnly = true,
             trailingIcon = {
@@ -64,7 +64,7 @@ fun DropDownComposable(modifier: Modifier = Modifier, navController: NavHostCont
                 DropdownMenuItem(
                     text = { Text(text = c.name) },
                     onClick = {
-                        viewModel.selectedCategory = c.name
+                        viewModel.selectedCategory = c
                         isExpanded=false
                     }
                 )

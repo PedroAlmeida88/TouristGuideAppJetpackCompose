@@ -30,7 +30,7 @@ class LocationViewModel(private val locationHandler: LocationHandler) : ViewMode
     val imagePath : MutableState<String?> = mutableStateOf(null)//todo teste
     var selectedLocation by mutableStateOf<LocationData?>(null)
     var selectedPoi by mutableStateOf<PointOfInterest?>(null)
-    var selectedCategory by mutableStateOf("")
+    var selectedCategory by mutableStateOf<Category?>(null)
 
 
     val Locations = listOf(
