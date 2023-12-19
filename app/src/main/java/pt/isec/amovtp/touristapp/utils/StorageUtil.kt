@@ -16,6 +16,7 @@ import java.io.FileInputStream
 import java.io.IOException
 import java.io.InputStream
 
+
 enum class Collections(val collectionName: String){
     Locations("Locations"),
     Users("Users"),
@@ -127,21 +128,7 @@ class StorageUtil {
          *  Ler dados da Firestore
          */
 
-        fun getLocationFromFirestore () {
-            val db = Firebase.firestore
 
-            db.collection(Collections.Locations.route)
-                .get()
-                .addOnSuccessListener { result ->
-                    for (document in result) {
-                        //println("${document.id} => ${document.data}")
-                        Log.i(TAG, "getLocationFromFirestore: " + document.data.toString())
-                    }
-                }
-                .addOnFailureListener { e ->
-                    Log.i(TAG, "ERROR"+ e.toString())
-                }
-        }
         fun getLocationFromFirestore(callback: (List<Location>) -> Unit) {
             val db = Firebase.firestore
 
@@ -206,10 +193,29 @@ class StorageUtil {
                     callback(emptyList())
                 }
         }
+        fun getCategoryToFirestore(callback: (List<Category>) -> Unit) {
+            val db = Firebase.firestore
 
-        fun getCategoryFromFirestore () : List<Category> {
-            return emptyList()
+            db.collection(Collections.Category.route)
+                .get()
+                .addOnSuccessListener { result ->
+                    val categories = mutableListOf<Category>()
+
+                    for (document in result) {
+                        val name = document.id
+                        val description = document.getString("Description") ?: ""
+                        val icon = document.getString("Icon") ?: ""
+                        val category = Category(name, description,icon)
+                        categories.add(category)
+                    }
+                    callback(categories)
+                }
+                .addOnFailureListener { e ->
+                    Log.i(TAG, "ERROR: ${e.toString()}")
+                    callback(emptyList())
+                }
         }
+
 
         fun getCommentsFromFirestore () : List<Comment> {
             return emptyList()
@@ -310,6 +316,8 @@ class StorageUtil {
 
 
         }
+
+
 
 
     }

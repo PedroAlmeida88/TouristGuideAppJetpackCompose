@@ -139,5 +139,13 @@ class FirebaseViewModel : ViewModel() {
         callback()
     }
 
+    fun getCategoriesFromFirestore(callback: (List<Category>) -> Unit) {
+        viewModelScope.launch {
+            StorageUtil.getCategoryToFirestore () { categories ->
+                callback(categories)
+            }
+        }
+    }
+
 
 }

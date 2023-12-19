@@ -19,10 +19,14 @@ import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExposedDropdownMenuBox
+import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -38,8 +42,10 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
 import pt.isec.amovtp.touristapp.R
+import pt.isec.amovtp.touristapp.data.Category
 import pt.isec.amovtp.touristapp.data.Location
 import pt.isec.amovtp.touristapp.data.PointOfInterest
+import pt.isec.amovtp.touristapp.ui.composables.DropDownComposable
 import pt.isec.amovtp.touristapp.ui.viewmodels.FirebaseViewModel
 import pt.isec.amovtp.touristapp.ui.viewmodels.LocationViewModel
 import kotlin.math.log
@@ -49,13 +55,28 @@ import kotlin.math.log
 fun POIScreen(modifier: Modifier = Modifier, navController: NavHostController?, viewModel : LocationViewModel,firebaseViewModel: FirebaseViewModel) {
     val selectedLocation = viewModel.selectedLocation
 
+    //var isExpanded by remember {
+    //    mutableStateOf(false)
+    //}
+
+    var categories by remember {
+        mutableStateOf<List<Category>>(emptyList())
+    }
+
+    //var selectd by remember {
+    //    mutableStateOf("")
+    //}
+
     var pois by remember { mutableStateOf<List<PointOfInterest>>(emptyList()) }
 
     //sempre que é iniciado, carrega os POIS
     LaunchedEffect(Unit) {
         firebaseViewModel.getPoisFromFirestore(selectedLocation) { loadedPois ->
             pois = loadedPois
-            //Log.i("TAG", "POIScreen: " + pois)
+        }
+
+        firebaseViewModel.getCategoriesFromFirestore(){ loadedCategories ->
+            categories = loadedCategories
         }
     }
     Column(
@@ -70,29 +91,7 @@ fun POIScreen(modifier: Modifier = Modifier, navController: NavHostController?, 
             horizontalArrangement = Arrangement.Start,
             verticalAlignment = Alignment.Top
         ) {
-            //Fazer ciclo com butões
-
-            Button(
-                onClick = { }
-            ) {
-                Text(text = "Museus")
-            }
-            Spacer(modifier = Modifier.width(12.dp))
-            Button(
-                onClick = { }
-            ) {
-                Text(text = "Jardins")
-            }
-            Spacer(modifier = Modifier.width(12.dp))
-            Button(onClick = {
-                navController?.navigate(Screens.ADD_CATEGORY.route)
-            }, ) {
-                Icon(
-                    Icons.Filled.Add,
-                    contentDescription = "Add"
-                )
-
-            }
+            DropDownComposable(navController = navController, viewModel = viewModel, firebaseViewModel = firebaseViewModel)
         }
         Spacer(Modifier.height(16.dp))
         LazyColumn(
