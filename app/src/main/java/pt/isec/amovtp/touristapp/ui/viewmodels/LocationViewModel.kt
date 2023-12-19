@@ -29,6 +29,8 @@ data class Coordinates(val team: String,val latitude : Double, val longitude: Do
 class LocationViewModel(private val locationHandler: LocationHandler) : ViewModel() {
     val imagePath : MutableState<String?> = mutableStateOf(null)//todo teste
     var selectedLocation by mutableStateOf<LocationData?>(null)
+    var selectedPoi by mutableStateOf<PointOfInterest?>(null)
+
     val Locations = listOf(
         LocationData("Liverpool", "Liverpool description", 53.430819, -2.960828, ""),
         LocationData("Manchester", "Manchester description", 53.482989, -2.200292, ""),
