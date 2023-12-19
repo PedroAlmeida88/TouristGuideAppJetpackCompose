@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CutCornerShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -29,8 +30,10 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import pt.isec.amovtp.touristapp.data.Location
@@ -50,6 +53,8 @@ fun AddLocationScreen(modifier: Modifier.Companion, navController: NavHostContro
     var isInputEnabled by remember { mutableStateOf(false) }
     var isError by remember { mutableStateOf(false) }
     var type by remember { mutableStateOf("gallery") }
+
+    val focusManager = LocalFocusManager.current
 
     val location = locationViewModel.currentLocation.observeAsState()
 
@@ -94,6 +99,10 @@ fun AddLocationScreen(modifier: Modifier.Companion, navController: NavHostContro
                 locationName = it
                 validateForm()
             },
+            singleLine = true,
+            keyboardActions = KeyboardActions {
+                focusManager.moveFocus(FocusDirection.Next)
+            },
             label = { Text(text = "Location Name") },
 
         )
@@ -108,6 +117,10 @@ fun AddLocationScreen(modifier: Modifier.Companion, navController: NavHostContro
             onValueChange ={
                 locationDescription = it
                 validateForm()
+            },
+            singleLine = true,
+            keyboardActions = KeyboardActions {
+                focusManager.clearFocus()
             },
             label = { Text(text = "Location Description") },
         )
@@ -158,6 +171,10 @@ fun AddLocationScreen(modifier: Modifier.Companion, navController: NavHostContro
                 longitude = it
                 validateForm()
             },
+            singleLine = true,
+            keyboardActions = KeyboardActions {
+                focusManager.moveFocus(FocusDirection.Next)
+            },
             label = { Text(text = "Longitude") },
             enabled = isInputEnabled
         )
@@ -166,6 +183,10 @@ fun AddLocationScreen(modifier: Modifier.Companion, navController: NavHostContro
             onValueChange ={
                 latitude = it
                 validateForm()
+            },
+            singleLine = true,
+            keyboardActions = KeyboardActions {
+                focusManager.clearFocus()
             },
             label = { Text(text = "Latitude") },
             enabled = isInputEnabled
