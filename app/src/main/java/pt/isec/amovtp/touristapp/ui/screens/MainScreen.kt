@@ -172,9 +172,11 @@ fun MainScreen(navController:NavHostController = rememberNavController(),
             composable (Screens.ADD_LOCATIONS.route) {
                 AddLocationScreen(modifier = Modifier,navController = navController,locationViewModel = locationViewModel, firebaseViewModel = firebaseViewModel)
             }
+            /*
             composable (Screens.SHOW_MAP.route) {
                 ShowMapScreen(navController = navController, viewModel = locationViewModel)
             }
+            */
             composable (Screens.POI.route) {
                 POIScreen(navController = navController, viewModel = locationViewModel,firebaseViewModel = firebaseViewModel)
             }

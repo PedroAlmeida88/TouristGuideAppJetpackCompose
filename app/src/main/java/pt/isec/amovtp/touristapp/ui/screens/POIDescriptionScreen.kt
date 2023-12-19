@@ -95,7 +95,7 @@ fun POIDescriptionScreen(modifier: Modifier = Modifier, viewModel: LocationViewM
                                         subDescription = poi.description
                                         //icon = ShapeDrawable(OvalShape())
                                     }
-                                    if(!poi.name.equals(currentPoi?.name))
+                                    if(! poi.name.equals(currentPoi?.name))
                                         marker.icon = ShapeDrawable(OvalShape()).apply {
                                             intrinsicHeight = 40 // Altura do círculo em pixels
                                             intrinsicWidth = 40 // Largura do círculo em pixels

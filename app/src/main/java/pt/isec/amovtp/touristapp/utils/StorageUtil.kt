@@ -7,6 +7,7 @@ import android.util.Log
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
+import pt.isec.amovtp.touristapp.data.Category
 import pt.isec.amovtp.touristapp.data.Comment
 import pt.isec.amovtp.touristapp.data.Location
 import pt.isec.amovtp.touristapp.data.PointOfInterest
@@ -14,7 +15,7 @@ import pt.isec.amovtp.touristapp.data.User
 import java.io.FileInputStream
 import java.io.IOException
 import java.io.InputStream
-import java.util.Locale.Category
+
 
 enum class Collections(val collectionName: String){
     Locations("Locations"),
@@ -91,8 +92,18 @@ class StorageUtil {
                 .update(updateData)
         }
 
-        fun addCategoryToFirestore (onResult: (Throwable?) -> Unit) {
+        fun addCategoryToFirestore (category: Category, onResult: (Throwable?) -> Unit) {
+            val db = Firebase.firestore
 
+            val categoryData = hashMapOf(
+                "Description" to category.description,
+                "Icon" to category.icon
+            )
+
+            db.collection(Collections.Category.route).document(category.name).set(categoryData)
+                .addOnCompleteListener { result ->
+                    onResult(result.exception)
+                }
         }
 
         fun addCommentToFirestore (onResult: (Throwable?) -> Unit) {
@@ -117,21 +128,7 @@ class StorageUtil {
          *  Ler dados da Firestore
          */
 
-        fun getLocationFromFirestore () {
-            val db = Firebase.firestore
 
-            db.collection(Collections.Locations.route)
-                .get()
-                .addOnSuccessListener { result ->
-                    for (document in result) {
-                        //println("${document.id} => ${document.data}")
-                        Log.i(TAG, "getLocationFromFirestore: " + document.data.toString())
-                    }
-                }
-                .addOnFailureListener { e ->
-                    Log.i(TAG, "ERROR"+ e.toString())
-                }
-        }
         fun getLocationFromFirestore(callback: (List<Location>) -> Unit) {
             val db = Firebase.firestore
 
@@ -178,7 +175,6 @@ class StorageUtil {
 
                             val category = pt.isec.amovtp.touristapp.data.Category(
                                 "Categoria Teste",
-                                2,
                                 "Alterar no StorageUtil",
                                 ""
                             )
@@ -197,10 +193,29 @@ class StorageUtil {
                     callback(emptyList())
                 }
         }
+        fun getCategoryToFirestore(callback: (List<Category>) -> Unit) {
+            val db = Firebase.firestore
 
-        fun getCategoryFromFirestore () : List<Category> {
-            return emptyList()
+            db.collection(Collections.Category.route)
+                .get()
+                .addOnSuccessListener { result ->
+                    val categories = mutableListOf<Category>()
+
+                    for (document in result) {
+                        val name = document.id
+                        val description = document.getString("Description") ?: ""
+                        val icon = document.getString("Icon") ?: ""
+                        val category = Category(name, description,icon)
+                        categories.add(category)
+                    }
+                    callback(categories)
+                }
+                .addOnFailureListener { e ->
+                    Log.i(TAG, "ERROR: ${e.toString()}")
+                    callback(emptyList())
+                }
         }
+
 
         fun getCommentsFromFirestore () : List<Comment> {
             return emptyList()
@@ -301,6 +316,8 @@ class StorageUtil {
 
 
         }
+
+
 
 
     }

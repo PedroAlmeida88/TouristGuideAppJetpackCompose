@@ -30,6 +30,8 @@ class LocationViewModel(private val locationHandler: LocationHandler) : ViewMode
     val imagePath : MutableState<String?> = mutableStateOf(null)//todo teste
     var selectedLocation by mutableStateOf<LocationData?>(null)
     var selectedPoi by mutableStateOf<PointOfInterest?>(null)
+    var selectedCategory by mutableStateOf("")
+
 
     val Locations = listOf(
         LocationData("Liverpool", "Liverpool description", 53.430819, -2.960828, ""),
@@ -37,7 +39,7 @@ class LocationViewModel(private val locationHandler: LocationHandler) : ViewMode
         LocationData("Munich", "Munich description", 48.218775, 11.624753, ""),
         LocationData("Barcelona", "Barcelona description", 41.38087, 2.122802, "")
     )
-    val category = Category("Categoria Teste",2,"","")
+    val category = Category("Categoria Teste","","")
     val POIs = listOf(
         PointOfInterest("La Sagrada Familia", "AAAAAAA",41.4036, 2.1744, "R.drawable.acacio",category),
         PointOfInterest("Camp Nou", "BAA",41.38087, 2.122802, "R.drawable.acacio",category)
