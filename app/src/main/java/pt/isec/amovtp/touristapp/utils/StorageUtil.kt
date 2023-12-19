@@ -7,6 +7,7 @@ import android.util.Log
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
+import pt.isec.amovtp.touristapp.data.Category
 import pt.isec.amovtp.touristapp.data.Comment
 import pt.isec.amovtp.touristapp.data.Location
 import pt.isec.amovtp.touristapp.data.PointOfInterest
@@ -14,7 +15,6 @@ import pt.isec.amovtp.touristapp.data.User
 import java.io.FileInputStream
 import java.io.IOException
 import java.io.InputStream
-import java.util.Locale.Category
 
 enum class Collections(val collectionName: String){
     Locations("Locations"),
@@ -91,8 +91,18 @@ class StorageUtil {
                 .update(updateData)
         }
 
-        fun addCategoryToFirestore (onResult: (Throwable?) -> Unit) {
+        fun addCategoryToFirestore (category: Category, onResult: (Throwable?) -> Unit) {
+            val db = Firebase.firestore
 
+            val categoryData = hashMapOf(
+                "Description" to category.description,
+                "Icon" to category.icon
+            )
+
+            db.collection(Collections.Category.route).document(category.name).set(categoryData)
+                .addOnCompleteListener { result ->
+                    onResult(result.exception)
+                }
         }
 
         fun addCommentToFirestore (onResult: (Throwable?) -> Unit) {

@@ -42,6 +42,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.graphics.vector.ImageVector.Builder
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import pt.isec.amovtp.touristapp.ui.viewmodels.FirebaseViewModel
@@ -102,7 +103,7 @@ fun AddCategoryScreen(modifier: Modifier, navController: NavHostController?, fir
                     if(selectedIcon == null)
                         Icon(Icons.Default.List, contentDescription = "List")
                     else
-                        Icon(selectedIcon!!, contentDescription = selectedIcon!!.name)
+                        Icon(Builder(name = selectedIcon!!.name), contentDescription = selectedIcon!!.name)
                 }
 
                 DropdownMenu(
@@ -141,7 +142,12 @@ fun AddCategoryScreen(modifier: Modifier, navController: NavHostController?, fir
 
         Button(
             onClick = {
-                firebaseViewModel
+                val category = pt.isec.amovtp.touristapp.data.Category(categoryName, categoryDescription, selectedIcon!!.name)
+                firebaseViewModel.addCategoryToFirestore(category) {
+                    navController?.navigate(Screens.POI.route) {
+                        popUpTo(Screens.POI.route)
+                    }
+                }
             }
         ) {
             Text(text = "Submit")

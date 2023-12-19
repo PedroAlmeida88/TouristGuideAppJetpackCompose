@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.google.firebase.auth.FirebaseUser
 import kotlinx.coroutines.launch
 import pt.isec.amovtp.touristapp.data.AuthUser
+import pt.isec.amovtp.touristapp.data.Category
 import pt.isec.amovtp.touristapp.data.Location
 import pt.isec.amovtp.touristapp.data.PointOfInterest
 import pt.isec.amovtp.touristapp.data.User
@@ -129,7 +130,14 @@ class FirebaseViewModel : ViewModel() {
         }
     }
 
-
+    fun addCategoryToFirestore(category: Category, callback: () -> Unit) {
+        viewModelScope.launch {
+            StorageUtil.addCategoryToFirestore (category) { exception ->
+                _error.value = exception?.message
+            }
+        }
+        callback()
+    }
 
 
 }
