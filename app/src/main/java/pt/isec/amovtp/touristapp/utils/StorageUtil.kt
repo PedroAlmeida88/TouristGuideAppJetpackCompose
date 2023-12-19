@@ -178,7 +178,6 @@ class StorageUtil {
 
                             val category = pt.isec.amovtp.touristapp.data.Category(
                                 "Categoria Teste",
-                                2,
                                 "Alterar no StorageUtil",
                                 ""
                             )
