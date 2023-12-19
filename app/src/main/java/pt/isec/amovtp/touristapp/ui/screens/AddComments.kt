@@ -5,6 +5,6 @@ import androidx.compose.ui.Modifier
 import pt.isec.amovtp.touristapp.ui.viewmodels.FirebaseViewModel
 
 @Composable
-fun AddComments(modfier: Modifier.Companion, firebaseViewModel: FirebaseViewModel) {
+fun AddCommentsScreen(modifier: Modifier, firebaseViewModel: FirebaseViewModel) {
 
 }
