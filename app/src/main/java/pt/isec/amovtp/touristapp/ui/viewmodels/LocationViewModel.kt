@@ -9,7 +9,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import pt.isec.amovtp.touristapp.R
 import pt.isec.amovtp.touristapp.data.Category
 import pt.isec.amovtp.touristapp.data.PointOfInterest
 import pt.isec.amovtp.touristapp.utils.location.LocationHandler
@@ -37,7 +36,7 @@ class LocationViewModel(private val locationHandler: LocationHandler) : ViewMode
         LocationData("Munich", "Munich description", 48.218775, 11.624753, ""),
         LocationData("Barcelona", "Barcelona description", 41.38087, 2.122802, "")
     )
-    val category = Category("Categoria Teste",2,"","")
+    val category = Category("Categoria Teste","","")
     val POIs = listOf(
         PointOfInterest("La Sagrada Familia", "AAAAAAA",41.4036, 2.1744, "R.drawable.acacio",category),
         PointOfInterest("Camp Nou", "BAA",41.38087, 2.122802, "R.drawable.acacio",category)
