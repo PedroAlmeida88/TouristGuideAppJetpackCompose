@@ -182,7 +182,7 @@ fun MainScreen(navController:NavHostController = rememberNavController(),
                 AddPOIScreen(modifier = Modifier,navController = navController,locationViewModel = locationViewModel, firebaseViewModel = firebaseViewModel)
             }
             composable (Screens.POI_DESCRIPTION.route) {
-                POIDescriptionScreen(modifier = Modifier, viewModel = locationViewModel)
+                POIDescriptionScreen(modifier = Modifier, viewModel = locationViewModel,firebaseViewModel = firebaseViewModel)
             }
             composable (Screens.ADD_CATEGORY.route) {
                 AddCategoryScreen(modifier = Modifier, navController = navController, firebaseViewModel = firebaseViewModel)
