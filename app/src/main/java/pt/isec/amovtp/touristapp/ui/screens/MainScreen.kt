@@ -190,7 +190,7 @@ fun MainScreen(navController:NavHostController = rememberNavController(),
                 AddCategoryScreen(modifier = Modifier, navController = navController, firebaseViewModel = firebaseViewModel)
             }
             composable (Screens.ADD_COMMENTS.route) {
-                AddComments(modfier = Modifier, firebaseViewModel = firebaseViewModel)
+                AddCommentsScreen(modfier = Modifier, locationViewModel = locationViewModel,firebaseViewModel = firebaseViewModel)
             }
             composable (Screens.CREDITS.route) {
                 CreditsScreen()

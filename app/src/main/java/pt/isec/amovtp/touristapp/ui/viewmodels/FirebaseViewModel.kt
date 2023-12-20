@@ -8,6 +8,7 @@ import com.google.firebase.auth.FirebaseUser
 import kotlinx.coroutines.launch
 import pt.isec.amovtp.touristapp.data.AuthUser
 import pt.isec.amovtp.touristapp.data.Category
+import pt.isec.amovtp.touristapp.data.Comment
 import pt.isec.amovtp.touristapp.data.Location
 import pt.isec.amovtp.touristapp.data.PointOfInterest
 import pt.isec.amovtp.touristapp.data.User
@@ -143,6 +144,14 @@ class FirebaseViewModel : ViewModel() {
         viewModelScope.launch {
             StorageUtil.getCategoryToFirestore () { categories ->
                 callback(categories)
+            }
+        }
+    }
+
+    fun getCommentsFromFirestore(selectedLocation: Location?, selectedPoi: PointOfInterest?, callback: (List<Comment>) -> Unit) {
+        viewModelScope.launch {
+            StorageUtil.getCommentFromFirestore (selectedLocation,selectedPoi) { comments ->
+                callback(comments)
             }
         }
     }

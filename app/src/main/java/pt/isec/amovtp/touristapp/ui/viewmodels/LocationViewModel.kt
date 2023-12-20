@@ -27,7 +27,7 @@ class LocationViewModelFactory (
 data class Coordinates(val team: String,val latitude : Double, val longitude: Double,val imagesRes: Int)
 
 class LocationViewModel(private val locationHandler: LocationHandler) : ViewModel() {
-    val imagePath : MutableState<String?> = mutableStateOf(null)//todo teste
+    val imagePath : MutableState<String?> = mutableStateOf(null)
     var selectedLocation by mutableStateOf<LocationData?>(null)
     var selectedPoi by mutableStateOf<PointOfInterest?>(null)
     var selectedCategory by mutableStateOf<Category?>(null)
