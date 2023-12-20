@@ -72,7 +72,6 @@ fun POIScreen(modifier: Modifier = Modifier, navController: NavHostController?, 
             categories = loadedCategories
         }
     }
-    Text(text = selectedCategory)
     Column(
         verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.CenterHorizontally,

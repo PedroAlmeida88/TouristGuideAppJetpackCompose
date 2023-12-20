@@ -36,6 +36,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import pt.isec.amovtp.touristapp.data.Category
 import pt.isec.amovtp.touristapp.data.PointOfInterest
+import pt.isec.amovtp.touristapp.ui.composables.DropDownComposable
 import pt.isec.amovtp.touristapp.ui.composables.TakePhotoOrLoadFromGallery
 import pt.isec.amovtp.touristapp.ui.viewmodels.FirebaseViewModel
 import pt.isec.amovtp.touristapp.ui.viewmodels.LocationViewModel
@@ -45,10 +46,10 @@ import pt.isec.amovtp.touristapp.ui.viewmodels.LocationViewModel
 fun AddPOIScreen(modifier: Modifier.Companion, navController: NavHostController?,locationViewModel: LocationViewModel, firebaseViewModel: FirebaseViewModel) {
     val context = LocalContext.current
     val selectedLocation = locationViewModel.selectedLocation
+    var selectedCategory = locationViewModel.selectedCategory
 
     var poiName by remember { mutableStateOf("") }
     var poiDescription by remember { mutableStateOf("") }
-    var categorySelected by remember { mutableStateOf("") }
     var longitude by remember { mutableStateOf("") }
     var latitude by remember { mutableStateOf("") }
 
@@ -68,8 +69,8 @@ fun AddPOIScreen(modifier: Modifier.Companion, navController: NavHostController?
                 poiDescription.isNotBlank() &&
                 longitudeDouble != null &&
                 latitudeDouble != null &&
-                locationViewModel.imagePath.value != null
-
+                locationViewModel.imagePath.value != null &&
+                selectedCategory != null
     }
 
     Column (
@@ -119,20 +120,10 @@ fun AddPOIScreen(modifier: Modifier.Companion, navController: NavHostController?
         )
         //TODO:Verificação da categoria, dropdown?
         Spacer(modifier = Modifier.height(16.dp))
-        Text(
-            text = "Category",
-            modifier = Modifier
-                .align(Alignment.CenterHorizontally)
-
-        )
-        OutlinedTextField(
-            value = categorySelected,
-            onValueChange ={
-                categorySelected = it
-                validateForm()
-            },
-            label = { Text(text = "Category") },
-        )
+        DropDownComposable(
+            navController = navController,
+            viewModel = locationViewModel,
+            firebaseViewModel = firebaseViewModel)
 
         Row(
             modifier = Modifier
@@ -221,7 +212,7 @@ fun AddPOIScreen(modifier: Modifier.Companion, navController: NavHostController?
                     var POI = PointOfInterest(
                         name = poiName,
                         description = poiDescription,
-                        category = Category("tetse","",""),
+                        category = selectedCategory ?: Category("null","",""),
                         latitude = latitude.toDouble(),
                         longitude = longitude.toDouble(),
                         photoUrl = ""
