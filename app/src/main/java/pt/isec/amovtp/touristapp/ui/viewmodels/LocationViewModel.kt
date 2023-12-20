@@ -24,7 +24,6 @@ class LocationViewModelFactory (
     }
 }
 
-data class Coordinates(val team: String,val latitude : Double, val longitude: Double,val imagesRes: Int)
 
 class LocationViewModel(private val locationHandler: LocationHandler) : ViewModel() {
     val imagePath : MutableState<String?> = mutableStateOf(null)
@@ -33,12 +32,7 @@ class LocationViewModel(private val locationHandler: LocationHandler) : ViewMode
     var selectedCategory by mutableStateOf<Category?>(null)
 
 
-    val Locations = listOf(
-        LocationData("Liverpool", "Liverpool description", 53.430819, -2.960828, ""),
-        LocationData("Manchester", "Manchester description", 53.482989, -2.200292, ""),
-        LocationData("Munich", "Munich description", 48.218775, 11.624753, ""),
-        LocationData("Barcelona", "Barcelona description", 41.38087, 2.122802, "")
-    )
+
     val category = Category("Categoria Teste","","")
     val POIs = listOf(
         PointOfInterest("La Sagrada Familia", "AAAAAAA",41.4036, 2.1744, "R.drawable.acacio",category),
