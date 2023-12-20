@@ -9,6 +9,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import pt.isec.amovtp.touristapp.R
 import pt.isec.amovtp.touristapp.data.Category
 import pt.isec.amovtp.touristapp.data.PointOfInterest
 import pt.isec.amovtp.touristapp.utils.location.LocationHandler
@@ -29,6 +30,8 @@ class LocationViewModel(private val locationHandler: LocationHandler) : ViewMode
     val imagePath : MutableState<String?> = mutableStateOf(null)//todo teste
     var selectedLocation by mutableStateOf<LocationData?>(null)
     var selectedPoi by mutableStateOf<PointOfInterest?>(null)
+    var selectedCategory by mutableStateOf<Category?>(null)
+
 
     val Locations = listOf(
         LocationData("Liverpool", "Liverpool description", 53.430819, -2.960828, ""),

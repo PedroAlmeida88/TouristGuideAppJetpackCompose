@@ -44,6 +44,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import pt.isec.amovtp.touristapp.data.Category
 import pt.isec.amovtp.touristapp.ui.viewmodels.FirebaseViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -141,11 +142,9 @@ fun AddCategoryScreen(modifier: Modifier, navController: NavHostController?, fir
 
         Button(
             onClick = {
-                val category = pt.isec.amovtp.touristapp.data.Category(categoryName, categoryDescription, selectedIcon!!.name)
+                val category = Category(categoryName, categoryDescription, selectedIcon!!.name)
                 firebaseViewModel.addCategoryToFirestore(category) {
-                    navController?.navigate(Screens.POI.route) {
-                        popUpTo(Screens.POI.route)
-                    }
+                    navController?.popBackStack()
                 }
             }
         ) {
