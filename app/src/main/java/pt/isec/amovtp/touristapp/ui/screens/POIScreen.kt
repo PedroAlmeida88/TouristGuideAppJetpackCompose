@@ -147,6 +147,19 @@ fun POIScreen(modifier: Modifier = Modifier, navController: NavHostController?, 
                                     contentDescription = null
                                 )
                             }
+                            IconButton(
+                                onClick = {
+                                    viewModel.selectedPoi = poi
+                                    navController?.navigate(Screens.ADD_POI_PICTURES.route)
+                                },
+                                modifier = Modifier.padding(8.dp),
+
+                                ) {
+                                Icon(
+                                    painter = painterResource(id = android.R.drawable.ic_menu_gallery),
+                                    contentDescription = null
+                                )
+                            }
                             Column(
                                 modifier = Modifier
                                     .weight(1f)
