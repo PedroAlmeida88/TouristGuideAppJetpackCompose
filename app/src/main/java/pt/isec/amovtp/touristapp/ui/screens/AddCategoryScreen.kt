@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Build
 import androidx.compose.material.icons.filled.Call
@@ -41,7 +42,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import pt.isec.amovtp.touristapp.data.Category
@@ -72,6 +75,7 @@ fun AddCategoryScreen(modifier: Modifier, navController: NavHostController?, fir
     var categoryName by remember { mutableStateOf("") }
     var categoryDescription by remember { mutableStateOf("") }
     val scrollState = rememberScrollState()
+    val focusManager = LocalFocusManager.current
 
     Column(
         verticalArrangement = Arrangement.Center,
@@ -84,6 +88,10 @@ fun AddCategoryScreen(modifier: Modifier, navController: NavHostController?, fir
             OutlinedTextField(
                 label = { Text(text = "Name") },
                 value = categoryName,
+                singleLine = true,
+                keyboardActions = KeyboardActions {
+                    focusManager.moveFocus(FocusDirection.Next)
+                },
                 onValueChange = {
                     categoryName = it
                 }
@@ -132,10 +140,15 @@ fun AddCategoryScreen(modifier: Modifier, navController: NavHostController?, fir
         OutlinedTextField(
             label = { Text(text = "Description") },
             value = categoryDescription,
+            singleLine = true,
+            keyboardActions = KeyboardActions {
+                focusManager.clearFocus()
+            },
             onValueChange = {
                 categoryDescription = it
             },
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier
+                .fillMaxWidth()
         )
 
         Spacer(modifier = Modifier.height(8.dp))
