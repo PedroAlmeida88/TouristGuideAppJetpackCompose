@@ -8,6 +8,8 @@ import com.google.firebase.auth.FirebaseUser
 import kotlinx.coroutines.launch
 import pt.isec.amovtp.touristapp.data.AuthUser
 import pt.isec.amovtp.touristapp.data.Category
+import pt.isec.amovtp.touristapp.data.Comment
+import pt.isec.amovtp.touristapp.data.ImagesPOIs
 import pt.isec.amovtp.touristapp.data.Location
 import pt.isec.amovtp.touristapp.data.PointOfInterest
 import pt.isec.amovtp.touristapp.data.User
@@ -105,7 +107,20 @@ class FirebaseViewModel : ViewModel() {
             }
         }
     }
-
+    fun addCommentToFirestore(comment: Comment,selectedLocation: Location?, selectedPoi: PointOfInterest?) {
+        viewModelScope.launch {
+            StorageUtil.addCommentToFirestore(comment,selectedLocation,selectedPoi){ exception ->
+                _error.value = exception?.message
+            }
+        }
+    }
+    fun addPOIsImagesDataToFirestore(images: ImagesPOIs,selectedLocation: Location?, selectedPoi: PointOfInterest?) {
+        viewModelScope.launch {
+            StorageUtil.addPOIsImagesDataToFirestore(images,selectedLocation,selectedPoi){ exception ->
+                _error.value = exception?.message
+            }
+        }
+    }
     fun uploadLocationToStorage(directory: String,imageName: String, path: String) {
         viewModelScope.launch {
             StorageUtil.getFileFromPath(path)?.let { inputStream ->
@@ -118,6 +133,13 @@ class FirebaseViewModel : ViewModel() {
         viewModelScope.launch {
             StorageUtil.getFileFromPath(path)?.let { inputStream ->
                 StorageUtil.uploadPOIFile(directory,inputStream, imageName, locationName )
+            }
+        }
+    }
+    fun uploadPOIUniquePictureToStorage(directory: String,imageName: String, path: String,locationName: String,poi: String) {
+        viewModelScope.launch {
+            StorageUtil.getFileFromPath(path)?.let { inputStream ->
+                StorageUtil.uploadPOIUniquePictureFile(directory,inputStream, imageName, locationName,poi )
             }
         }
     }
@@ -141,11 +163,29 @@ class FirebaseViewModel : ViewModel() {
 
     fun getCategoriesFromFirestore(callback: (List<Category>) -> Unit) {
         viewModelScope.launch {
-            StorageUtil.getCategoryToFirestore () { categories ->
+            StorageUtil.getCategoryFromFirestore () { categories ->
                 callback(categories)
             }
         }
     }
+
+    fun getCommentsFromFirestore(selectedLocation: Location?, selectedPoi: PointOfInterest?, callback: (List<Comment>) -> Unit) {
+        viewModelScope.launch {
+            StorageUtil.getCommentFromFirestore (selectedLocation,selectedPoi) { comments ->
+                callback(comments)
+            }
+        }
+    }
+
+    fun getPOIUniquePhotoFromFirestore(selectedLocation: Location?, selectedPoi: PointOfInterest?,callback: (List<ImagesPOIs>) -> Unit) {
+        viewModelScope.launch {
+            StorageUtil.getPOIUniquePhotoFromFirestore (selectedLocation,selectedPoi) { img ->
+                callback(img)
+            }
+        }
+    }
+
+
 
 
 }

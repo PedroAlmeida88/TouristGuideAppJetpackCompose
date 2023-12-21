@@ -48,7 +48,8 @@ enum class Screens(val display: String, val showAppBar : Boolean) {
     ADD_CATEGORY("Add Category", true),
     SHOW_MAP("Show map", true),
     CREDITS("Credits", true),
-    ADD_COMMENTS("Add Comments", true);
+    ADD_COMMENTS("Add Comments", true),
+    ADD_POI_PICTURES("Add POI Pictures", true);
 
     val route : String
         get() = this.toString()
@@ -190,7 +191,10 @@ fun MainScreen(navController:NavHostController = rememberNavController(),
                 AddCategoryScreen(modifier = Modifier, navController = navController, firebaseViewModel = firebaseViewModel)
             }
             composable (Screens.ADD_COMMENTS.route) {
-                AddCommentsScreen(modifier = Modifier, firebaseViewModel = firebaseViewModel)
+                AddCommentsScreen(modfier = Modifier, locationViewModel = locationViewModel,firebaseViewModel = firebaseViewModel)
+            }
+            composable (Screens.ADD_POI_PICTURES.route) {
+                AddPOIPicturesScreen(modfier = Modifier, locationViewModel = locationViewModel,firebaseViewModel = firebaseViewModel)
             }
             composable (Screens.CREDITS.route) {
                 CreditsScreen()

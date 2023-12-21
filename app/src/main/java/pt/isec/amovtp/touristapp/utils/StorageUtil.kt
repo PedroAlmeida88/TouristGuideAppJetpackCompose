@@ -9,6 +9,7 @@ import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
 import pt.isec.amovtp.touristapp.data.Category
 import pt.isec.amovtp.touristapp.data.Comment
+import pt.isec.amovtp.touristapp.data.ImagesPOIs
 import pt.isec.amovtp.touristapp.data.Location
 import pt.isec.amovtp.touristapp.data.PointOfInterest
 import pt.isec.amovtp.touristapp.data.User
@@ -22,6 +23,7 @@ enum class Collections(val collectionName: String){
     Users("Users"),
     Comments("Comments"),
     Category("Category"),
+    ImagesPOI("Images"), //Imagens de cada POI
     POIs("POIs");
 
     val route : String
@@ -69,6 +71,49 @@ class StorageUtil {
                     onResult(result.exception)
                 }
         }
+        fun addCommentToFirestore(comment: Comment,location: Location?, poi: PointOfInterest?,onResult: (Throwable?) -> Unit) {
+            val db = Firebase.firestore
+
+            val commentData = hashMapOf(
+                "Comment" to comment.description,
+                "UserName" to comment.userName,
+                "UserUID" to comment.userUID,
+                "Date" to comment.date,
+            )
+
+            db.collection(Collections.Locations.route)
+                .document(location?.name ?: "")
+                .collection(Collections.POIs.route)
+                .document(poi?.name?: "")
+                .collection(Collections.Comments.route)
+                .document("Comment-[${comment.userName}]")
+                .set(commentData)
+                .addOnCompleteListener { result ->
+                    onResult(result.exception)
+                }
+        }
+
+        fun addPOIsImagesDataToFirestore(images: ImagesPOIs, location: Location?, poi: PointOfInterest?, onResult: (Throwable?) -> Unit) {
+            val db = Firebase.firestore
+
+            val imageData = hashMapOf(
+                "PhotoUrl" to images.photoUrl,
+                "UserName" to images.userName,
+                "UserUID" to images.userUID,
+                "Date" to images.date,
+            )
+
+            db.collection(Collections.Locations.route)
+                .document(location?.name ?: "")
+                .collection(Collections.POIs.route)
+                .document(poi?.name?: "")
+                .collection(Collections.ImagesPOI.route)
+                .document("Image[${images.userName}]")
+                .set(imageData)
+                .addOnCompleteListener { result ->
+                    onResult(result.exception)
+                }
+        }
         fun addLocationPhotoUrlToFirestore(name: String ,photoUrl: Uri) {
             val db = Firebase.firestore
             val newPhotoUrl = photoUrl.toString()
@@ -91,6 +136,20 @@ class StorageUtil {
                 .document(name)
                 .update(updateData)
         }
+        private fun addPOIUniquePhotoUrlToFirestore(imageName: String, downloadUri: Uri?, locationName: String, poiName: String) {
+            val db = Firebase.firestore
+            val newPhotoUrl = downloadUri.toString()
+            val updateData = hashMapOf(
+                "PhotoUrl" to newPhotoUrl as Any
+            )
+            db.collection(Collections.Locations.route)
+                .document(locationName)
+                .collection(Collections.POIs.route)
+                .document(poiName)
+                .collection(Collections.ImagesPOI.route)
+                .document(imageName)
+                .update(updateData)
+        }
 
         fun addCategoryToFirestore (category: Category, onResult: (Throwable?) -> Unit) {
             val db = Firebase.firestore
@@ -106,9 +165,7 @@ class StorageUtil {
                 }
         }
 
-        fun addCommentToFirestore (onResult: (Throwable?) -> Unit) {
 
-        }
 
         fun addUserToFirestore (uid: String, user: User, onResult: (Throwable?) -> Unit) {
             val db = Firebase.firestore
@@ -193,7 +250,7 @@ class StorageUtil {
                     callback(emptyList())
                 }
         }
-        fun getCategoryToFirestore(callback: (List<Category>) -> Unit) {
+        fun getCategoryFromFirestore(callback: (List<Category>) -> Unit) {
             val db = Firebase.firestore
 
             db.collection(Collections.Category.route)
@@ -216,10 +273,79 @@ class StorageUtil {
                 }
         }
 
+        fun getPOIUniquePhotoFromFirestore(location: Location?, poi: PointOfInterest?,callback: (List<ImagesPOIs>) -> Unit) {
+            val db = Firebase.firestore
+            val idDocumentLocation = location?.name ?: ""
+            val idDocumentPoi = poi?.name ?: ""
 
-        fun getCommentsFromFirestore () : List<Comment> {
-            return emptyList()
+            db.collection(Collections.Locations.route)
+                .document(idDocumentLocation)
+                .collection(Collections.POIs.route)
+                .document(idDocumentPoi)
+                .collection(Collections.ImagesPOI.route)
+                .get()
+                .addOnSuccessListener { result ->
+                    val images = mutableListOf<ImagesPOIs>()
+
+                    for (document in result) {
+                        try {
+                            //val name = document.id
+                            val photoUrl = document.getString("PhotoUrl") ?: ""
+                            val userName = document.getString("UserName") ?: ""
+                            val userUID = document.getString("UserUID") ?: ""
+                            val date = document.getString("Date") ?: ""
+
+                            val image = ImagesPOIs(photoUrl,userName,userUID,date)
+                            images.add(image)
+                        } catch (e: Exception) {
+                            Log.e(TAG, "Error parsing POI document: ${e.message}")
+                        }
+                    }
+                    callback(images)
+                }
+                .addOnFailureListener { e ->
+                    Log.e(TAG, "Error fetching POIs: ${e.message}")
+                    callback(emptyList())
+                }
         }
+
+        fun getCommentFromFirestore(location: Location?, poi: PointOfInterest?, callback: (List<Comment>) -> Unit) {
+            val db = Firebase.firestore
+            val idDocumentLocation = location?.name ?: ""
+            val idDocumentPoi = poi?.name ?: ""
+
+            db.collection(Collections.Locations.route)
+                .document(idDocumentLocation)
+                .collection(Collections.POIs.route)
+                .document(idDocumentPoi)
+                .collection(Collections.Comments.route)
+                .get()
+                .addOnSuccessListener { result ->
+                    val comments = mutableListOf<Comment>()
+
+                    for (document in result) {
+                        try {
+                            //val name = document.id
+                            val commentString = document.getString("Comment") ?: ""
+                            val userName = document.getString("UserName") ?: ""
+                            val userUID = document.getString("UserUID") ?: ""
+                            val date = document.getString("Date") ?: ""
+
+                            val comment = Comment(commentString,userName,userUID,date)
+                            comments.add(comment)
+                        } catch (e: Exception) {
+                            Log.e(TAG, "Error parsing POI document: ${e.message}")
+                        }
+                    }
+                    callback(comments)
+                }
+                .addOnFailureListener { e ->
+                    Log.e(TAG, "Error fetching POIs: ${e.message}")
+                    callback(emptyList())
+                }
+
+        }
+
 
         fun getUserFromFirestore (userUID: String, userData: (User) -> Unit){
             val db = Firebase.firestore
@@ -305,16 +431,31 @@ class StorageUtil {
                     println(downloadUri.toString())
                     //add Uti to database
                     addPOIPhotoUrlToFirestore(imgFile,downloadUri,locationName)
-
-
-                    //   https://firebasestorage.googleapis.com/v0/b/p0405ansamov.appspot.com/o/images%2Fimage.png?alt=media&token=302c7119-c3a9-426d-b7b4-6ab5ac25fed9
-                } else {
-                    // Handle failures
-                    // ...
                 }
             }
+        }
 
+        fun uploadPOIUniquePictureFile(directory:String, inputStream: InputStream, imageName: String, locationName: String, poiName: String) {
+            val storage = Firebase.storage
+            val ref1 = storage.reference
+            val ref2 = ref1.child(directory)
+            val ref3 = ref2.child(imageName)
 
+            val uploadTask = ref3.putStream(inputStream)
+            uploadTask.continueWithTask { task ->
+                if (!task.isSuccessful) {
+                    task.exception?.let {
+                        throw it
+                    }
+                }
+                ref3.downloadUrl
+            }.addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    val downloadUri = task.result
+                    println(downloadUri.toString())
+                    addPOIUniquePhotoUrlToFirestore(imageName,downloadUri,locationName,poiName)
+                }
+            }
         }
 
 

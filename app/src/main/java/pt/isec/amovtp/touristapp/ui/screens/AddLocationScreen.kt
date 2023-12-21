@@ -147,7 +147,7 @@ fun AddLocationScreen(modifier: Modifier.Companion, navController: NavHostContro
                 shape = CutCornerShape(percent = 0)
                 ) {
                 Text(text = "Get coordinates from current location")
-            }
+                }
 
             Button(
                 onClick = {
@@ -216,6 +216,7 @@ fun AddLocationScreen(modifier: Modifier.Companion, navController: NavHostContro
                     )
                     firebaseViewModel.addLocationsToFirestore(location)
                     firebaseViewModel.uploadLocationToStorage(directory = "images/"+locationName ,imageName = locationName, path = locationViewModel.imagePath.value ?: "")
+                    locationViewModel.imagePath.value = null
                     navController?.popBackStack()
                     Toast.makeText(context,"Localização adicionada com sucesso!",Toast.LENGTH_LONG).show()
                 }

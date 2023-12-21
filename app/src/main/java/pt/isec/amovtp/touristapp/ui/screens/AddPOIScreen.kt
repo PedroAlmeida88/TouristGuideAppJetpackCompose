@@ -241,6 +241,7 @@ fun AddPOIScreen(modifier: Modifier.Companion, navController: NavHostController?
 
                     firebaseViewModel.addPOIToFirestore(selectedLocation?.name ?: ""  ,POI)
                     firebaseViewModel.uploadPOIToStorage(directory = "images/" + selectedLocation?.name +"/pois/",imageName = poiName, path = locationViewModel.imagePath.value ?: "", locationName = selectedLocation?.name ?: "" )
+                    locationViewModel.imagePath.value = null
                     navController?.popBackStack()
                     Toast.makeText(context,"POI adicionada com sucesso!",Toast.LENGTH_LONG).show()
                 }

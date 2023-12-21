@@ -29,5 +29,7 @@ class FireAuthUtil {
             if(auth.currentUser != null)
                 auth.signOut()
         }
+
     }
+
 }
