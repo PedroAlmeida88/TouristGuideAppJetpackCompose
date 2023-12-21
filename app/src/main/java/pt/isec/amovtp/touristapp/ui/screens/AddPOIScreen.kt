@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CutCornerShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -30,8 +31,10 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import pt.isec.amovtp.touristapp.data.Category
@@ -59,6 +62,7 @@ fun AddPOIScreen(modifier: Modifier.Companion, navController: NavHostController?
 
     //coordenadas
     val location = locationViewModel.currentLocation.observeAsState()
+    val focusManager = LocalFocusManager.current
 
 
     fun validateForm() {
@@ -101,6 +105,10 @@ fun AddPOIScreen(modifier: Modifier.Companion, navController: NavHostController?
                 poiName = it
                 validateForm()
             },
+            singleLine = true,
+            keyboardActions = KeyboardActions {
+                focusManager.moveFocus(FocusDirection.Next)
+            },
             label = { Text(text = "POI Name") },
 
         )
@@ -115,6 +123,10 @@ fun AddPOIScreen(modifier: Modifier.Companion, navController: NavHostController?
             onValueChange ={
                 poiDescription = it
                 validateForm()
+            },
+            singleLine = true,
+            keyboardActions = KeyboardActions {
+                focusManager.clearFocus()
             },
             label = { Text(text = "Location Description") },
         )
@@ -177,6 +189,10 @@ fun AddPOIScreen(modifier: Modifier.Companion, navController: NavHostController?
                     longitude = it
                     validateForm()
                 },
+                singleLine = true,
+                keyboardActions = KeyboardActions {
+                    focusManager.moveFocus(FocusDirection.Next)
+                },
                 label = { Text(text = "Longitude") },
                 enabled = isInputEnabled,
                 modifier = Modifier.weight(1f)
@@ -186,6 +202,10 @@ fun AddPOIScreen(modifier: Modifier.Companion, navController: NavHostController?
                 onValueChange = {
                     latitude = it
                     validateForm()
+                },
+                singleLine = true,
+                keyboardActions = KeyboardActions {
+                    focusManager.moveFocus(FocusDirection.Next)
                 },
                 label = { Text(text = "Latitude") },
                 enabled = isInputEnabled,
