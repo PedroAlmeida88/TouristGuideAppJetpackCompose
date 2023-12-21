@@ -70,6 +70,7 @@ fun POIScreen(modifier: Modifier = Modifier, navController: NavHostController?, 
         mutableStateOf<List<Category>>(emptyList())
     }
 
+
     var pois by remember { mutableStateOf<List<PointOfInterest>>(emptyList()) }
 
     //sempre que é iniciado, carrega os POIS
@@ -100,7 +101,7 @@ fun POIScreen(modifier: Modifier = Modifier, navController: NavHostController?, 
             modifier = Modifier
                 .fillMaxSize()
         ) {
-            items(pois) { poi ->
+            items(pois.filter { it.category.name == selectedCategory?.name || selectedCategory?.name == "All"}) { poi ->
                 Card(
                     modifier = Modifier
                         //.fillMaxHeight(0,5f) // Use 50% of the screen height

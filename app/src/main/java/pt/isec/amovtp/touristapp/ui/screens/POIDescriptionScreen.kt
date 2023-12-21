@@ -120,29 +120,12 @@ fun POIDescriptionScreen(modifier: Modifier = Modifier, viewModel: LocationViewM
         Spacer(Modifier.height(16.dp))
 
         Button(
-            onClick = { /* TODO: Ecrã de adicionar comentário */ },
-            modifier = Modifier
-                .padding(8.dp),
-            colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.primary),
-            shape = CutCornerShape(percent = 0)
-        ) {
-            Text(text = "Add Comment", maxLines = 2)
-        }
-        Button(
             onClick = { /* TODO: Ecrã de adicionar classificação */ },
             modifier = Modifier.padding(8.dp),
             colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.primary),
             shape = CutCornerShape(percent = 0)
         ) {
             Text(text = "Add Rating", maxLines = 2)
-        }
-        Button(
-            onClick = { /* TODO: Ecrã de adicionar fotografia */ },
-            modifier = Modifier.padding(8.dp),
-            colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.primary),
-            shape = CutCornerShape(percent = 0)
-        ) {
-            Text(text = "Add Photo", maxLines = 2)
         }
 
         LazyColumn(

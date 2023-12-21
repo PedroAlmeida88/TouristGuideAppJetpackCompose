@@ -155,6 +155,7 @@ class StorageUtil {
             val db = Firebase.firestore
 
             val categoryData = hashMapOf(
+                "Name" to category.name,
                 "Description" to category.description,
                 "Icon" to category.icon
             )
@@ -230,13 +231,15 @@ class StorageUtil {
                             val longitude = document.getDouble("Longitude") ?: 0.0
                             val imageUrl = document.getString("PhotoUrl") ?: ""
 
-                            val category = pt.isec.amovtp.touristapp.data.Category(
-                                "Categoria Teste",
-                                "Alterar no StorageUtil",
-                                ""
-                            )
+                            val categoryData = document.get("Category") as Map<*, *>
+                            val catName = categoryData["name"].toString()
+                            val catIcon = categoryData["icon"].toString()
+                            val catDesc = categoryData["description"].toString()
 
-                            val pointOfInterest = PointOfInterest(name, description, latitude, longitude, imageUrl,category)
+                            Log.i(TAG, "getPoisFromFirestore: " + categoryData.toString())
+                            Log.i(TAG, "getPoisFromFirestore DESCRICAO: " +catDesc)
+
+                            val pointOfInterest = PointOfInterest(name, description, latitude, longitude, imageUrl,Category(catName,catIcon,catDesc))
                             pois.add(pointOfInterest)
                         } catch (e: Exception) {
                             Log.e(TAG, "Error parsing POI document: ${e.message}")
