@@ -3,14 +3,26 @@ package pt.isec.amovtp.touristapp.ui.screens
 import android.graphics.drawable.ShapeDrawable
 import android.graphics.drawable.shapes.OvalShape
 import android.util.Log
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.IntrinsicSize
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.CutCornerShape
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -26,6 +38,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory
 import org.osmdroid.util.GeoPoint
@@ -37,13 +50,7 @@ import pt.isec.amovtp.touristapp.ui.viewmodels.LocationViewModel
 
 @Composable
 fun POIDescriptionScreen(modifier: Modifier = Modifier, viewModel: LocationViewModel,firebaseViewModel: FirebaseViewModel) {
-    //localização atual
-    //val location = viewModel.currentLocation.observeAsState()
 
-    //val geoPoint by remember{ mutableStateOf(GeoPoint(
-    //    location.value?.latitude ?: 0.0, location.value?.longitude ?: 0.0
-    //)) }
-    //poi atual
     val currentPoi = viewModel.selectedPoi
 
     val currentGeoPoint by remember{ mutableStateOf(GeoPoint(
@@ -57,8 +64,6 @@ fun POIDescriptionScreen(modifier: Modifier = Modifier, viewModel: LocationViewM
     LaunchedEffect(Unit) {
         firebaseViewModel.getPoisFromFirestore(selectedLocation) { loadedPois ->
             pois = loadedPois
-            //Log.i("Localizaçoesadada", "POIDescriptionScreen: " + loadedPois)
-            //Log.i("POISSSS", "POIDescriptionScreen: " + pois)
             loaded = true
         }
     }
@@ -74,9 +79,10 @@ fun POIDescriptionScreen(modifier: Modifier = Modifier, viewModel: LocationViewM
         Spacer(Modifier.height(16.dp))
         Box (
             modifier = Modifier
+                .padding(8.dp)
                 .fillMaxWidth()
+                .fillMaxHeight(0.5f)
                 .clipToBounds()
-                //.background(Color(255, 240, 128)),
         ){
             if(loaded)
                 AndroidView(
@@ -111,6 +117,91 @@ fun POIDescriptionScreen(modifier: Modifier = Modifier, viewModel: LocationViewM
                     }
                 )
         }
-        Text(text = "lkjjadnwkldnalkw")
+        Spacer(Modifier.height(16.dp))
+
+        Button(
+            onClick = { /* TODO: Ecrã de adicionar comentário */ },
+            modifier = Modifier
+                .padding(8.dp),
+            colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.primary),
+            shape = CutCornerShape(percent = 0)
+        ) {
+            Text(text = "Add Comment", maxLines = 2)
+        }
+        Button(
+            onClick = { /* TODO: Ecrã de adicionar classificação */ },
+            modifier = Modifier.padding(8.dp),
+            colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.primary),
+            shape = CutCornerShape(percent = 0)
+        ) {
+            Text(text = "Add Rating", maxLines = 2)
+        }
+        Button(
+            onClick = { /* TODO: Ecrã de adicionar fotografia */ },
+            modifier = Modifier.padding(8.dp),
+            colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.primary),
+            shape = CutCornerShape(percent = 0)
+        ) {
+            Text(text = "Add Photo", maxLines = 2)
+        }
+
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxSize()
+        ) {
+            items(pois) { poi->
+                Card(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(8.dp),
+                    elevation = CardDefaults.cardElevation(4.dp),
+                    colors = CardDefaults.cardColors(
+                        containerColor = Color(128,192,255)
+                    ),
+                    onClick = {
+                        //geoPoint = GeoPoint(it.latitude,it.longitude)
+                    }
+                ) {
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(8.dp),
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        Text(text = "Comment", fontSize = 20.sp)
+                        //Text(text = "${it.latitude} ${it.longitude}", fontSize = 14.sp)
+                    }
+                }
+            }
+        }
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxSize()
+        ) {
+            items(pois) { poi->
+                Card(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(8.dp),
+                    elevation = CardDefaults.cardElevation(4.dp),
+                    colors = CardDefaults.cardColors(
+                        containerColor = Color(128,192,255)
+                    ),
+                    onClick = {
+                        //geoPoint = GeoPoint(it.latitude,it.longitude)
+                    }
+                ) {
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(8.dp),
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        Text(text = "Photo", fontSize = 20.sp)
+                        //Text(text = "${it.latitude} ${it.longitude}", fontSize = 14.sp)
+                    }
+                }
+            }
+        }
     }
 }

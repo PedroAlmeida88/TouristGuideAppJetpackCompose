@@ -147,7 +147,7 @@ fun AddLocationScreen(modifier: Modifier.Companion, navController: NavHostContro
                 shape = CutCornerShape(percent = 0)
                 ) {
                 Text(text = "Get coordinates from current location")
-            }
+                }
 
             Button(
                 onClick = {

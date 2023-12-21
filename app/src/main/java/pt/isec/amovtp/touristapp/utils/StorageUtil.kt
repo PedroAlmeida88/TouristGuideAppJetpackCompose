@@ -217,9 +217,41 @@ class StorageUtil {
         }
 
 
-        fun getCommentsFromFirestore () : List<Comment> {
-            return emptyList()
+        fun getCommentFromFirestore(location: Location?, poi: PointOfInterest?, callback: (List<Comment>) -> Unit) {
+            val db = Firebase.firestore
+            val idDocumentLocation = location?.name ?: ""
+            val idDocumentPoi = poi?.name ?: ""
+
+            db.collection(Collections.Locations.route)
+                .document(idDocumentLocation)
+                .collection(Collections.POIs.route)
+                .document(idDocumentPoi)
+                .collection(Collections.Comments.route)
+                .get()
+                .addOnSuccessListener { result ->
+                    val comments = mutableListOf<Comment>()
+
+                    for (document in result) {
+                        try {
+                            //val name = document.id
+                            val commentString = document.getString("Comment") ?: ""
+                            val userName = document.getString("UserName") ?: ""
+
+                            val comment = Comment(commentString,userName)
+                            comments.add(comment)
+                        } catch (e: Exception) {
+                            Log.e(TAG, "Error parsing POI document: ${e.message}")
+                        }
+                    }
+                    callback(comments)
+                }
+                .addOnFailureListener { e ->
+                    Log.e(TAG, "Error fetching POIs: ${e.message}")
+                    callback(emptyList())
+                }
+
         }
+
 
         fun getUserFromFirestore (userUID: String, userData: (User) -> Unit){
             val db = Firebase.firestore
@@ -316,7 +348,6 @@ class StorageUtil {
 
 
         }
-
 
 
 
