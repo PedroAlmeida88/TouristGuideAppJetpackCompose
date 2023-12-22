@@ -132,20 +132,12 @@ fun LocationsScreen(modifier: Modifier = Modifier, navController: NavHostControl
                         //Image(painter = painterResource(u = ), contentDescription = "city picture")
                         AsyncImage(model = location.photoUrl, contentDescription = "City Picture")
                         Text(text = location.name, fontSize = 20.sp)
-                        Text(text = "${location.latitude} ${location.longitude}", fontSize = 14.sp)
-                        /*
-                        Button(
-                            onClick = { navController?.navigate(Screens.SHOW_MAP.route,la) },
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .fillParentMaxHeight(0.05f),
-                            shape = CutCornerShape(percent = 0),
-
-                            ) {
-                            Text(text = "Ver no mapa")
-                        }
-
-                         */
+                        Text(text = location.description, fontSize = 14.sp)
+                        Text(text = "${location.latitude} ${location.longitude}", fontSize = 8.sp)
+                        if(location.writenCoords)
+                            Text(text = "Coords were writen", fontSize = 8.sp)
+                        else
+                            Text(text = "Coords were got from location", fontSize = 8.sp)
                     }
                     
                 }

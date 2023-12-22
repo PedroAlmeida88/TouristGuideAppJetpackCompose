@@ -63,6 +63,7 @@ fun AddPOIScreen(modifier: Modifier.Companion, navController: NavHostController?
     //coordenadas
     val location = locationViewModel.currentLocation.observeAsState()
     val focusManager = LocalFocusManager.current
+    var writenCoords by remember { mutableStateOf(false) }
 
 
     fun validateForm() {
@@ -135,7 +136,8 @@ fun AddPOIScreen(modifier: Modifier.Companion, navController: NavHostController?
         DropDownComposable(
             navController = navController,
             viewModel = locationViewModel,
-            firebaseViewModel = firebaseViewModel)
+            firebaseViewModel = firebaseViewModel
+        )
 
         Row(
             modifier = Modifier
@@ -148,6 +150,7 @@ fun AddPOIScreen(modifier: Modifier.Companion, navController: NavHostController?
                     isInputEnabled = false;
                     latitude = (location.value?.latitude ?: 0.0).toString()
                     longitude = (location.value?.longitude ?: 0.0).toString()
+                    writenCoords = false
                     validateForm()
 
                 },
@@ -164,6 +167,7 @@ fun AddPOIScreen(modifier: Modifier.Companion, navController: NavHostController?
             Button(
                 onClick = {
                     isInputEnabled = true
+                    writenCoords = true
                     validateForm()
                 },
                 modifier = Modifier
@@ -235,7 +239,8 @@ fun AddPOIScreen(modifier: Modifier.Companion, navController: NavHostController?
                         category = selectedCategory ?: Category("","",""),
                         latitude = latitude.toDouble(),
                         longitude = longitude.toDouble(),
-                        photoUrl = ""
+                        photoUrl = "",
+                        writenCoords = writenCoords
                     )
                     Log.i("TAG", "AddPOIScreen: " + POI)
 

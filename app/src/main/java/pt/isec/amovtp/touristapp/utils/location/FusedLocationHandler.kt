@@ -2,6 +2,7 @@ package pt.isec.amovtp.touristapp.utils.location
 
 import android.annotation.SuppressLint
 import android.location.Location
+import android.location.LocationManager
 import android.os.Looper
 import android.util.Log
 import com.google.android.gms.location.FusedLocationProviderClient
@@ -32,6 +33,7 @@ class FusedLocationHandler(private val locationProvider: FusedLocationProviderCl
                 location?.let(notify)
                 Log.i("Teste", "startLocationUpdates: $location")
             }
+
         val locationRequest =
             LocationRequest.Builder(PRIORITY_HIGH_ACCURACY, 2000)
                 //.setMinUpdateDistanceMeters(100f)
@@ -46,8 +48,11 @@ class FusedLocationHandler(private val locationProvider: FusedLocationProviderCl
             fastestInterval = 5000
             priority = LocationRequest.PRIORITY_HIGH_ACCURACY
         }*/
-        locationProvider.requestLocationUpdates(locationRequest,locationCallback, Looper.myLooper())
-
+        locationProvider.requestLocationUpdates(
+            locationRequest,
+            locationCallback,
+            Looper.myLooper()
+        )
         locationEnabled = true
     }
 

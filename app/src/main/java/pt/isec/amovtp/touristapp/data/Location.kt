@@ -5,7 +5,8 @@ data class Location (
     val description: String,
     val latitude: Double,
     val longitude: Double,
-    val photoUrl: String
+    val photoUrl: String,
+    val writenCoords: Boolean
 ){
     val userId: String = ""
     val countToAccept: Int = -1

@@ -22,7 +22,12 @@ import pt.isec.amovtp.touristapp.ui.viewmodels.LocationViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DropDownComposable(modifier: Modifier = Modifier, navController: NavHostController?, viewModel : LocationViewModel, firebaseViewModel: FirebaseViewModel){
+fun DropDownComposable(
+    modifier: Modifier = Modifier,
+    navController: NavHostController?,
+    viewModel : LocationViewModel,
+    firebaseViewModel: FirebaseViewModel,
+){
     var isExpanded by remember {
         mutableStateOf(false)
     }
@@ -56,13 +61,7 @@ fun DropDownComposable(modifier: Modifier = Modifier, navController: NavHostCont
             expanded = isExpanded,
             onDismissRequest = {isExpanded=false }
         ) {
-            DropdownMenuItem(
-                text = { Text(text = "Tudo") },
-                onClick = {
-                    viewModel.selectedCategory = Category("All","","")
-                    isExpanded=false
-                }
-            )
+
             for( c in categories)
                 DropdownMenuItem(
                     text = { Text(text = c.name) },

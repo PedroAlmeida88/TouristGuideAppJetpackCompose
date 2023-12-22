@@ -45,6 +45,7 @@ class StorageUtil {
                 "Latitude" to location.latitude,
                 "Longitude" to location.longitude,
                 "PhotoUrl" to location.photoUrl,
+                "WritenCoords" to location.writenCoords,
             )
             db.collection(Collections.Locations.route).document(location.name).set(locationData)
                 .addOnCompleteListener { result ->
@@ -60,6 +61,7 @@ class StorageUtil {
                 "Latitude" to poi.latitude,
                 "Longitude" to poi.longitude,
                 "PhotoUrl" to poi.photoUrl,
+                "WritenCoords" to poi.writenCoords,
             )
 
             db.collection(Collections.Locations.route)
@@ -203,7 +205,8 @@ class StorageUtil {
                         val latitude = document.getDouble("Latitude") ?: 0.0
                         val longitude = document.getDouble("Longitude") ?: 0.0
                         val imageUrl = document.getString("PhotoUrl") ?: ""
-                        val location = Location(name, description, latitude, longitude, imageUrl)
+                        val writenCoords  = document.getBoolean("WritenCoords") ?: false
+                        val location = Location(name, description, latitude, longitude, imageUrl,writenCoords)
                         locations.add(location)
                     }
                     callback(locations)
@@ -231,6 +234,7 @@ class StorageUtil {
                             val latitude = document.getDouble("Latitude") ?: 0.0
                             val longitude = document.getDouble("Longitude") ?: 0.0
                             val imageUrl = document.getString("PhotoUrl") ?: ""
+                            val writenCoords  = document.getBoolean("WritenCoords") ?: false
 
                             val categoryData = document.get("Category") as Map<*, *>
                             val catName = categoryData["name"].toString()
@@ -240,7 +244,7 @@ class StorageUtil {
                             Log.i(TAG, "getPoisFromFirestore: " + categoryData.toString())
                             Log.i(TAG, "getPoisFromFirestore DESCRICAO: " +catDesc)
 
-                            val pointOfInterest = PointOfInterest(name, description, latitude, longitude, imageUrl,Category(catName,catIcon,catDesc))
+                            val pointOfInterest = PointOfInterest(name, description, latitude, longitude, imageUrl,Category(catName,catIcon,catDesc),writenCoords)
                             pois.add(pointOfInterest)
                         } catch (e: Exception) {
                             Log.e(TAG, "Error parsing POI document: ${e.message}")

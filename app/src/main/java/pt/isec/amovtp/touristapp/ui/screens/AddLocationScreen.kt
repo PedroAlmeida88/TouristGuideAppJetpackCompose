@@ -52,7 +52,7 @@ fun AddLocationScreen(modifier: Modifier.Companion, navController: NavHostContro
     var isFormValid by remember { mutableStateOf(false) }
     var isInputEnabled by remember { mutableStateOf(false) }
     var isError by remember { mutableStateOf(false) }
-    var type by remember { mutableStateOf("gallery") }
+    var writenCoords by remember { mutableStateOf(false) }
 
     val focusManager = LocalFocusManager.current
 
@@ -136,6 +136,7 @@ fun AddLocationScreen(modifier: Modifier.Companion, navController: NavHostContro
                     isInputEnabled = false;
                     latitude = (location.value?.latitude ?: 0.0).toString()
                     longitude = (location.value?.longitude ?: 0.0).toString()
+                    writenCoords = false
                     validateForm()
 
                 },
@@ -152,6 +153,7 @@ fun AddLocationScreen(modifier: Modifier.Companion, navController: NavHostContro
             Button(
                 onClick = {
                     isInputEnabled = true
+                    writenCoords = true
                     validateForm()
                 },
                 modifier = Modifier
@@ -212,7 +214,8 @@ fun AddLocationScreen(modifier: Modifier.Companion, navController: NavHostContro
                         description = locationDescription,
                         latitude = latitude.toDouble(),
                         longitude = longitude.toDouble(),
-                        photoUrl = ""
+                        photoUrl = "",
+                        writenCoords = writenCoords
                     )
                     firebaseViewModel.addLocationsToFirestore(location)
                     firebaseViewModel.uploadLocationToStorage(directory = "images/"+locationName ,imageName = locationName, path = locationViewModel.imagePath.value ?: "")
