@@ -6,7 +6,8 @@ data class PointOfInterest (
     val latitude: Double,
     val longitude: Double,
     val photoUrl: String,
-    val category: Category
+    val category: Category,
+    val writenCoords: Boolean
     ){
     val userId: Int = -1
     val countToAccept: Int = 0

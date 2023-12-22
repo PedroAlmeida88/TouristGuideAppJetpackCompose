@@ -29,7 +29,7 @@ class LocationViewModel(private val locationHandler: LocationHandler) : ViewMode
     val imagePath : MutableState<String?> = mutableStateOf(null)
     var selectedLocation by mutableStateOf<LocationData?>(null)
     var selectedPoi by mutableStateOf<PointOfInterest?>(null)
-    var selectedCategory by mutableStateOf<Category?>(Category("All","",""))
+    var selectedCategory by mutableStateOf<Category?>(Category("","",""))
 
     // Permissions
     var coarseLocationPermission = false

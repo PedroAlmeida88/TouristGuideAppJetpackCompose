@@ -4,6 +4,7 @@ import android.content.ContentValues.TAG
 import android.content.res.AssetManager
 import android.net.Uri
 import android.util.Log
+import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
@@ -45,12 +46,68 @@ class StorageUtil {
                 "Latitude" to location.latitude,
                 "Longitude" to location.longitude,
                 "PhotoUrl" to location.photoUrl,
+                "WritenCoords" to location.writenCoords,
+                "Approvals" to location.approvals,
+                "UserUID" to location.userUID,
             )
             db.collection(Collections.Locations.route).document(location.name).set(locationData)
                 .addOnCompleteListener { result ->
                     onResult(result.exception)
                 }
         }
+
+        fun updateAprovalFirestore(location: Location, userUID: String ,onResult: (Throwable?) -> Unit) {
+            val db = Firebase.firestore
+
+            val num = location.approvals + 1
+            val updatedUserUIDs = location.userUIDsApprovals.toMutableList().apply {
+                add(userUID)
+            }
+            val locationData = hashMapOf(
+                "Approvals" to num as Any,
+                "UserUIDs" to updatedUserUIDs
+            )
+
+            db.collection(Collections.Locations.route)
+                .document(location.name)
+                .update(locationData)
+                .addOnCompleteListener { result ->
+                    onResult(result.exception)
+                }
+        }
+
+        /*
+        fun updateAprovalFirestore(location: Location, userUID: String, onResult: (Throwable?) -> Unit) {
+            val db = Firebase.firestore
+
+            val num = location.approvals + 1
+
+            db.collection(Collections.Locations.route)
+                .document(location.name)
+                .get()
+                .addOnSuccessListener { documentSnapshot ->
+                    val existingUserUIDs = documentSnapshot.get("UserUIDs") as? List<String> ?: emptyList()
+
+                    val newUserUIDs = existingUserUIDs + userUID
+
+                    val locationData = hashMapOf(
+                        "Approvals" to num as Any,
+                        "UserUIDs" to newUserUIDs
+                    )
+
+                    db.collection(Collections.Locations.route)
+                        .document(location.name)
+                        .update(locationData)
+                        .addOnCompleteListener { result ->
+                            onResult(result.exception)
+                        }
+                }
+                .addOnFailureListener { exception ->
+                    onResult(exception)
+                }
+        }
+
+         */
         fun addPOIToFirestore(locationName: String, poi: PointOfInterest,onResult: (Throwable?) -> Unit) {
             val db = Firebase.firestore
 
@@ -60,6 +117,7 @@ class StorageUtil {
                 "Latitude" to poi.latitude,
                 "Longitude" to poi.longitude,
                 "PhotoUrl" to poi.photoUrl,
+                "WritenCoords" to poi.writenCoords,
             )
 
             db.collection(Collections.Locations.route)
@@ -203,7 +261,11 @@ class StorageUtil {
                         val latitude = document.getDouble("Latitude") ?: 0.0
                         val longitude = document.getDouble("Longitude") ?: 0.0
                         val imageUrl = document.getString("PhotoUrl") ?: ""
-                        val location = Location(name, description, latitude, longitude, imageUrl)
+                        val writenCoords  = document.getBoolean("WritenCoords") ?: false
+                        val approvals  = document.getLong("Approvals")?.toInt() ?: 0
+                        val userUIDs = document.get("UserUIDs") as? List<String> ?: emptyList()
+                        val userUID = document.getString("UserUID") ?: ""
+                        val location = Location(name, description, latitude, longitude, imageUrl,writenCoords,approvals,userUIDs,userUID)
                         locations.add(location)
                     }
                     callback(locations)
@@ -231,6 +293,7 @@ class StorageUtil {
                             val latitude = document.getDouble("Latitude") ?: 0.0
                             val longitude = document.getDouble("Longitude") ?: 0.0
                             val imageUrl = document.getString("PhotoUrl") ?: ""
+                            val writenCoords  = document.getBoolean("WritenCoords") ?: false
 
                             val categoryData = document.get("Category") as Map<*, *>
                             val catName = categoryData["name"].toString()
@@ -240,7 +303,7 @@ class StorageUtil {
                             Log.i(TAG, "getPoisFromFirestore: " + categoryData.toString())
                             Log.i(TAG, "getPoisFromFirestore DESCRICAO: " +catDesc)
 
-                            val pointOfInterest = PointOfInterest(name, description, latitude, longitude, imageUrl,Category(catName,catIcon,catDesc))
+                            val pointOfInterest = PointOfInterest(name, description, latitude, longitude, imageUrl,Category(catName,catIcon,catDesc),writenCoords)
                             pois.add(pointOfInterest)
                         } catch (e: Exception) {
                             Log.e(TAG, "Error parsing POI document: ${e.message}")

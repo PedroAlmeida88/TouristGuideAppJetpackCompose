@@ -20,9 +20,14 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.Icons.Default
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowForward
 import androidx.compose.material.icons.filled.Build
+import androidx.compose.material.icons.filled.ClearAll
+import androidx.compose.material.icons.filled.CommentBank
+import androidx.compose.material.icons.filled.PhotoLibrary
+import androidx.compose.material.icons.filled.RestartAlt
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -64,7 +69,7 @@ import pt.isec.amovtp.touristapp.ui.viewmodels.LocationViewModel
 @Composable
 fun POIScreen(modifier: Modifier = Modifier, navController: NavHostController?, viewModel : LocationViewModel,firebaseViewModel: FirebaseViewModel) {
     val selectedLocation = viewModel.selectedLocation
-    var selectedCategory = viewModel.selectedCategory
+    val selectedCategory = viewModel.selectedCategory
     
     var categories by remember {
         mutableStateOf<List<Category>>(emptyList())
@@ -94,6 +99,11 @@ fun POIScreen(modifier: Modifier = Modifier, navController: NavHostController?, 
             horizontalArrangement = Arrangement.Start,
             verticalAlignment = Alignment.Top
         ) {
+            IconButton(onClick = {
+                viewModel.selectedCategory = Category("","","")
+            }) {
+                Icon(imageVector = Default.ClearAll, contentDescription = "")
+            }
             DropDownComposable(navController = navController, viewModel = viewModel, firebaseViewModel = firebaseViewModel)
         }
         Spacer(Modifier.height(16.dp))
@@ -101,7 +111,7 @@ fun POIScreen(modifier: Modifier = Modifier, navController: NavHostController?, 
             modifier = Modifier
                 .fillMaxSize()
         ) {
-            items(pois.filter { it.category.name == selectedCategory?.name || selectedCategory?.name == "All"}) { poi ->
+            items(pois.filter { it.category.name == selectedCategory?.name || selectedCategory?.name == ""}) { poi ->
                 Card(
                     modifier = Modifier
                         .fillMaxSize()
@@ -139,8 +149,8 @@ fun POIScreen(modifier: Modifier = Modifier, navController: NavHostController?, 
                                     navController?.navigate(Screens.ADD_COMMENTS.route)
                                 },
                                 modifier = Modifier.padding(8.dp),
-
                                 ) {
+
                                 Icon(
                                     painter = painterResource(id = android.R.drawable.sym_action_chat),
                                     contentDescription = null
@@ -156,7 +166,7 @@ fun POIScreen(modifier: Modifier = Modifier, navController: NavHostController?, 
 
                                 ) {
                                 Icon(
-                                    painter = painterResource(id = android.R.drawable.ic_menu_gallery),
+                                    imageVector = Default.PhotoLibrary,
                                     contentDescription = null
                                 )
                             }
@@ -169,7 +179,8 @@ fun POIScreen(modifier: Modifier = Modifier, navController: NavHostController?, 
                                 horizontalAlignment = Alignment.CenterHorizontally
                             ) {
                                 Text(text = poi.name, fontSize = 20.sp)
-                                Text(text = "${poi.latitude} ${poi.longitude}", fontSize = 14.sp)
+                                Text(text = poi.description, fontSize = 14.sp)
+                                Text(text = "${poi.latitude} ${poi.longitude}", fontSize = 8.sp)
                             }
 
 
