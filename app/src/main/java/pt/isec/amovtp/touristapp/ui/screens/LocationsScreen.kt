@@ -1,6 +1,7 @@
 package pt.isec.amovtp.touristapp.ui.screens
 
 import android.util.Log
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
@@ -111,21 +112,20 @@ fun LocationsScreen(modifier: Modifier = Modifier, navController: NavHostControl
         ) {
             items(locations) { location ->
                 val borderColor = when (location.approvals) {
-                    0,1 -> Color.Red
-                    2 -> Color.Yellow
+                    0 -> Color.Red
+                    1 -> Color.Yellow
                     else -> MaterialTheme.colorScheme.tertiary
                 }
                 Card(
                     modifier = Modifier
-                        //.fillMaxHeight(0,5f) // Use 50% of the screen height
-                        //.height(324.dp)
                         .fillMaxHeight()
                         .fillMaxWidth()
                         .padding(8.dp)
+                        .border(2.dp, borderColor, shape = RoundedCornerShape(16.dp))
                         .clip(shape = RoundedCornerShape(16.dp)),
                     elevation = CardDefaults.cardElevation(4.dp),
                     colors = CardDefaults.cardColors(
-                        containerColor = borderColor
+                        containerColor = MaterialTheme.colorScheme.tertiary
                     ),
 
                     onClick = {
