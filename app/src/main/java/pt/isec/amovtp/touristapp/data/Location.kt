@@ -8,7 +8,7 @@ data class Location (
     val photoUrl: String,
     val writenCoords: Boolean,
     val approvals: Int,
-    val userUIDsApprovals:List<String>,
+    val userUIDsApprovals:List<String>, //lista de userUIDs
+    var userUID: String,                 //userUID do criador da localização
     var enableBtn: Boolean = true
-
 )

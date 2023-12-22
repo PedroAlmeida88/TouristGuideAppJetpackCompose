@@ -53,7 +53,6 @@ fun LocationsScreen(modifier: Modifier = Modifier, navController: NavHostControl
     //geopoin
     val myLocation = viewModel.currentLocation.observeAsState()
     var locations by remember { mutableStateOf<List<Location>>(emptyList())}
-
     val userUID = firebaseViewModel.authUser.value!!.uid
 
 
@@ -62,7 +61,8 @@ fun LocationsScreen(modifier: Modifier = Modifier, navController: NavHostControl
         firebaseViewModel.getLocationFromFirestore { loadedLocations ->
             locations = loadedLocations
             for (l in locations) {
-                if (userUID in l.userUIDsApprovals) {
+                //caso já tenha votado ou tenha sido criado por ele
+                if (userUID in l.userUIDsApprovals || userUID == l.userUID) {
                     l.enableBtn = false
                 }
             }
@@ -168,7 +168,7 @@ fun LocationsScreen(modifier: Modifier = Modifier, navController: NavHostControl
                                             firebaseViewModel.getLocationFromFirestore { loadedLocations ->
                                                 locations = loadedLocations
                                                 for (l in locations) {
-                                                    if (userUID in l.userUIDsApprovals) {
+                                                    if (userUID in l.userUIDsApprovals || userUID == l.userUID) {
                                                         l.enableBtn = false
                                                     }
                                                 }

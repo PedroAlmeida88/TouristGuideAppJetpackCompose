@@ -53,6 +53,7 @@ fun AddLocationScreen(modifier: Modifier.Companion, navController: NavHostContro
     var isInputEnabled by remember { mutableStateOf(false) }
     var isError by remember { mutableStateOf(false) }
     var writenCoords by remember { mutableStateOf(false) }
+    val userUID = firebaseViewModel.authUser.value!!.uid
 
     val focusManager = LocalFocusManager.current
 
@@ -217,7 +218,8 @@ fun AddLocationScreen(modifier: Modifier.Companion, navController: NavHostContro
                         photoUrl = "",
                         writenCoords = writenCoords,
                         approvals = 0,
-                        emptyList()
+                        userUIDsApprovals =  emptyList(),
+                        userUID = userUID
                     )
                     firebaseViewModel.addLocationsToFirestore(location)
                     firebaseViewModel.uploadLocationToStorage(directory = "images/"+locationName ,imageName = locationName, path = locationViewModel.imagePath.value ?: "")

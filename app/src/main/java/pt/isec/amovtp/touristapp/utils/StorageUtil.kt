@@ -48,6 +48,7 @@ class StorageUtil {
                 "PhotoUrl" to location.photoUrl,
                 "WritenCoords" to location.writenCoords,
                 "Approvals" to location.approvals,
+                "UserUID" to location.userUID,
             )
             db.collection(Collections.Locations.route).document(location.name).set(locationData)
                 .addOnCompleteListener { result ->
@@ -263,7 +264,8 @@ class StorageUtil {
                         val writenCoords  = document.getBoolean("WritenCoords") ?: false
                         val approvals  = document.getLong("Approvals")?.toInt() ?: 0
                         val userUIDs = document.get("UserUIDs") as? List<String> ?: emptyList()
-                        val location = Location(name, description, latitude, longitude, imageUrl,writenCoords,approvals,userUIDs)
+                        val userUID = document.getString("UserUID") ?: ""
+                        val location = Location(name, description, latitude, longitude, imageUrl,writenCoords,approvals,userUIDs,userUID)
                         locations.add(location)
                     }
                     callback(locations)
