@@ -161,7 +161,7 @@ fun LocationsScreen(modifier: Modifier = Modifier, navController: NavHostControl
                                 if(location.approvals < 2) {
                                     IconButton(
                                         onClick = {
-                                            firebaseViewModel.updateAprovalInFirestore(
+                                            firebaseViewModel.updateAprovalLocationInFirestore(
                                                 location,
                                                 userUID
                                             )
