@@ -100,6 +100,13 @@ class FirebaseViewModel : ViewModel() {
             }
         }
     }
+    fun updateAprovalInFirestore(location: Location, userUID: String,) {
+        viewModelScope.launch {
+            StorageUtil.updateAprovalFirestore(location,userUID){ exception ->
+                _error.value = exception?.message
+            }
+        }
+    }
     fun addPOIToFirestore(locationName:String, poi: PointOfInterest) {
         viewModelScope.launch {
             StorageUtil.addPOIToFirestore(locationName,poi){ exception ->

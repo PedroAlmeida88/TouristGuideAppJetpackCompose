@@ -6,9 +6,9 @@ data class Location (
     val latitude: Double,
     val longitude: Double,
     val photoUrl: String,
-    val writenCoords: Boolean
-){
-    val userId: String = ""
-    val countToAccept: Int = -1
-    val avaliation: Int = -1
-}
+    val writenCoords: Boolean,
+    val approvals: Int,
+    val userUIDsApprovals:List<String>,
+    var enableBtn: Boolean = true
+
+)

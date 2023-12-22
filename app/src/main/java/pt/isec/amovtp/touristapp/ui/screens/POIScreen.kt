@@ -149,7 +149,6 @@ fun POIScreen(modifier: Modifier = Modifier, navController: NavHostController?, 
                                     navController?.navigate(Screens.ADD_COMMENTS.route)
                                 },
                                 modifier = Modifier.padding(8.dp),
-
                                 ) {
 
                                 Icon(
