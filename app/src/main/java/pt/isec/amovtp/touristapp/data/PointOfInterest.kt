@@ -7,8 +7,11 @@ data class PointOfInterest (
     val longitude: Double,
     val photoUrl: String,
     val category: Category,
-    val writenCoords: Boolean
-    ){
-    val userId: Int = -1
-    val countToAccept: Int = 0
-}
+    val writenCoords: Boolean,
+    val approvals: Int,
+    val userUIDsApprovals:List<String>, //lista de userUIDs
+    var userUID: String,                 //userUID do criador da localização
+    var enableBtn: Boolean = true
+    )
+
+

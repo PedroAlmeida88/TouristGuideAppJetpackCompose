@@ -56,7 +56,7 @@ class StorageUtil {
                 }
         }
 
-        fun updateAprovalFirestore(location: Location, userUID: String ,onResult: (Throwable?) -> Unit) {
+        fun updateAprovalLocationFirestore(location: Location, userUID: String ,onResult: (Throwable?) -> Unit) {
             val db = Firebase.firestore
 
             val num = location.approvals + 1
@@ -76,38 +76,29 @@ class StorageUtil {
                 }
         }
 
-        /*
-        fun updateAprovalFirestore(location: Location, userUID: String, onResult: (Throwable?) -> Unit) {
+        fun updateAprovalPOIsFirestore(location: Location?, poi: PointOfInterest, userUID: String, onResult: (Throwable?) -> Unit) {
             val db = Firebase.firestore
 
-            val num = location.approvals + 1
+            val num = poi.approvals + 1
+            val updatedUserUIDs = poi.userUIDsApprovals.toMutableList().apply {
+                add(userUID)
+            }
+            val locationData = hashMapOf(
+                "Approvals" to num as Any,
+                "UserUIDs" to updatedUserUIDs
+            )
 
             db.collection(Collections.Locations.route)
-                .document(location.name)
-                .get()
-                .addOnSuccessListener { documentSnapshot ->
-                    val existingUserUIDs = documentSnapshot.get("UserUIDs") as? List<String> ?: emptyList()
-
-                    val newUserUIDs = existingUserUIDs + userUID
-
-                    val locationData = hashMapOf(
-                        "Approvals" to num as Any,
-                        "UserUIDs" to newUserUIDs
-                    )
-
-                    db.collection(Collections.Locations.route)
-                        .document(location.name)
-                        .update(locationData)
-                        .addOnCompleteListener { result ->
-                            onResult(result.exception)
-                        }
-                }
-                .addOnFailureListener { exception ->
-                    onResult(exception)
+                .document(location!!.name)
+                .collection(Collections.POIs.route)
+                .document(poi.name)
+                .update(locationData)
+                .addOnCompleteListener { result ->
+                    onResult(result.exception)
                 }
         }
 
-         */
+
         fun addPOIToFirestore(locationName: String, poi: PointOfInterest,onResult: (Throwable?) -> Unit) {
             val db = Firebase.firestore
 
@@ -118,6 +109,8 @@ class StorageUtil {
                 "Longitude" to poi.longitude,
                 "PhotoUrl" to poi.photoUrl,
                 "WritenCoords" to poi.writenCoords,
+                "Approvals" to poi.approvals,
+                "UserUID" to poi.userUID,
             )
 
             db.collection(Collections.Locations.route)
@@ -294,6 +287,9 @@ class StorageUtil {
                             val longitude = document.getDouble("Longitude") ?: 0.0
                             val imageUrl = document.getString("PhotoUrl") ?: ""
                             val writenCoords  = document.getBoolean("WritenCoords") ?: false
+                            val approvals  = document.getLong("Approvals")?.toInt() ?: 0
+                            val userUIDs = document.get("UserUIDs") as? List<String> ?: emptyList()
+                            val userUID = document.getString("UserUID") ?: ""
 
                             val categoryData = document.get("Category") as Map<*, *>
                             val catName = categoryData["name"].toString()
@@ -303,7 +299,7 @@ class StorageUtil {
                             Log.i(TAG, "getPoisFromFirestore: " + categoryData.toString())
                             Log.i(TAG, "getPoisFromFirestore DESCRICAO: " +catDesc)
 
-                            val pointOfInterest = PointOfInterest(name, description, latitude, longitude, imageUrl,Category(catName,catIcon,catDesc),writenCoords)
+                            val pointOfInterest = PointOfInterest(name, description, latitude, longitude, imageUrl,Category(catName,catIcon,catDesc),writenCoords,approvals,userUIDs,userUID)
                             pois.add(pointOfInterest)
                         } catch (e: Exception) {
                             Log.e(TAG, "Error parsing POI document: ${e.message}")
@@ -525,7 +521,6 @@ class StorageUtil {
                 }
             }
         }
-
 
 
 

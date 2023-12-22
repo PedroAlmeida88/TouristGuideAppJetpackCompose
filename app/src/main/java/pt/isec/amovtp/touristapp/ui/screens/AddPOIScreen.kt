@@ -65,6 +65,7 @@ fun AddPOIScreen(modifier: Modifier.Companion, navController: NavHostController?
     val focusManager = LocalFocusManager.current
     var writenCoords by remember { mutableStateOf(false) }
 
+    val userUID = firebaseViewModel.authUser.value!!.uid
 
     fun validateForm() {
         val longitudeDouble: Double? = longitude.toDoubleOrNull()
@@ -240,7 +241,10 @@ fun AddPOIScreen(modifier: Modifier.Companion, navController: NavHostController?
                         latitude = latitude.toDouble(),
                         longitude = longitude.toDouble(),
                         photoUrl = "",
-                        writenCoords = writenCoords
+                        writenCoords = writenCoords,
+                        approvals = 0,
+                        userUIDsApprovals = emptyList(),
+                        userUID = userUID
                     )
                     Log.i("TAG", "AddPOIScreen: " + POI)
 

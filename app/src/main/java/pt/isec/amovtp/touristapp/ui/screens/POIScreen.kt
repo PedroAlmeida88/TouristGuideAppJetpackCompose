@@ -3,6 +3,7 @@ package pt.isec.amovtp.touristapp.ui.screens
 import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
@@ -24,6 +25,7 @@ import androidx.compose.material.icons.Icons.Default
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowForward
 import androidx.compose.material.icons.filled.Build
+import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.ClearAll
 import androidx.compose.material.icons.filled.CommentBank
 import androidx.compose.material.icons.filled.PhotoLibrary
@@ -70,7 +72,8 @@ import pt.isec.amovtp.touristapp.ui.viewmodels.LocationViewModel
 fun POIScreen(modifier: Modifier = Modifier, navController: NavHostController?, viewModel : LocationViewModel,firebaseViewModel: FirebaseViewModel) {
     val selectedLocation = viewModel.selectedLocation
     val selectedCategory = viewModel.selectedCategory
-    
+    val userUID = firebaseViewModel.authUser.value!!.uid
+
     var categories by remember {
         mutableStateOf<List<Category>>(emptyList())
     }
@@ -82,6 +85,12 @@ fun POIScreen(modifier: Modifier = Modifier, navController: NavHostController?, 
     LaunchedEffect(Unit) {
         firebaseViewModel.getPoisFromFirestore(selectedLocation) { loadedPois ->
             pois = loadedPois
+            for (p in pois) {
+                //caso já tenha votado ou tenha sido criado por ele
+                if (userUID in p.userUIDsApprovals || userUID == p.userUID) {
+                    p.enableBtn = false
+                }
+            }
         }
 
         firebaseViewModel.getCategoriesFromFirestore(){ loadedCategories ->
@@ -112,10 +121,17 @@ fun POIScreen(modifier: Modifier = Modifier, navController: NavHostController?, 
                 .fillMaxSize()
         ) {
             items(pois.filter { it.category.name == selectedCategory?.name || selectedCategory?.name == ""}) { poi ->
+                val borderColor = when (poi.approvals) {
+                    0 -> Color.Red
+                    1 -> Color.Yellow
+                    else -> MaterialTheme.colorScheme.tertiary
+                }
                 Card(
                     modifier = Modifier
-                        .fillMaxSize()
+                        .fillMaxHeight()
+                        .fillMaxWidth()
                         .padding(8.dp)
+                        .border(2.dp, borderColor, shape = RoundedCornerShape(16.dp))
                         .clip(shape = RoundedCornerShape(16.dp)),
                     elevation = CardDefaults.cardElevation(4.dp),
                     colors = CardDefaults.cardColors(
@@ -170,6 +186,34 @@ fun POIScreen(modifier: Modifier = Modifier, navController: NavHostController?, 
                                     contentDescription = null
                                 )
                             }
+                            IconButton(
+                                onClick = {
+
+                                    firebaseViewModel.updateAprovalPOIsInFirestore(
+                                        selectedLocation,
+                                        poi,
+                                        userUID
+                                    )
+                                    firebaseViewModel.getPoisFromFirestore(selectedLocation) { loadedPois ->
+                                        pois = loadedPois
+                                        for (p in pois) {
+                                            //caso já tenha votado ou tenha sido criado por ele
+                                            if (userUID in p.userUIDsApprovals || userUID == p.userUID) {
+                                                p.enableBtn = false
+                                            }
+                                        }
+                                    }
+
+                                },
+                                modifier = Modifier.padding(8.dp),
+                                enabled = poi.enableBtn
+                            ) {
+                                Icon(
+                                    imageVector = Default.CheckCircle,
+                                    contentDescription = null
+                                )
+                            }
+                            Text(text = "${poi.approvals}/2")
                             Column(
                                 modifier = Modifier
                                     .weight(1f)
