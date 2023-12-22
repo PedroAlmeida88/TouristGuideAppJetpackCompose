@@ -104,8 +104,6 @@ fun POIScreen(modifier: Modifier = Modifier, navController: NavHostController?, 
             items(pois.filter { it.category.name == selectedCategory?.name || selectedCategory?.name == "All"}) { poi ->
                 Card(
                     modifier = Modifier
-                        //.fillMaxHeight(0,5f) // Use 50% of the screen height
-                        //.height(324.dp)
                         .fillMaxSize()
                         .padding(8.dp)
                         .clip(shape = RoundedCornerShape(16.dp)),
@@ -147,6 +145,7 @@ fun POIScreen(modifier: Modifier = Modifier, navController: NavHostController?, 
                                     painter = painterResource(id = android.R.drawable.sym_action_chat),
                                     contentDescription = null
                                 )
+
                             }
                             IconButton(
                                 onClick = {

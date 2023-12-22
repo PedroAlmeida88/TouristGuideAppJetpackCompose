@@ -48,6 +48,7 @@ import org.osmdroid.tileprovider.tilesource.TileSourceFactory
 import org.osmdroid.util.GeoPoint
 import org.osmdroid.views.MapView
 import org.osmdroid.views.overlay.Marker
+import pt.isec.amovtp.touristapp.data.Location
 import pt.isec.amovtp.touristapp.data.PointOfInterest
 import pt.isec.amovtp.touristapp.ui.composables.RatingBar
 import pt.isec.amovtp.touristapp.ui.viewmodels.FirebaseViewModel
@@ -59,6 +60,17 @@ fun POIDescriptionScreen(modifier: Modifier = Modifier, viewModel: LocationViewM
     val context = LocalContext.current
     var isRatingEnabled by remember { mutableStateOf(true) }
     val currentPoi = viewModel.selectedPoi
+
+    /*
+    //Todo:Lista de ratings
+    val allRatings by remember {
+        mutableStateOf<List<Ratings>>(
+            listOf(Ratings(1,"ton","","hoje"),Ratings(1,"name","","hoje"),Ratings(3,"nig","","hoje"))
+        )
+    }
+
+     */
+
 
     val currentGeoPoint by remember{ mutableStateOf(GeoPoint(
        currentPoi?.latitude ?: 0.0, currentPoi?.longitude ?: 0.0
@@ -122,41 +134,7 @@ fun POIDescriptionScreen(modifier: Modifier = Modifier, viewModel: LocationViewM
                     }
                 )
         }
-        Spacer(Modifier.height(16.dp))
-        Column(
-            verticalArrangement = Arrangement.Top,
-            horizontalAlignment = Alignment.CenterHorizontally,
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(8.dp)
-        ) {
-            RatingBar(
-                currentRating = myRating,
-                onRatingChanged = {
-                    if (isRatingEnabled) {
-                        myRating = it
-                    }
-                },
-                starsColor = Color.Yellow,
-                size = 48.dp
-            )
-            Spacer(modifier = Modifier.height(16.dp))
-            Button(
-                onClick = {
-                    isRatingEnabled = false
-                    Toast.makeText(context, "Classificação submetida com sucesso!", Toast.LENGTH_LONG).show()
-                },
-                enabled = isRatingEnabled
-            ) {
-                Text(text = "Submeter Classificação")
-            }
-            Spacer(modifier = Modifier.height(16.dp))
-            Text(
-                text = "Classificação do POI ${myRating}/3",
-                fontSize = 24.sp,
-                modifier = Modifier
-                    .padding(top = 16.dp)
-            )
-        }
+
+
     }
 }

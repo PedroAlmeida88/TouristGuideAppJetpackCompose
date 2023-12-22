@@ -79,6 +79,7 @@ class StorageUtil {
                 "UserName" to comment.userName,
                 "UserUID" to comment.userUID,
                 "Date" to comment.date,
+                "Rating" to comment.rating,
             )
 
             db.collection(Collections.Locations.route)
@@ -333,8 +334,9 @@ class StorageUtil {
                             val userName = document.getString("UserName") ?: ""
                             val userUID = document.getString("UserUID") ?: ""
                             val date = document.getString("Date") ?: ""
+                            val rating = document.getLong("Rating")?.toInt() ?: 0
 
-                            val comment = Comment(commentString,userName,userUID,date)
+                            val comment = Comment(commentString,userName,userUID,date,rating)
                             comments.add(comment)
                         } catch (e: Exception) {
                             Log.e(TAG, "Error parsing POI document: ${e.message}")
