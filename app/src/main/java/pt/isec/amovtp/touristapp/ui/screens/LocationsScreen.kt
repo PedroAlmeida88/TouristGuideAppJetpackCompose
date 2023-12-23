@@ -19,6 +19,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons.Default
 import androidx.compose.material.icons.filled.CheckCircle
+import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -184,6 +185,22 @@ fun LocationsScreen(modifier: Modifier = Modifier, navController: NavHostControl
                                     }
                                     Text(text = "${location.approvals}/2")
                                 }
+
+                                if(location.userUID == userUID) {
+                                    IconButton(
+                                        onClick = {
+                                            viewModel.selectedLocation = location
+                                            navController?.navigate(Screens.EDIT_LOCATION.route)
+                                        },
+                                        modifier = Modifier.padding(8.dp),
+                                    ) {
+                                        Icon(
+                                            imageVector = Default.Edit,
+                                            contentDescription = null
+                                        )
+                                    }
+                                }
+                                    //Edit
                                 Column(
                                     modifier = Modifier
                                         .weight(1f)
@@ -209,7 +226,7 @@ fun LocationsScreen(modifier: Modifier = Modifier, navController: NavHostControl
                             }
                         }
                     }
-                    
+
                 }
             }
         }
