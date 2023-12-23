@@ -10,5 +10,6 @@ data class Location (
     val approvals: Int,
     val userUIDsApprovals:List<String>, //lista de userUIDs
     var userUID: String,                 //userUID do criador da localização
+    val totalPois: Int,
     var enableBtn: Boolean = true
 )

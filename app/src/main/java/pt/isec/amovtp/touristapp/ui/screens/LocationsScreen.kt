@@ -1,6 +1,6 @@
 package pt.isec.amovtp.touristapp.ui.screens
 
-import android.util.Log
+import android.widget.Toast
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -19,6 +19,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons.Default
 import androidx.compose.material.icons.filled.CheckCircle
+import androidx.compose.material.icons.filled.DeleteForever
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
@@ -39,6 +40,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
@@ -50,9 +52,11 @@ import pt.isec.amovtp.touristapp.utils.location.LocationUtils
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun LocationsScreen(modifier: Modifier = Modifier, navController: NavHostController?,viewModel : LocationViewModel,firebaseViewModel: FirebaseViewModel) {
+fun LocationsScreen(navController: NavHostController?,viewModel : LocationViewModel,firebaseViewModel: FirebaseViewModel) {
     //geopoin
     val myLocation = viewModel.currentLocation.observeAsState()
+
+    val context = LocalContext.current
     var locations by remember { mutableStateOf<List<Location>>(emptyList())}
     val userUID = firebaseViewModel.authUser.value!!.uid
 
@@ -204,8 +208,30 @@ fun LocationsScreen(modifier: Modifier = Modifier, navController: NavHostControl
                                             contentDescription = null
                                         )
                                     }
+
+                                    IconButton(
+                                        onClick = {
+                                            if(location.totalPois == 0) {
+                                                firebaseViewModel.deleteLocationsFromFirestore(
+                                                    location
+                                                )
+                                                firebaseViewModel.getLocationFromFirestore { loadedLocations ->
+                                                    locations = loadedLocations
+                                                }
+                                                Toast.makeText(context, "Localização eliminada com sucesso!", Toast.LENGTH_LONG).show()
+                                            }else
+                                                Toast.makeText(context, "Localização não eliminada.Já existem POIS associados", Toast.LENGTH_LONG).show()
+
+                                        },
+                                        modifier = Modifier.padding(8.dp),
+                                    ) {
+                                        Icon(
+                                            imageVector = Default.DeleteForever,
+                                            contentDescription = null
+                                        )
+                                    }
                                 }
-                                    //Edit
+
                                 Column(
                                     modifier = Modifier
                                         .weight(1f)

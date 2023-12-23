@@ -37,7 +37,7 @@ class FirebaseViewModel : ViewModel() {
     val user : MutableState<User?>
         get() = _user
 
-    fun createUserWithEmail(user: User, password: String) {
+    fun createUserWithEmail(user: User, password: String, callback: () -> Unit) {
         if(user.email.isBlank() || password.isBlank())
             return
         viewModelScope.launch {
@@ -51,6 +51,7 @@ class FirebaseViewModel : ViewModel() {
                 _error.value = exception?.message
             }
             FireAuthUtil.signOut()
+            callback()
         }
     }
 
@@ -100,7 +101,13 @@ class FirebaseViewModel : ViewModel() {
             }
         }
     }
-
+    fun deleteLocationsFromFirestore(location: Location) {
+        viewModelScope.launch {
+            StorageUtil.deleteLocationFromFirestore(location){ exception ->
+                _error.value = exception?.message
+            }
+        }
+    }
     fun updateAprovalLocationInFirestore(location: Location, userUID: String,) {
         viewModelScope.launch {
             StorageUtil.updateAprovalLocationFirestore(location,userUID){ exception ->
@@ -115,9 +122,23 @@ class FirebaseViewModel : ViewModel() {
             }
         }
     }
+    fun updateAprovalCategoryInFirestore(category: Category, userUID: String) {
+        viewModelScope.launch {
+            StorageUtil.updateApprovalCategoryInFirestore (category,userUID) { exception ->
+                _error.value = exception?.message
+            }
+        }
+    }
     fun addPOIToFirestore(locationName:String, poi: PointOfInterest) {
         viewModelScope.launch {
             StorageUtil.addPOIToFirestore(locationName,poi){ exception ->
+                _error.value = exception?.message
+            }
+        }
+    }
+    fun deletePOIFromFirestore(locationName: String, poi: PointOfInterest) {
+        viewModelScope.launch {
+            StorageUtil.deletePOIFromFirestore(locationName,poi){ exception ->
                 _error.value = exception?.message
             }
         }
@@ -175,6 +196,7 @@ class FirebaseViewModel : ViewModel() {
         }
         callback()
     }
+
 
     fun getCategoriesFromFirestore(callback: (List<Category>) -> Unit) {
         viewModelScope.launch {
