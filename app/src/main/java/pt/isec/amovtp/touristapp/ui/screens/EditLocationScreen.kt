@@ -205,7 +205,7 @@ fun EditLocationScreen( navController: NavHostController?, locationViewModel: Lo
                 .padding(8.dp)
                 .weight(1f)
         ) {
-            locationViewModel.imagePath.value = selectedLocation?.photoUrl
+            //locationViewModel.imagePath.value = selectedLocation?.photoUrl
             TakePhotoOrLoadFromGallery(locationViewModel.imagePath, Modifier.fillMaxSize())
             validateForm()
         }
