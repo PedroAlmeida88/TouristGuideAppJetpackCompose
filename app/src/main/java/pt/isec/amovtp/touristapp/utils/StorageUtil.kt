@@ -49,6 +49,7 @@ class StorageUtil {
                 "WritenCoords" to location.writenCoords,
                 "Approvals" to location.approvals,
                 "UserUID" to location.userUID,
+                "TotalPois" to location.totalPois,
             )
             db.collection(Collections.Locations.route).
             document(location.name)
@@ -134,14 +135,30 @@ class StorageUtil {
                     onResult(result.exception)
                 }
 
-            incrementTotalPois(locationName)
+            incrementTotalPois(locationName,1)
         }
-        fun incrementTotalPois(locationName: String) {
+
+        fun deletePOIFromFirestore(locationName: String, poi: PointOfInterest, onResult: (Throwable?) -> Unit) {
+            val db = Firebase.firestore
+
+            db.collection(Collections.Locations.route)
+                .document(locationName)
+                .collection(Collections.POIs.route)
+                .document(poi.name)
+                .delete()
+                .addOnCompleteListener { result ->
+                    onResult(result.exception)
+                }
+
+            incrementTotalPois(locationName,-1)
+        }
+
+        fun incrementTotalPois(locationName: String,value:Long) {
             val db = Firebase.firestore
 
             // Crie um mapa para a operação de incremento
             val incrementData = hashMapOf(
-                "TotalPois" to FieldValue.increment(1)
+                "TotalPois" to FieldValue.increment(value)
             )
 
             db.collection(Collections.Locations.route)

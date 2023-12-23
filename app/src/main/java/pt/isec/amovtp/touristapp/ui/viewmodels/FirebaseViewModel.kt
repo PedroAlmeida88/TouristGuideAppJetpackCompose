@@ -128,6 +128,13 @@ class FirebaseViewModel : ViewModel() {
             }
         }
     }
+    fun deletePOIFromFirestore(locationName: String, poi: PointOfInterest) {
+        viewModelScope.launch {
+            StorageUtil.deletePOIFromFirestore(locationName,poi){ exception ->
+                _error.value = exception?.message
+            }
+        }
+    }
     fun addCommentToFirestore(comment: Comment,selectedLocation: Location?, selectedPoi: PointOfInterest?) {
         viewModelScope.launch {
             StorageUtil.addCommentToFirestore(comment,selectedLocation,selectedPoi){ exception ->
@@ -205,6 +212,7 @@ class FirebaseViewModel : ViewModel() {
             }
         }
     }
+
 
 
 

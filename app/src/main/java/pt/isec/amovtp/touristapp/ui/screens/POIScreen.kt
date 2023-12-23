@@ -1,6 +1,7 @@
 package pt.isec.amovtp.touristapp.ui.screens
 
 import android.util.Log
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -28,6 +29,7 @@ import androidx.compose.material.icons.filled.Build
 import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.ClearAll
 import androidx.compose.material.icons.filled.CommentBank
+import androidx.compose.material.icons.filled.DeleteForever
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.PhotoLibrary
 import androidx.compose.material.icons.filled.RestartAlt
@@ -53,6 +55,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -74,6 +77,7 @@ fun POIScreen(modifier: Modifier = Modifier, navController: NavHostController?, 
     val selectedLocation = viewModel.selectedLocation
     val selectedCategory = viewModel.selectedCategory
     val userUID = firebaseViewModel.authUser.value!!.uid
+    val context = LocalContext.current
 
     var categories by remember {
         mutableStateOf<List<Category>>(emptyList())
@@ -238,23 +242,42 @@ fun POIScreen(modifier: Modifier = Modifier, navController: NavHostController?, 
                                     Text(text = "${poi.approvals}/2")
                                 }
                             }
-                            if(poi.userUID == userUID)
+                            if(poi.userUID == userUID) {
                                 IconButton(
                                     onClick = {
                                         viewModel.selectedPoi = poi
                                         navController?.navigate(Screens.EDIT_POI.route)
                                     },
                                     modifier = Modifier.padding(8.dp),
-                                    ) {
+                                ) {
                                     Icon(
                                         imageVector = Default.Edit,
                                         contentDescription = null
                                     )
                                 }
+
+                                IconButton(
+                                    onClick = {
+                                        if(poi.approvals == 0) {
+                                            firebaseViewModel.deletePOIFromFirestore(selectedLocation?.name ?: "", poi)
+                                            firebaseViewModel.getPoisFromFirestore(selectedLocation) { loadedPois ->
+                                                pois = loadedPois
+                                            }
+                                            Toast.makeText(context, "Poi eliminada com sucesso!", Toast.LENGTH_LONG).show()
+                                        }else{
+                                            Toast.makeText(context, "Poi com já tem votos!", Toast.LENGTH_LONG).show()
+
+                                        }
+                                    },
+                                    modifier = Modifier.padding(8.dp),
+                                ) {
+                                    Icon(
+                                        imageVector = Default.DeleteForever,
+                                        contentDescription = null
+                                    )
+                                }
+                            }
                         }
-
-
-
                     }
                 }
             }
