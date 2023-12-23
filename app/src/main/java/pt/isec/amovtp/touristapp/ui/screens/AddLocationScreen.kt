@@ -219,7 +219,8 @@ fun AddLocationScreen(modifier: Modifier.Companion, navController: NavHostContro
                         writenCoords = writenCoords,
                         approvals = 0,
                         userUIDsApprovals =  emptyList(),
-                        userUID = userUID
+                        userUID = userUID,
+                        totalPois = 0
                     )
                     firebaseViewModel.addLocationsToFirestore(location)
                     firebaseViewModel.uploadLocationToStorage(directory = "images/"+locationName ,imageName = locationName, path = locationViewModel.imagePath.value ?: "")

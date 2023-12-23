@@ -57,6 +57,16 @@ class StorageUtil {
                     onResult(result.exception)
                 }
         }
+        fun deleteLocationFromFirestore(location: Location, onResult: (Throwable?) -> Unit) {
+            val db = Firebase.firestore
+
+            db.collection(Collections.Locations.route)
+                .document(location.name)
+                .delete()
+                .addOnCompleteListener { result ->
+                    onResult(result.exception)
+                }
+        }
 
         fun updateAprovalLocationFirestore(location: Location, userUID: String ,onResult: (Throwable?) -> Unit) {
             val db = Firebase.firestore
@@ -123,6 +133,21 @@ class StorageUtil {
                 .addOnCompleteListener { result ->
                     onResult(result.exception)
                 }
+
+            incrementTotalPois(locationName)
+        }
+        fun incrementTotalPois(locationName: String) {
+            val db = Firebase.firestore
+
+            // Crie um mapa para a operação de incremento
+            val incrementData = hashMapOf(
+                "TotalPois" to FieldValue.increment(1)
+            )
+
+            db.collection(Collections.Locations.route)
+                .document(locationName)
+                .update(incrementData as Map<String, Any>)
+
         }
         fun addCommentToFirestore(comment: Comment,location: Location?, poi: PointOfInterest?,onResult: (Throwable?) -> Unit) {
             val db = Firebase.firestore
@@ -260,7 +285,8 @@ class StorageUtil {
                         val approvals  = document.getLong("Approvals")?.toInt() ?: 0
                         val userUIDs = document.get("UserUIDs") as? List<String> ?: emptyList()
                         val userUID = document.getString("UserUID") ?: ""
-                        val location = Location(name, description, latitude, longitude, imageUrl,writenCoords,approvals,userUIDs,userUID)
+                        val totalPois = document.getLong("TotalPois")?.toInt() ?: 0
+                        val location = Location(name, description, latitude, longitude, imageUrl,writenCoords,approvals,userUIDs,userUID,totalPois)
                         locations.add(location)
                     }
                     callback(locations)
@@ -523,6 +549,7 @@ class StorageUtil {
                 }
             }
         }
+
 
 
 

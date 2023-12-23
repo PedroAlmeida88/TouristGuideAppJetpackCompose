@@ -42,7 +42,7 @@ import pt.isec.amovtp.touristapp.ui.viewmodels.FirebaseViewModel
 import pt.isec.amovtp.touristapp.ui.viewmodels.LocationViewModel
 
 @Composable
-fun EditLocationScreen(modifier: Modifier.Companion, navController: NavHostController?, locationViewModel: LocationViewModel, firebaseViewModel: FirebaseViewModel) {
+fun EditLocationScreen( navController: NavHostController?, locationViewModel: LocationViewModel, firebaseViewModel: FirebaseViewModel) {
     //location atual
     val selectedLocation = locationViewModel.selectedLocation
 
@@ -138,7 +138,7 @@ fun EditLocationScreen(modifier: Modifier.Companion, navController: NavHostContr
         ) {
             Button(
                 onClick = {
-                    isInputEnabled = false;
+                    isInputEnabled = false
                     latitude = (location.value?.latitude ?: 0.0).toString()
                     longitude = (location.value?.longitude ?: 0.0).toString()
                     writenCoords = false
@@ -215,7 +215,7 @@ fun EditLocationScreen(modifier: Modifier.Companion, navController: NavHostContr
                     isError = true
                 } else {
                     isError = false
-                    var location = Location(
+                    val location = Location(
                         name = locationName,
                         description = locationDescription,
                         latitude = latitude.toDouble(),
@@ -224,7 +224,8 @@ fun EditLocationScreen(modifier: Modifier.Companion, navController: NavHostContr
                         writenCoords = writenCoords,
                         approvals = 0,
                         userUIDsApprovals = emptyList(),
-                        userUID = userUID
+                        userUID = userUID,
+                        totalPois = selectedLocation.totalPois
                     )
                     firebaseViewModel.addLocationsToFirestore(location)
                     firebaseViewModel.uploadLocationToStorage(directory = "images/"+locationName ,imageName = locationName, path = locationViewModel.imagePath.value ?: "")

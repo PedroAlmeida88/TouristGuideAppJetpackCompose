@@ -100,7 +100,13 @@ class FirebaseViewModel : ViewModel() {
             }
         }
     }
-
+    fun deleteLocationsFromFirestore(location: Location) {
+        viewModelScope.launch {
+            StorageUtil.deleteLocationFromFirestore(location){ exception ->
+                _error.value = exception?.message
+            }
+        }
+    }
     fun updateAprovalLocationInFirestore(location: Location, userUID: String,) {
         viewModelScope.launch {
             StorageUtil.updateAprovalLocationFirestore(location,userUID){ exception ->
