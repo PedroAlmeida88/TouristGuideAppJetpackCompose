@@ -46,15 +46,19 @@ import pt.isec.amovtp.touristapp.ui.viewmodels.LocationViewModel
 
 
 @Composable
-fun AddPOIScreen(modifier: Modifier.Companion, navController: NavHostController?,locationViewModel: LocationViewModel, firebaseViewModel: FirebaseViewModel) {
+fun EditPOIScreen(modifier: Modifier.Companion, navController: NavHostController?,locationViewModel: LocationViewModel, firebaseViewModel: FirebaseViewModel) {
+    val selectedPoi = locationViewModel.selectedPoi
+
+
     val context = LocalContext.current
     val selectedLocation = locationViewModel.selectedLocation
+    locationViewModel.selectedCategory = selectedPoi!!.category
     var selectedCategory = locationViewModel.selectedCategory
 
-    var poiName by remember { mutableStateOf("") }
-    var poiDescription by remember { mutableStateOf("") }
-    var longitude by remember { mutableStateOf("") }
-    var latitude by remember { mutableStateOf("") }
+    var poiName by remember { mutableStateOf(selectedPoi!!.name) }
+    var poiDescription by remember { mutableStateOf(selectedPoi!!.description) }
+    var longitude by remember { mutableStateOf(selectedPoi!!.longitude.toString()) }
+    var latitude by remember { mutableStateOf(selectedPoi!!.latitude.toString()) }
 
     var isFormValid by remember { mutableStateOf(false) }
     var isInputEnabled by remember { mutableStateOf(false) }
@@ -63,7 +67,7 @@ fun AddPOIScreen(modifier: Modifier.Companion, navController: NavHostController?
     //coordenadas
     val location = locationViewModel.currentLocation.observeAsState()
     val focusManager = LocalFocusManager.current
-    var writenCoords by remember { mutableStateOf(false) }
+    var writenCoords by remember { mutableStateOf(selectedPoi!!.writenCoords) }
 
     val userUID = firebaseViewModel.authUser.value!!.uid
 
@@ -111,6 +115,7 @@ fun AddPOIScreen(modifier: Modifier.Companion, navController: NavHostController?
             keyboardActions = KeyboardActions {
                 focusManager.moveFocus(FocusDirection.Next)
             },
+            enabled = false,
             label = { Text(text = "POI Name") },
 
         )
@@ -224,6 +229,7 @@ fun AddPOIScreen(modifier: Modifier.Companion, navController: NavHostController?
                 .padding(8.dp)
                 .weight(1f)
         ) {
+            locationViewModel.imagePath.value = selectedPoi!!.photoUrl
             TakePhotoOrLoadFromGallery(locationViewModel.imagePath, Modifier.fillMaxSize())
             validateForm()
         }
@@ -251,7 +257,7 @@ fun AddPOIScreen(modifier: Modifier.Companion, navController: NavHostController?
                     firebaseViewModel.uploadPOIToStorage(directory = "images/" + selectedLocation?.name +"/pois/",imageName = poiName, path = locationViewModel.imagePath.value ?: "", locationName = selectedLocation?.name ?: "" )
                     locationViewModel.imagePath.value = null
                     navController?.popBackStack()
-                    Toast.makeText(context,"POI adicionada com sucesso!",Toast.LENGTH_LONG).show()
+                    Toast.makeText(context,"POI editada com sucesso!",Toast.LENGTH_LONG).show()
                 }
             },
             modifier = Modifier

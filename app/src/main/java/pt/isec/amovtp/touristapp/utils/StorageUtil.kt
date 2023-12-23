@@ -50,7 +50,9 @@ class StorageUtil {
                 "Approvals" to location.approvals,
                 "UserUID" to location.userUID,
             )
-            db.collection(Collections.Locations.route).document(location.name).set(locationData)
+            db.collection(Collections.Locations.route).
+            document(location.name)
+                .set(locationData)
                 .addOnCompleteListener { result ->
                     onResult(result.exception)
                 }

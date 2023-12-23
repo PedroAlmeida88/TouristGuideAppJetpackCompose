@@ -19,6 +19,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons.Default
 import androidx.compose.material.icons.filled.CheckCircle
+import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -159,31 +160,52 @@ fun LocationsScreen(modifier: Modifier = Modifier, navController: NavHostControl
                                 verticalAlignment = Alignment.CenterVertically
                             ) {
                                 if(location.approvals < 2) {
-                                    IconButton(
-                                        onClick = {
-                                            firebaseViewModel.updateAprovalLocationInFirestore(
-                                                location,
-                                                userUID
-                                            )
-                                            firebaseViewModel.getLocationFromFirestore { loadedLocations ->
-                                                locations = loadedLocations
-                                                for (l in locations) {
-                                                    if (userUID in l.userUIDsApprovals || userUID == l.userUID) {
-                                                        l.enableBtn = false
+                                    Row (
+                                        verticalAlignment = Alignment.CenterVertically
+                                    ) {
+                                        IconButton(
+                                            onClick = {
+                                                firebaseViewModel.updateAprovalLocationInFirestore(
+                                                    location,
+                                                    userUID
+                                                )
+                                                firebaseViewModel.getLocationFromFirestore { loadedLocations ->
+                                                    locations = loadedLocations
+                                                    for (l in locations) {
+                                                        if (userUID in l.userUIDsApprovals || userUID == l.userUID) {
+                                                            l.enableBtn = false
+                                                        }
                                                     }
                                                 }
-                                            }
+                                            },
+                                            modifier = Modifier.padding(8.dp),
+                                            enabled = location.enableBtn
+                                        ) {
+                                            Icon(
+                                                imageVector = Default.CheckCircle,
+                                                contentDescription = null
+                                            )
+                                        }
+                                        Text(text = "${location.approvals}/2")
+                                    }
+
+                                }
+
+                                if(location.userUID == userUID) {
+                                    IconButton(
+                                        onClick = {
+                                            viewModel.selectedLocation = location
+                                            navController?.navigate(Screens.EDIT_LOCATION.route)
                                         },
                                         modifier = Modifier.padding(8.dp),
-                                        enabled = location.enableBtn
                                     ) {
                                         Icon(
-                                            imageVector = Default.CheckCircle,
+                                            imageVector = Default.Edit,
                                             contentDescription = null
                                         )
                                     }
-                                    Text(text = "${location.approvals}/2")
                                 }
+                                    //Edit
                                 Column(
                                     modifier = Modifier
                                         .weight(1f)
@@ -209,7 +231,7 @@ fun LocationsScreen(modifier: Modifier = Modifier, navController: NavHostControl
                             }
                         }
                     }
-                    
+
                 }
             }
         }

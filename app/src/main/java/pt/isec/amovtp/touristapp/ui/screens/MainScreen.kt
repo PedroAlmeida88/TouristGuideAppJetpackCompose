@@ -42,8 +42,10 @@ enum class Screens(val display: String, val showAppBar : Boolean) {
     REGISTER("Register", true),
     LOCATIONS("Locations", true),
     ADD_LOCATIONS("Add Locations", true),
+    EDIT_LOCATION("Add Locations", true),
     POI("Point of Interest", true),
     ADD_POI("Add Points of Interest", true),
+    EDIT_POI("Add Points of Interest", true),
     POI_DESCRIPTION("Point of Interest Description", true),
     ADD_CATEGORY("Add Category", true),
     SHOW_MAP("Show map", true),
@@ -173,16 +175,17 @@ fun MainScreen(navController:NavHostController = rememberNavController(),
             composable (Screens.ADD_LOCATIONS.route) {
                 AddLocationScreen(modifier = Modifier,navController = navController,locationViewModel = locationViewModel, firebaseViewModel = firebaseViewModel)
             }
-            /*
-            composable (Screens.SHOW_MAP.route) {
-                ShowMapScreen(navController = navController, viewModel = locationViewModel)
+            composable (Screens.EDIT_LOCATION.route) {
+                EditLocationScreen(modifier = Modifier,navController = navController,locationViewModel = locationViewModel, firebaseViewModel = firebaseViewModel)
             }
-            */
             composable (Screens.POI.route) {
                 POIScreen(navController = navController, viewModel = locationViewModel,firebaseViewModel = firebaseViewModel)
             }
             composable (Screens.ADD_POI.route) {
                 AddPOIScreen(modifier = Modifier,navController = navController,locationViewModel = locationViewModel, firebaseViewModel = firebaseViewModel)
+            }
+            composable (Screens.EDIT_POI.route) {
+                EditPOIScreen(modifier = Modifier,navController = navController,locationViewModel = locationViewModel, firebaseViewModel = firebaseViewModel)
             }
             composable (Screens.POI_DESCRIPTION.route) {
                 POIDescriptionScreen(modifier = Modifier, viewModel = locationViewModel,firebaseViewModel = firebaseViewModel)

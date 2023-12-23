@@ -28,6 +28,7 @@ import androidx.compose.material.icons.filled.Build
 import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.ClearAll
 import androidx.compose.material.icons.filled.CommentBank
+import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.PhotoLibrary
 import androidx.compose.material.icons.filled.RestartAlt
 import androidx.compose.material3.Button
@@ -159,6 +160,26 @@ fun POIScreen(modifier: Modifier = Modifier, navController: NavHostController?, 
                             horizontalArrangement = Arrangement.SpaceBetween,
                             verticalAlignment = Alignment.CenterVertically
                         ) {
+                            Column(
+                                modifier = Modifier
+                                    .weight(1f)
+                                    .fillMaxHeight()
+                                    .padding(8.dp),
+                                verticalArrangement = Arrangement.Center,
+                                horizontalAlignment = Alignment.CenterHorizontally
+                            ) {
+                                Text(text = poi.name, fontSize = 20.sp)
+                                Text(text = poi.description, fontSize = 14.sp)
+                                Text(text = "${poi.latitude} ${poi.longitude}", fontSize = 8.sp)
+                            }
+                        }
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .height(IntrinsicSize.Min),
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
                             IconButton(
                                 onClick = {
                                     viewModel.selectedPoi = poi
@@ -186,50 +207,54 @@ fun POIScreen(modifier: Modifier = Modifier, navController: NavHostController?, 
                                     contentDescription = null
                                 )
                             }
-                            IconButton(
-                                onClick = {
 
-                                    firebaseViewModel.updateAprovalPOIsInFirestore(
-                                        selectedLocation,
-                                        poi,
-                                        userUID
-                                    )
-                                    firebaseViewModel.getPoisFromFirestore(selectedLocation) { loadedPois ->
-                                        pois = loadedPois
-                                        for (p in pois) {
-                                            //caso já tenha votado ou tenha sido criado por ele
-                                            if (userUID in p.userUIDsApprovals || userUID == p.userUID) {
-                                                p.enableBtn = false
+                            if (poi.approvals < 2) {
+                                Row (
+                                    verticalAlignment = Alignment.CenterVertically
+                                ){
+                                    IconButton(
+                                        onClick = {
+                                            firebaseViewModel.updateAprovalPOIsInFirestore(
+                                                selectedLocation,
+                                                poi,
+                                                userUID
+                                            )
+                                            firebaseViewModel.getPoisFromFirestore(selectedLocation) { loadedPois ->
+                                                pois = loadedPois
+                                                for (p in pois)
+                                                    if (userUID in p.userUIDsApprovals || userUID == p.userUID)
+                                                        p.enableBtn = false
                                             }
-                                        }
+
+                                        },
+                                        modifier = Modifier.padding(8.dp),
+                                        enabled = poi.enableBtn
+                                    ) {
+                                        Icon(
+                                            imageVector = Default.CheckCircle,
+                                            contentDescription = null
+                                        )
                                     }
-
-                                },
-                                modifier = Modifier.padding(8.dp),
-                                enabled = poi.enableBtn
-                            ) {
-                                Icon(
-                                    imageVector = Default.CheckCircle,
-                                    contentDescription = null
-                                )
+                                    Text(text = "${poi.approvals}/2")
+                                }
                             }
-                            Text(text = "${poi.approvals}/2")
-                            Column(
-                                modifier = Modifier
-                                    .weight(1f)
-                                    .fillMaxHeight()
-                                    .padding(8.dp),
-                                verticalArrangement = Arrangement.Center,
-                                horizontalAlignment = Alignment.CenterHorizontally
-                            ) {
-                                Text(text = poi.name, fontSize = 20.sp)
-                                Text(text = poi.description, fontSize = 14.sp)
-                                Text(text = "${poi.latitude} ${poi.longitude}", fontSize = 8.sp)
-                            }
-
-
-
+                            if(poi.userUID == userUID)
+                                IconButton(
+                                    onClick = {
+                                        viewModel.selectedPoi = poi
+                                        navController?.navigate(Screens.EDIT_POI.route)
+                                    },
+                                    modifier = Modifier.padding(8.dp),
+                                    ) {
+                                    Icon(
+                                        imageVector = Default.Edit,
+                                        contentDescription = null
+                                    )
+                                }
                         }
+
+
+
                     }
                 }
             }

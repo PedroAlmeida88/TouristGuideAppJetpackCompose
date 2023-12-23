@@ -100,6 +100,7 @@ class FirebaseViewModel : ViewModel() {
             }
         }
     }
+
     fun updateAprovalLocationInFirestore(location: Location, userUID: String,) {
         viewModelScope.launch {
             StorageUtil.updateAprovalLocationFirestore(location,userUID){ exception ->

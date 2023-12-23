@@ -1,6 +1,5 @@
 package pt.isec.amovtp.touristapp.ui.screens
 
-import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -37,46 +36,43 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
-import pt.isec.amovtp.touristapp.data.Category
-import pt.isec.amovtp.touristapp.data.PointOfInterest
-import pt.isec.amovtp.touristapp.ui.composables.DropDownComposable
+import pt.isec.amovtp.touristapp.data.Location
 import pt.isec.amovtp.touristapp.ui.composables.TakePhotoOrLoadFromGallery
 import pt.isec.amovtp.touristapp.ui.viewmodels.FirebaseViewModel
 import pt.isec.amovtp.touristapp.ui.viewmodels.LocationViewModel
 
-
 @Composable
-fun AddPOIScreen(modifier: Modifier.Companion, navController: NavHostController?,locationViewModel: LocationViewModel, firebaseViewModel: FirebaseViewModel) {
-    val context = LocalContext.current
+fun EditLocationScreen(modifier: Modifier.Companion, navController: NavHostController?, locationViewModel: LocationViewModel, firebaseViewModel: FirebaseViewModel) {
+    //location atual
     val selectedLocation = locationViewModel.selectedLocation
-    var selectedCategory = locationViewModel.selectedCategory
 
-    var poiName by remember { mutableStateOf("") }
-    var poiDescription by remember { mutableStateOf("") }
-    var longitude by remember { mutableStateOf("") }
-    var latitude by remember { mutableStateOf("") }
 
+    val context = LocalContext.current
+    var locationName by remember { mutableStateOf(selectedLocation!!.name) }
+    var locationDescription by remember { mutableStateOf(selectedLocation!!.description) }
+    var longitude by remember { mutableStateOf(selectedLocation!!.longitude.toString()) }
+    var latitude by remember { mutableStateOf(selectedLocation!!.latitude.toString()) }
     var isFormValid by remember { mutableStateOf(false) }
     var isInputEnabled by remember { mutableStateOf(false) }
     var isError by remember { mutableStateOf(false) }
-
-    //coordenadas
-    val location = locationViewModel.currentLocation.observeAsState()
-    val focusManager = LocalFocusManager.current
-    var writenCoords by remember { mutableStateOf(false) }
-
+    var writenCoords by remember { mutableStateOf(selectedLocation!!.writenCoords) }
     val userUID = firebaseViewModel.authUser.value!!.uid
+
+    val focusManager = LocalFocusManager.current
+
+    val location = locationViewModel.currentLocation.observeAsState()
+
 
     fun validateForm() {
         val longitudeDouble: Double? = longitude.toDoubleOrNull()
         val latitudeDouble: Double? = latitude.toDoubleOrNull()
 
-        isFormValid = poiName.isNotBlank() &&
-                poiDescription.isNotBlank() &&
+        isFormValid = locationName.isNotBlank() &&
+                locationDescription.isNotBlank() &&
                 longitudeDouble != null &&
                 latitudeDouble != null &&
-                locationViewModel.imagePath.value != null &&
-                selectedCategory!!.name != ""
+                locationViewModel.imagePath.value != null
+
     }
 
     Column (
@@ -96,34 +92,35 @@ fun AddPOIScreen(modifier: Modifier.Companion, navController: NavHostController?
                 color = Color.Red
             )
         Text(
-            text = "POI Name",
+            text = "Location Name",
             modifier = Modifier
                 .align(Alignment.CenterHorizontally)
         )
 
         OutlinedTextField(
-            value = poiName,
+            value = locationName,
             onValueChange ={
-                poiName = it
+                locationName = it
                 validateForm()
             },
             singleLine = true,
             keyboardActions = KeyboardActions {
                 focusManager.moveFocus(FocusDirection.Next)
             },
-            label = { Text(text = "POI Name") },
+            enabled = false,
+            label = { Text(text = "Location Name") },
 
-        )
+            )
         Spacer(modifier = Modifier.height(16.dp))
         Text(
-            text = "POI Description",
+            text = "Location Description",
             modifier = Modifier
                 .align(Alignment.CenterHorizontally)
         )
         OutlinedTextField(
-            value = poiDescription,
+            value = locationDescription,
             onValueChange ={
-                poiDescription = it
+                locationDescription = it
                 validateForm()
             },
             singleLine = true,
@@ -132,18 +129,12 @@ fun AddPOIScreen(modifier: Modifier.Companion, navController: NavHostController?
             },
             label = { Text(text = "Location Description") },
         )
-        Spacer(modifier = Modifier.height(16.dp))
-        DropDownComposable(
-            navController = navController,
-            viewModel = locationViewModel,
-            firebaseViewModel = firebaseViewModel
-        )
 
         Row(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(IntrinsicSize.Min)
-                .padding(8.dp)
+                .padding(16.dp)
         ) {
             Button(
                 onClick = {
@@ -160,7 +151,7 @@ fun AddPOIScreen(modifier: Modifier.Companion, navController: NavHostController?
                     .padding(end = 8.dp),
                 colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.primary),
                 shape = CutCornerShape(percent = 0)
-                ) {
+            ) {
                 Text(text = "Get coordinates from current location")
             }
 
@@ -176,47 +167,37 @@ fun AddPOIScreen(modifier: Modifier.Companion, navController: NavHostController?
                     .padding(end = 8.dp),
                 colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.primary),
                 shape = CutCornerShape(percent = 0)
-                ) {
+            ) {
                 Text(text = "Write coordinates")
             }
         }
 
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(IntrinsicSize.Min)
-                .padding(8.dp)
-        ) {
-            OutlinedTextField(
-                value = longitude,
-                onValueChange = {
-                    longitude = it
-                    validateForm()
-                },
-                singleLine = true,
-                keyboardActions = KeyboardActions {
-                    focusManager.moveFocus(FocusDirection.Next)
-                },
-                label = { Text(text = "Longitude") },
-                enabled = isInputEnabled,
-                modifier = Modifier.weight(1f)
-            )
-            OutlinedTextField(
-                value = latitude,
-                onValueChange = {
-                    latitude = it
-                    validateForm()
-                },
-                singleLine = true,
-                keyboardActions = KeyboardActions {
-                    focusManager.moveFocus(FocusDirection.Next)
-                },
-                label = { Text(text = "Latitude") },
-                enabled = isInputEnabled,
-                modifier = Modifier.weight(1f)
-
-            )
-        }
+        OutlinedTextField(
+            value = longitude,
+            onValueChange ={
+                longitude = it
+                validateForm()
+            },
+            singleLine = true,
+            keyboardActions = KeyboardActions {
+                focusManager.moveFocus(FocusDirection.Next)
+            },
+            label = { Text(text = "Longitude") },
+            enabled = isInputEnabled
+        )
+        OutlinedTextField(
+            value = latitude,
+            onValueChange ={
+                latitude = it
+                validateForm()
+            },
+            singleLine = true,
+            keyboardActions = KeyboardActions {
+                focusManager.clearFocus()
+            },
+            label = { Text(text = "Latitude") },
+            enabled = isInputEnabled
+        )
         Box(
             modifier = Modifier
                 .fillMaxSize()
@@ -224,6 +205,7 @@ fun AddPOIScreen(modifier: Modifier.Companion, navController: NavHostController?
                 .padding(8.dp)
                 .weight(1f)
         ) {
+            locationViewModel.imagePath.value = selectedLocation?.photoUrl
             TakePhotoOrLoadFromGallery(locationViewModel.imagePath, Modifier.fillMaxSize())
             validateForm()
         }
@@ -233,25 +215,22 @@ fun AddPOIScreen(modifier: Modifier.Companion, navController: NavHostController?
                     isError = true
                 } else {
                     isError = false
-                    var POI = PointOfInterest(
-                        name = poiName,
-                        description = poiDescription,
-                        category = selectedCategory ?: Category("","",""),
+                    var location = Location(
+                        name = locationName,
+                        description = locationDescription,
                         latitude = latitude.toDouble(),
                         longitude = longitude.toDouble(),
-                        photoUrl = "",
+                        photoUrl = selectedLocation!!.photoUrl,
                         writenCoords = writenCoords,
                         approvals = 0,
                         userUIDsApprovals = emptyList(),
                         userUID = userUID
                     )
-                    Log.i("TAG", "AddPOIScreen: " + POI)
-
-                    firebaseViewModel.addPOIToFirestore(selectedLocation?.name ?: ""  ,POI)
-                    firebaseViewModel.uploadPOIToStorage(directory = "images/" + selectedLocation?.name +"/pois/",imageName = poiName, path = locationViewModel.imagePath.value ?: "", locationName = selectedLocation?.name ?: "" )
+                    firebaseViewModel.addLocationsToFirestore(location)
+                    firebaseViewModel.uploadLocationToStorage(directory = "images/"+locationName ,imageName = locationName, path = locationViewModel.imagePath.value ?: "")
                     locationViewModel.imagePath.value = null
                     navController?.popBackStack()
-                    Toast.makeText(context,"POI adicionada com sucesso!",Toast.LENGTH_LONG).show()
+                    Toast.makeText(context,"Localização editada com sucesso!", Toast.LENGTH_LONG).show()
                 }
             },
             modifier = Modifier
@@ -266,6 +245,4 @@ fun AddPOIScreen(modifier: Modifier.Companion, navController: NavHostController?
 
     }
 
-
 }
-
