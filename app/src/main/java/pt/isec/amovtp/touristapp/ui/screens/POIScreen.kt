@@ -31,6 +31,7 @@ import androidx.compose.material.icons.filled.ClearAll
 import androidx.compose.material.icons.filled.CommentBank
 import androidx.compose.material.icons.filled.DeleteForever
 import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material.icons.filled.FormatListNumberedRtl
 import androidx.compose.material.icons.filled.PhotoLibrary
 import androidx.compose.material.icons.filled.RestartAlt
 import androidx.compose.material3.Button
@@ -116,9 +117,16 @@ fun POIScreen(modifier: Modifier = Modifier, navController: NavHostController?, 
             IconButton(onClick = {
                 viewModel.selectedCategory = Category("","","")
             }) {
-                Icon(imageVector = Default.ClearAll, contentDescription = "")
+                Icon(imageVector = Default.RestartAlt, contentDescription = "")
             }
             DropDownComposable(navController = navController, viewModel = viewModel, firebaseViewModel = firebaseViewModel)
+            IconButton(
+                onClick = {
+                    navController?.navigate(Screens.LIST_CATEGORY.route)
+                }
+            ) {
+                Icon(imageVector = Default.FormatListNumberedRtl, contentDescription = "")
+            }
         }
         Spacer(Modifier.height(16.dp))
         LazyColumn(
