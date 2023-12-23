@@ -5,8 +5,9 @@ data class Category (
     val description:String,
     val icon: String,
 
+    val totalPois: Int,                 //num de pois associados
     val approvals: Int,
     val userUIDsApprovals:List<String>, //lista de userUIDs
-    var userUID: String,                 //userUID do criador da categoria
+    var userUID: String,                //userUID do criador da categoria
     var enableBtn: Boolean = true
 )

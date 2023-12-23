@@ -68,6 +68,16 @@ class StorageUtil {
                     onResult(result.exception)
                 }
         }
+        fun deleteCategoryFromFirestore(category: Category,onResult: (Throwable?) -> Unit) {
+            val db = Firebase.firestore
+
+            db.collection(Collections.Category.route)
+                .document(category.name)
+                .delete()
+                .addOnCompleteListener { result ->
+                    onResult(result.exception)
+                }
+        }
 
         fun updateAprovalLocationFirestore(location: Location, userUID: String ,onResult: (Throwable?) -> Unit) {
             val db = Firebase.firestore
@@ -155,10 +165,10 @@ class StorageUtil {
                     onResult(result.exception)
                 }
 
-            incrementTotalPois(locationName,1)
+            incrementTotalPois(locationName,poi.category.name,1)
         }
 
-        fun deletePOIFromFirestore(locationName: String, poi: PointOfInterest, onResult: (Throwable?) -> Unit) {
+        fun deletePOIFromFirestore(locationName: String,poi: PointOfInterest, onResult: (Throwable?) -> Unit) {
             val db = Firebase.firestore
 
             db.collection(Collections.Locations.route)
@@ -170,13 +180,12 @@ class StorageUtil {
                     onResult(result.exception)
                 }
 
-            incrementTotalPois(locationName,-1)
+            incrementTotalPois(locationName,poi.category.name,-1)
         }
 
-        fun incrementTotalPois(locationName: String,value:Long) {
+        fun incrementTotalPois(locationName: String, categoryName: String,value:Long) {
             val db = Firebase.firestore
 
-            // Crie um mapa para a operação de incremento
             val incrementData = hashMapOf(
                 "TotalPois" to FieldValue.increment(value)
             )
@@ -184,6 +193,14 @@ class StorageUtil {
             db.collection(Collections.Locations.route)
                 .document(locationName)
                 .update(incrementData as Map<String, Any>)
+
+            val incrementDataCategory = hashMapOf(
+                "TotalPois" to FieldValue.increment(value)
+            )
+
+            db.collection(Collections.Category.route)
+                .document(categoryName)
+                .update(incrementDataCategory as Map<String, Any>)
 
         }
         fun addCommentToFirestore(comment: Comment,location: Location?, poi: PointOfInterest?,onResult: (Throwable?) -> Unit) {
@@ -273,7 +290,11 @@ class StorageUtil {
             val categoryData = hashMapOf(
                 "Name" to category.name,
                 "Description" to category.description,
-                "Icon" to category.icon
+                "Icon" to category.icon,
+                "Approvals" to category.approvals,
+                "UserUIDs" to category.userUIDsApprovals,
+                "UserUID" to category.userUID,
+                "TotalPois" to category.totalPois,
             )
 
             db.collection(Collections.Category.route).document(category.name).set(categoryData)
@@ -364,7 +385,7 @@ class StorageUtil {
                             Log.i(TAG, "getPoisFromFirestore: " + categoryData.toString())
                             Log.i(TAG, "getPoisFromFirestore DESCRICAO: " +catDesc)
 
-                            val pointOfInterest = PointOfInterest(name, description, latitude, longitude, imageUrl,Category(catName,catIcon,catDesc,-1,
+                            val pointOfInterest = PointOfInterest(name, description, latitude, longitude, imageUrl,Category(catName,catIcon,catDesc,-1,-1,
                                 emptyList(),""),writenCoords,approvals,userUIDs,userUID)
                             pois.add(pointOfInterest)
                         } catch (e: Exception) {
@@ -394,8 +415,9 @@ class StorageUtil {
                         val approvals  = document.getLong("Approvals")?.toInt() ?: 0
                         val userUIDs = document.get("UserUIDs") as? List<String> ?: emptyList()
                         val userUID = document.getString("UserUID") ?: ""
+                        val totalPois = document.getLong("TotalPois")?.toInt() ?: 0
 
-                        val category = Category(name, description,icon,approvals,userUIDs,userUID)
+                        val category = Category(name, description,icon,totalPois,approvals,userUIDs,userUID)
                         categories.add(category)
                     }
                     callback(categories)

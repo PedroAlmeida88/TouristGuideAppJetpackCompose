@@ -49,10 +49,11 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import pt.isec.amovtp.touristapp.data.Category
 import pt.isec.amovtp.touristapp.ui.viewmodels.FirebaseViewModel
+import pt.isec.amovtp.touristapp.ui.viewmodels.LocationViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AddCategoryScreen(modifier: Modifier, navController: NavHostController?, firebaseViewModel: FirebaseViewModel) {
+fun EditCategoryScreen(modifier: Modifier, navController: NavHostController?, locationViewModel: LocationViewModel,firebaseViewModel: FirebaseViewModel) {
     val icons = listOf(
         Icons.Default.Call,
         Icons.Default.Face,
@@ -68,15 +69,18 @@ fun AddCategoryScreen(modifier: Modifier, navController: NavHostController?, fir
         Icons.Default.Star,
         Icons.Default.Lock
     )
+    var selectedCategory = locationViewModel.selectedCategory
 
     var expanded by remember { mutableStateOf(false) }
 
     var selectedIcon by remember { mutableStateOf<ImageVector?>(null) }
-    var categoryName by remember { mutableStateOf("") }
-    var categoryDescription by remember { mutableStateOf("") }
+    var categoryName by remember { mutableStateOf(selectedCategory!!.name) }
+    var categoryDescription by remember { mutableStateOf(selectedCategory!!.description) }
     val scrollState = rememberScrollState()
     val focusManager = LocalFocusManager.current
     val userUID = firebaseViewModel.authUser.value!!.uid
+
+
     Column(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -94,7 +98,8 @@ fun AddCategoryScreen(modifier: Modifier, navController: NavHostController?, fir
                 },
                 onValueChange = {
                     categoryName = it
-                }
+                },
+                enabled = false
             )
 
             Box (
@@ -155,8 +160,8 @@ fun AddCategoryScreen(modifier: Modifier, navController: NavHostController?, fir
 
         Button(
             onClick = {
-                val category = Category(categoryName, categoryDescription, selectedIcon!!.name,0,0,
-                    emptyList(),userUID)
+                val category = Category(categoryName, categoryDescription, selectedIcon!!.name,selectedCategory!!.totalPois,selectedCategory.approvals,
+                    selectedCategory.userUIDsApprovals,userUID)
                 firebaseViewModel.addCategoryToFirestore(category) {
                     navController?.popBackStack()
                 }
