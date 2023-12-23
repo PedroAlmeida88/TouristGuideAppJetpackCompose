@@ -160,30 +160,35 @@ fun LocationsScreen(modifier: Modifier = Modifier, navController: NavHostControl
                                 verticalAlignment = Alignment.CenterVertically
                             ) {
                                 if(location.approvals < 2) {
-                                    IconButton(
-                                        onClick = {
-                                            firebaseViewModel.updateAprovalLocationInFirestore(
-                                                location,
-                                                userUID
-                                            )
-                                            firebaseViewModel.getLocationFromFirestore { loadedLocations ->
-                                                locations = loadedLocations
-                                                for (l in locations) {
-                                                    if (userUID in l.userUIDsApprovals || userUID == l.userUID) {
-                                                        l.enableBtn = false
+                                    Row (
+                                        verticalAlignment = Alignment.CenterVertically
+                                    ) {
+                                        IconButton(
+                                            onClick = {
+                                                firebaseViewModel.updateAprovalLocationInFirestore(
+                                                    location,
+                                                    userUID
+                                                )
+                                                firebaseViewModel.getLocationFromFirestore { loadedLocations ->
+                                                    locations = loadedLocations
+                                                    for (l in locations) {
+                                                        if (userUID in l.userUIDsApprovals || userUID == l.userUID) {
+                                                            l.enableBtn = false
+                                                        }
                                                     }
                                                 }
-                                            }
-                                        },
-                                        modifier = Modifier.padding(8.dp),
-                                        enabled = location.enableBtn
-                                    ) {
-                                        Icon(
-                                            imageVector = Default.CheckCircle,
-                                            contentDescription = null
-                                        )
+                                            },
+                                            modifier = Modifier.padding(8.dp),
+                                            enabled = location.enableBtn
+                                        ) {
+                                            Icon(
+                                                imageVector = Default.CheckCircle,
+                                                contentDescription = null
+                                            )
+                                        }
+                                        Text(text = "${location.approvals}/2")
                                     }
-                                    Text(text = "${location.approvals}/2")
+
                                 }
 
                                 if(location.userUID == userUID) {

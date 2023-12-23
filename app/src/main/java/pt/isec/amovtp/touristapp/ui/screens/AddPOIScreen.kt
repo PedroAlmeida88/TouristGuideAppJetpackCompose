@@ -76,7 +76,7 @@ fun AddPOIScreen(modifier: Modifier.Companion, navController: NavHostController?
                 longitudeDouble != null &&
                 latitudeDouble != null &&
                 locationViewModel.imagePath.value != null &&
-                selectedCategory != null
+                selectedCategory!!.name != ""
     }
 
     Column (
@@ -132,7 +132,6 @@ fun AddPOIScreen(modifier: Modifier.Companion, navController: NavHostController?
             },
             label = { Text(text = "Location Description") },
         )
-        //TODO:Verificação da categoria, dropdown?
         Spacer(modifier = Modifier.height(16.dp))
         DropDownComposable(
             navController = navController,
