@@ -42,13 +42,14 @@ enum class Screens(val display: String, val showAppBar : Boolean) {
     REGISTER("Register", true),
     LOCATIONS("Locations", true),
     ADD_LOCATIONS("Add Locations", true),
-    EDIT_LOCATION("Add Locations", true),
+    EDIT_LOCATION("Edit Locations", true),
     POI("Point of Interest", true),
     ADD_POI("Add Points of Interest", true),
-    EDIT_POI("Add Points of Interest", true),
+    EDIT_POI("Edit Points of Interest", true),
     POI_DESCRIPTION("Point of Interest Description", true),
     ADD_CATEGORY("Add Category", true),
-    LIST_CATEGORY("Add Category", true),
+    LIST_CATEGORY("List Category", true),
+    EDIT_CATEGORY("Edit Category", true),
     SHOW_MAP("Show map", true),
     CREDITS("Credits", true),
     ADD_COMMENTS("Add Comments", true),
@@ -192,7 +193,10 @@ fun MainScreen(navController:NavHostController = rememberNavController(),
                 POIDescriptionScreen(modifier = Modifier, viewModel = locationViewModel,firebaseViewModel = firebaseViewModel)
             }
             composable (Screens.LIST_CATEGORY.route) {
-                ListCategoryScreen(modifier = Modifier, viewModel = locationViewModel,firebaseViewModel = firebaseViewModel)
+                ListCategoryScreen(navController= navController,modifier = Modifier, viewModel = locationViewModel,firebaseViewModel = firebaseViewModel)
+            }
+            composable (Screens.EDIT_CATEGORY.route) {
+                EditCategoryScreen(navController= navController,modifier = Modifier, locationViewModel = locationViewModel,firebaseViewModel = firebaseViewModel)
             }
             composable (Screens.ADD_CATEGORY.route) {
                 AddCategoryScreen(modifier = Modifier, navController = navController, firebaseViewModel = firebaseViewModel)

@@ -6,6 +6,7 @@ import android.util.Log
 import android.widget.RatingBar
 import android.widget.Toast
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -54,6 +55,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
+import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory
 import org.osmdroid.util.GeoPoint
@@ -67,7 +69,7 @@ import pt.isec.amovtp.touristapp.ui.viewmodels.FirebaseViewModel
 import pt.isec.amovtp.touristapp.ui.viewmodels.LocationViewModel
 
 @Composable
-fun ListCategoryScreen(modifier: Modifier = Modifier, viewModel: LocationViewModel,firebaseViewModel: FirebaseViewModel) {
+fun ListCategoryScreen(navController: NavHostController?,modifier: Modifier = Modifier, viewModel: LocationViewModel, firebaseViewModel: FirebaseViewModel) {
     var myRating by remember { mutableIntStateOf(0) }
     val context = LocalContext.current
     var isRatingEnabled by remember { mutableStateOf(true) }
@@ -104,10 +106,17 @@ fun ListCategoryScreen(modifier: Modifier = Modifier, viewModel: LocationViewMod
                 .weight(1f)
         ) {
             items(categories) { category ->
+                val borderColor = when (category.approvals) {
+                    0 -> Color.Red
+                    1 -> Color.Yellow
+                    else -> MaterialTheme.colorScheme.tertiary
+                }
                 Card(
                     modifier = Modifier
+                        .fillMaxHeight()
                         .fillMaxWidth()
                         .padding(8.dp)
+                        .border(2.dp, borderColor, shape = RoundedCornerShape(16.dp))
                         .clip(shape = RoundedCornerShape(16.dp)),
                     elevation = CardDefaults.cardElevation(4.dp),
                     colors = CardDefaults.cardColors(
@@ -145,61 +154,75 @@ fun ListCategoryScreen(modifier: Modifier = Modifier, viewModel: LocationViewMod
                             horizontalArrangement = Arrangement.SpaceBetween,
                             verticalAlignment = Alignment.CenterVertically
                         ) {
-                            Row (
-                                verticalAlignment = Alignment.CenterVertically
-                            ){
-                                IconButton(
-                                    onClick = {
-                                        firebaseViewModel.updateAprovalCategoryInFirestore(
-                                            category,
-                                            userUID
-                                        )
-                                        firebaseViewModel.getCategoriesFromFirestore(){ loadedCategories ->
-                                            categories = loadedCategories
-                                            for (c in categories) {
-                                                if (userUID in c.userUIDsApprovals || userUID == c.userUID) {
-                                                    c.enableBtn = false
+                            if (category.approvals < 2){
+                                Row(
+                                    verticalAlignment = Alignment.CenterVertically
+                                ) {
+                                    IconButton(
+                                        onClick = {
+                                            firebaseViewModel.updateAprovalCategoryInFirestore(
+                                                category,
+                                                userUID
+                                            )
+                                            firebaseViewModel.getCategoriesFromFirestore() { loadedCategories ->
+                                                categories = loadedCategories
+                                                for (c in categories) {
+                                                    if (userUID in c.userUIDsApprovals || userUID == c.userUID) {
+                                                        c.enableBtn = false
+                                                    }
                                                 }
                                             }
-                                        }
-                                    },
-                                    modifier = Modifier.padding(8.dp),
-                                ) {
-                                    Icon(
-                                        imageVector = Icons.Default.CheckCircle,
-                                        contentDescription = null
-                                    )
+                                        },
+                                        modifier = Modifier.padding(8.dp),
+                                        enabled = category.enableBtn
+                                    ) {
+                                        Icon(
+                                            imageVector = Icons.Default.CheckCircle,
+                                            contentDescription = null
+                                        )
+                                    }
+                                    Text("${category.approvals}/2") // Uncomment this line if needed
                                 }
-                                Text("${category.approvals}/2") // Uncomment this line if needed
                             }
 
                             Row(
                                 verticalAlignment = Alignment.CenterVertically,
                                 horizontalArrangement = Arrangement.SpaceEvenly
                             ) {
-                                IconButton(
-                                    onClick = {
-                                        // Handle click for the Edit IconButton
-                                    },
-                                    modifier = Modifier.padding(8.dp),
-                                ) {
-                                    Icon(
-                                        imageVector = Icons.Default.Edit,
-                                        contentDescription = null
-                                    )
-                                }
+                                if(category.userUID == userUID) {
 
-                                IconButton(
-                                    onClick = {
-                                        // Handle click for the Delete IconButton
-                                        Toast.makeText(context, "s", Toast.LENGTH_LONG).show()
-                                    },
-                                    modifier = Modifier.padding(8.dp),
-                                ) {
-                                    Icon(
-                                        imageVector = Icons.Default.DeleteForever,
-                                        contentDescription = null
-                                    )
+                                    IconButton(
+                                        onClick = {
+                                            viewModel.selectedCategory = category
+                                            navController?.navigate(Screens.EDIT_CATEGORY.route)
+                                        },
+                                        modifier = Modifier.padding(8.dp),
+                                    ) {
+                                        Icon(
+                                            imageVector = Icons.Default.Edit,
+                                            contentDescription = null
+                                        )
+                                    }
+
+                                    IconButton(
+                                        onClick = {
+                                            if(category.totalPois == 0) {
+                                                firebaseViewModel.deleteCategoryFromFirestore(category)
+                                                firebaseViewModel.getCategoriesFromFirestore() { loadedCategories ->
+                                                    categories = loadedCategories
+                                                }
+                                                Toast.makeText(context, "Categoria eliminada com sucesso!", Toast.LENGTH_LONG).show()
+                                            }else
+                                                Toast.makeText(context, "Categoria não eliminada.Já existem POIS associados", Toast.LENGTH_LONG).show()
+
+                                        },
+                                        modifier = Modifier.padding(8.dp),
+                                    ) {
+                                        Icon(
+                                            imageVector = Icons.Default.DeleteForever,
+                                            contentDescription = null
+                                        )
+                                    }
                                 }
                             }
                         }
