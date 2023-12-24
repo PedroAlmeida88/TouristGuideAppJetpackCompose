@@ -264,3 +264,8 @@ fun getDate(): String {
         ""
     }
 }
+
+@Composable
+fun LandscapeAddCommentsScreen(modfier: Modifier.Companion, locationViewModel: LocationViewModel, firebaseViewModel: FirebaseViewModel) {
+
+}

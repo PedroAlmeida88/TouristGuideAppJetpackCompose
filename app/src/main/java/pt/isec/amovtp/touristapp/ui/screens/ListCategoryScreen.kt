@@ -213,3 +213,8 @@ fun ListCategoryScreen(navController: NavHostController?,modifier: Modifier = Mo
 
     }
 }
+
+@Composable
+fun LandscapeListCategoryScreen(navController: NavHostController, modifier: Modifier.Companion, viewModel: LocationViewModel, firebaseViewModel: FirebaseViewModel) {
+
+}

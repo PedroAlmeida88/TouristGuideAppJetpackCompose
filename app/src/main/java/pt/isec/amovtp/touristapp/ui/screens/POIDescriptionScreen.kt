@@ -120,3 +120,8 @@ fun POIDescriptionScreen(modifier: Modifier = Modifier, viewModel: LocationViewM
         }
     }
 }
+
+@Composable
+fun LandscapePOIDescriptionScreen(modifier: Modifier.Companion, viewModel: LocationViewModel, firebaseViewModel: FirebaseViewModel) {
+
+}

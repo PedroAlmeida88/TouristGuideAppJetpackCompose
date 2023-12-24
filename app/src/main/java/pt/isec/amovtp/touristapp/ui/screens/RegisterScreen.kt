@@ -182,3 +182,8 @@ fun RegisterScreen(navController: NavHostController, firebaseViewModel: Firebase
         }
     }
 }
+
+@Composable
+fun LandscapeRegisterScreen(navController: NavHostController, firebaseViewModel: FirebaseViewModel) {
+
+}

@@ -193,3 +193,8 @@ fun AddCategoryScreen(modifier: Modifier, navController: NavHostController?, fir
         }
     }
 }
+
+@Composable
+fun LandscapeAddCategoryScreen(modifier: Modifier.Companion, navController: NavHostController, firebaseViewModel: FirebaseViewModel) {
+
+}

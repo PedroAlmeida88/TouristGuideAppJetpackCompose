@@ -224,3 +224,8 @@ fun AddLocationScreen(modifier: Modifier.Companion, navController: NavHostContro
         }
     }
 }
+
+@Composable
+fun LandscapeAddLocationScreen(modifier: Modifier.Companion, navController: NavHostController, locationViewModel: LocationViewModel, firebaseViewModel: FirebaseViewModel) {
+
+}

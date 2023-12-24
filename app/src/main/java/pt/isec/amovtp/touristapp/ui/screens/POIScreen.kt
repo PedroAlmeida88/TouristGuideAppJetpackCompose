@@ -295,3 +295,8 @@ fun POIScreen(modifier: Modifier = Modifier, navController: NavHostController?, 
         }
     }
 }
+
+@Composable
+fun LandscapePOIScreen(navController: NavHostController, viewModel: LocationViewModel, firebaseViewModel: FirebaseViewModel) {
+
+}

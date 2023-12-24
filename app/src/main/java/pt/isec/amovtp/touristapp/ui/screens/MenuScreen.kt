@@ -101,3 +101,7 @@ fun MenuScreen(
     }
 }
 
+@Composable
+fun LandscapeMenuScreen(stringResource: String, navController: NavHostController, firebaseViewModel: FirebaseViewModel, route: String, route1: String) {
+
+}

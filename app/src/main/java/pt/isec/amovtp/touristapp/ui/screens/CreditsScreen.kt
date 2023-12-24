@@ -119,3 +119,8 @@ fun CreditsScreen(modifier: Modifier = Modifier) {
         }
     }
 }
+
+@Composable
+fun LandscapeCreditsScreen() {
+    TODO("Not yet implemented")
+}

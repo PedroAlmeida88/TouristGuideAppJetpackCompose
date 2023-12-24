@@ -223,3 +223,8 @@ fun EditLocationScreen( navController: NavHostController?, locationViewModel: Lo
         }
     }
 }
+
+@Composable
+fun LandscapeEditLocationScreen(navController: NavHostController, locationViewModel: LocationViewModel, firebaseViewModel: FirebaseViewModel) {
+
+}

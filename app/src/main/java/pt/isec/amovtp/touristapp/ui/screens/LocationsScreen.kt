@@ -265,3 +265,8 @@ fun LocationsScreen(navController: NavHostController?,viewModel : LocationViewMo
     }
 
 }
+
+@Composable
+fun LandscapeLocationsScreen(navController: NavHostController, viewModel: LocationViewModel, firebaseViewModel: FirebaseViewModel) {
+
+}

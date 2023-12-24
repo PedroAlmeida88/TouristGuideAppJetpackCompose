@@ -244,3 +244,7 @@ fun AddPOIScreen(modifier: Modifier.Companion, navController: NavHostController?
 
 }
 
+@Composable
+fun LandscapeAddPOIScreen(modifier: Modifier.Companion, navController: NavHostController, locationViewModel: LocationViewModel, firebaseViewModel: FirebaseViewModel) {
+
+}

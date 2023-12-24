@@ -243,3 +243,7 @@ fun EditPOIScreen(modifier: Modifier.Companion, navController: NavHostController
 
 }
 
+@Composable
+fun LandscapeEditPOIScreen(modifier: Modifier.Companion, navController: NavHostController, locationViewModel: LocationViewModel, firebaseViewModel: FirebaseViewModel) {
+
+}

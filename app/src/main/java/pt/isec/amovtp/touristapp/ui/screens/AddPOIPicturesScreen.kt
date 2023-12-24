@@ -144,3 +144,7 @@ fun AddPOIPicturesScreen(modfier: Modifier.Companion, locationViewModel: Locatio
 
 }
 
+@Composable
+fun LandscapeAddPOIPicturesScreen(modfier: Modifier.Companion, locationViewModel: LocationViewModel, firebaseViewModel: FirebaseViewModel) {
+
+}

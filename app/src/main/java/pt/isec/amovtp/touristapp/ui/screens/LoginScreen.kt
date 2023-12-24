@@ -152,3 +152,8 @@ fun LoginScreen(
         }
     }
 }
+
+@Composable
+fun LandscapeLoginScreen(navController: NavHostController, firebaseViewModel: FirebaseViewModel, content: () -> Unit) {
+
+}
