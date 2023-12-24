@@ -48,6 +48,7 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import pt.isec.amovtp.touristapp.data.Category
+import pt.isec.amovtp.touristapp.ui.composables.ErrorAlertDialog
 import pt.isec.amovtp.touristapp.ui.viewmodels.FirebaseViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -69,14 +70,25 @@ fun AddCategoryScreen(modifier: Modifier, navController: NavHostController?, fir
         Icons.Default.Lock
     )
 
+    val focusManager = LocalFocusManager.current
+    val userUID = firebaseViewModel.authUser.value!!.uid
+
     var expanded by remember { mutableStateOf(false) }
 
     var selectedIcon by remember { mutableStateOf<ImageVector?>(null) }
     var categoryName by remember { mutableStateOf("") }
     var categoryDescription by remember { mutableStateOf("") }
     val scrollState = rememberScrollState()
-    val focusManager = LocalFocusManager.current
-    val userUID = firebaseViewModel.authUser.value!!.uid
+
+    var isError by remember { mutableStateOf(false) }
+    var isValidForm by remember { mutableStateOf(false) }
+
+    fun validateForm() {
+        isValidForm = selectedIcon != null &&
+                categoryDescription.isNotBlank() &&
+                categoryDescription.isNotBlank()
+    }
+
     Column(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -84,7 +96,15 @@ fun AddCategoryScreen(modifier: Modifier, navController: NavHostController?, fir
             .padding(12.dp)
             .fillMaxSize()
     ) {
-        Row {
+        Row (
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            if(isError)
+                ErrorAlertDialog {
+                    isError = false
+                }
+
             OutlinedTextField(
                 label = { Text(text = "Name") },
                 value = categoryName,
@@ -94,6 +114,7 @@ fun AddCategoryScreen(modifier: Modifier, navController: NavHostController?, fir
                 },
                 onValueChange = {
                     categoryName = it
+                    validateForm()
                 }
             )
 
@@ -128,6 +149,7 @@ fun AddCategoryScreen(modifier: Modifier, navController: NavHostController?, fir
                             onClick = {
                                 expanded = false
                                 selectedIcon = icon
+                                validateForm()
                             }
                         )
                     }
@@ -136,7 +158,6 @@ fun AddCategoryScreen(modifier: Modifier, navController: NavHostController?, fir
         }
 
         Spacer(modifier = Modifier.height(8.dp))
-
         OutlinedTextField(
             label = { Text(text = "Description") },
             value = categoryDescription,
@@ -146,19 +167,25 @@ fun AddCategoryScreen(modifier: Modifier, navController: NavHostController?, fir
             },
             onValueChange = {
                 categoryDescription = it
+                validateForm()
             },
             modifier = Modifier
                 .fillMaxWidth()
         )
 
         Spacer(modifier = Modifier.height(8.dp))
-
         Button(
             onClick = {
-                val category = Category(categoryName, categoryDescription, selectedIcon!!.name,0,0,
-                    emptyList(),userUID)
-                firebaseViewModel.addCategoryToFirestore(category) {
-                    navController?.popBackStack()
+                if (!isValidForm)
+                    isError = true
+                else {
+                    val category = Category(
+                        categoryName, categoryDescription, selectedIcon!!.name, 0, 0,
+                        emptyList(), userUID
+                    )
+                    firebaseViewModel.addCategoryToFirestore(category) {
+                        navController?.popBackStack()
+                    }
                 }
             }
         ) {

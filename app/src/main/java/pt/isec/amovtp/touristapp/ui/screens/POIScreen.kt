@@ -69,7 +69,7 @@ import pt.isec.amovtp.touristapp.data.PointOfInterest
 import pt.isec.amovtp.touristapp.ui.composables.DropDownComposable
 import pt.isec.amovtp.touristapp.ui.viewmodels.FirebaseViewModel
 import pt.isec.amovtp.touristapp.ui.viewmodels.LocationViewModel
-
+import java.nio.file.WatchEvent
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -111,19 +111,24 @@ fun POIScreen(modifier: Modifier = Modifier, navController: NavHostController?, 
             .padding(8.dp)
     ) {
         Row(
-            horizontalArrangement = Arrangement.Start,
-            verticalAlignment = Alignment.Top
+            horizontalArrangement = Arrangement.Center,
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier.fillMaxWidth()
         ) {
-            IconButton(onClick = {
-                viewModel.selectedCategory = Category("","","",0, 0,emptyList(),"",false)
-            }) {
+            IconButton(
+                onClick = {
+                    viewModel.selectedCategory = Category("","","",0, 0,emptyList(),"",false)
+                },
+                modifier = Modifier.padding(4.dp, 0.dp)
+            ) {
                 Icon(imageVector = Default.RestartAlt, contentDescription = "")
             }
             DropDownComposable(navController = navController, viewModel = viewModel, firebaseViewModel = firebaseViewModel)
             IconButton(
                 onClick = {
                     navController?.navigate(Screens.LIST_CATEGORY.route)
-                }
+                },
+                modifier = Modifier.padding(4.dp, 0.dp)
             ) {
                 Icon(imageVector = Default.FormatListNumberedRtl, contentDescription = "")
             }
@@ -186,34 +191,30 @@ fun POIScreen(modifier: Modifier = Modifier, navController: NavHostController?, 
                             }
                         }
                         Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.Center,
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .height(IntrinsicSize.Min),
-                            horizontalArrangement = Arrangement.SpaceBetween,
-                            verticalAlignment = Alignment.CenterVertically
                         ) {
                             IconButton(
                                 onClick = {
                                     viewModel.selectedPoi = poi
                                     navController?.navigate(Screens.ADD_COMMENTS.route)
                                 },
-                                modifier = Modifier.padding(8.dp),
-                                ) {
-
+                                modifier = Modifier.padding(4.dp, 0.dp),
+                            ) {
                                 Icon(
                                     painter = painterResource(id = android.R.drawable.sym_action_chat),
                                     contentDescription = null
                                 )
-
                             }
                             IconButton(
                                 onClick = {
                                     viewModel.selectedPoi = poi
                                     navController?.navigate(Screens.ADD_POI_PICTURES.route)
                                 },
-                                modifier = Modifier.padding(8.dp),
-
-                                ) {
+                                modifier = Modifier.padding(4.dp, 0.dp),
+                            ) {
                                 Icon(
                                     imageVector = Default.PhotoLibrary,
                                     contentDescription = null
@@ -222,7 +223,8 @@ fun POIScreen(modifier: Modifier = Modifier, navController: NavHostController?, 
 
                             if (poi.approvals < 2) {
                                 Row (
-                                    verticalAlignment = Alignment.CenterVertically
+                                    verticalAlignment = Alignment.CenterVertically,
+                                    modifier = Modifier.padding(4.dp, 0.dp)
                                 ){
                                     IconButton(
                                         onClick = {
@@ -239,7 +241,6 @@ fun POIScreen(modifier: Modifier = Modifier, navController: NavHostController?, 
                                             }
 
                                         },
-                                        modifier = Modifier.padding(8.dp),
                                         enabled = poi.enableBtn
                                     ) {
                                         Icon(
@@ -247,7 +248,9 @@ fun POIScreen(modifier: Modifier = Modifier, navController: NavHostController?, 
                                             contentDescription = null
                                         )
                                     }
-                                    Text(text = "${poi.approvals}/2")
+                                    Text(
+                                        text = "${poi.approvals}/2",
+                                    )
                                 }
                             }
                             if(poi.userUID == userUID) {
@@ -256,7 +259,7 @@ fun POIScreen(modifier: Modifier = Modifier, navController: NavHostController?, 
                                         viewModel.selectedPoi = poi
                                         navController?.navigate(Screens.EDIT_POI.route)
                                     },
-                                    modifier = Modifier.padding(8.dp),
+                                    modifier = Modifier.padding(4.dp, 0.dp),
                                 ) {
                                     Icon(
                                         imageVector = Default.Edit,
@@ -277,7 +280,7 @@ fun POIScreen(modifier: Modifier = Modifier, navController: NavHostController?, 
 
                                         }
                                     },
-                                    modifier = Modifier.padding(8.dp),
+                                    modifier = Modifier.padding(4.dp, 0.dp),
                                 ) {
                                     Icon(
                                         imageVector = Default.DeleteForever,

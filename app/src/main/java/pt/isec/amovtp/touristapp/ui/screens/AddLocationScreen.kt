@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
@@ -139,40 +140,43 @@ fun AddLocationScreen(modifier: Modifier.Companion, navController: NavHostContro
             )
         }
 
-        OutlinedTextField(
-            value = longitude,
-            onValueChange ={
-                longitude = it
-                validateForm()
-            },
-            singleLine = true,
-            keyboardActions = KeyboardActions {
-                focusManager.moveFocus(FocusDirection.Next)
-            },
-            label = { Text(text = "Longitude") },
-            enabled = isInputEnabled,
+        Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(0.dp, 4.dp)
-        )
-
-        OutlinedTextField(
-            value = latitude,
-            onValueChange ={
-                latitude = it
-                validateForm()
-            },
-            singleLine = true,
-            keyboardActions = KeyboardActions {
-                focusManager.clearFocus()
-            },
-            label = { Text(text = "Latitude") },
-            enabled = isInputEnabled,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(0.dp, 4.dp)
-        )
-        Spacer(modifier = Modifier.height(4.dp))
+                .padding(0.dp, 12.dp)
+        ) {
+            OutlinedTextField(
+                value = longitude,
+                onValueChange ={
+                    longitude = it
+                    validateForm()
+                },
+                singleLine = true,
+                keyboardActions = KeyboardActions {
+                    focusManager.moveFocus(FocusDirection.Next)
+                },
+                label = { Text(text = "Longitude") },
+                enabled = isInputEnabled,
+                modifier = Modifier
+                    .weight(1f, false)
+            )
+            Spacer(modifier = Modifier.width(8.dp))
+            OutlinedTextField(
+                value = latitude,
+                onValueChange ={
+                    latitude = it
+                    validateForm()
+                },
+                singleLine = true,
+                keyboardActions = KeyboardActions {
+                    focusManager.clearFocus()
+                },
+                label = { Text(text = "Latitude") },
+                enabled = isInputEnabled,
+                modifier = Modifier
+                    .weight(1f, false)
+            )
+        }
 
         Box(
             modifier = Modifier

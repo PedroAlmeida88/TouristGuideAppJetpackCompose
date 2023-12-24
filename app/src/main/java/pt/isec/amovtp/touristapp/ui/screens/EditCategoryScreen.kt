@@ -1,6 +1,5 @@
 package pt.isec.amovtp.touristapp.ui.screens
 
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -42,14 +41,35 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import pt.isec.amovtp.touristapp.data.Category
+import pt.isec.amovtp.touristapp.ui.composables.ErrorAlertDialog
 import pt.isec.amovtp.touristapp.ui.viewmodels.FirebaseViewModel
 import pt.isec.amovtp.touristapp.ui.viewmodels.LocationViewModel
+
+fun getImageVectorFromName (iconName: String) : ImageVector? {
+    return when (iconName) {
+        "Filled.Call" -> Icons.Default.Call
+        "Filled.Face" -> Icons.Default.Face
+        "Filled.Favorite" -> Icons.Default.Favorite
+        "Filled.Delete" -> Icons.Default.Delete
+        "Filled.ShoppingCart" -> Icons.Default.ShoppingCart
+        "Filled.Home" -> Icons.Default.Home
+        "Filled.Build" -> Icons.Default.Build
+        "Filled.Warning" -> Icons.Default.Warning
+        "Filled.LocationOn" -> Icons.Default.LocationOn
+        "Filled.Create" -> Icons.Default.Create
+        "Filled.Email" -> Icons.Default.Email
+        "Filled.Star" -> Icons.Default.Star
+        "Filled.Lock" -> Icons.Default.Lock
+        else -> null
+    }
+}
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -69,43 +89,58 @@ fun EditCategoryScreen(modifier: Modifier, navController: NavHostController?, lo
         Icons.Default.Star,
         Icons.Default.Lock
     )
+
     var selectedCategory = locationViewModel.selectedCategory
-
-    var expanded by remember { mutableStateOf(false) }
-
-    var selectedIcon by remember { mutableStateOf<ImageVector?>(null) }
-    var categoryName by remember { mutableStateOf(selectedCategory!!.name) }
-    var categoryDescription by remember { mutableStateOf(selectedCategory!!.description) }
     val scrollState = rememberScrollState()
     val focusManager = LocalFocusManager.current
     val userUID = firebaseViewModel.authUser.value!!.uid
 
+    var expanded by remember { mutableStateOf(false) }
+
+    var selectedIcon by remember { mutableStateOf(getImageVectorFromName(selectedCategory!!.icon)) }
+    var categoryName by remember { mutableStateOf(selectedCategory!!.name) }
+    var categoryDescription by remember { mutableStateOf(selectedCategory!!.description) }
+
+    var isValidForm by remember { mutableStateOf(false) }
+    var isError by remember { mutableStateOf(false) }
+
+    fun validateForm () {
+        isValidForm = selectedIcon != null &&
+                categoryName.isNotBlank() &&
+                categoryDescription.isNotBlank()
+    }
 
     Column(
-        verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = modifier
             .padding(12.dp)
             .fillMaxSize()
     ) {
-        Row {
-            OutlinedTextField(
-                label = { Text(text = "Name") },
-                value = categoryName,
-                singleLine = true,
-                keyboardActions = KeyboardActions {
-                    focusManager.moveFocus(FocusDirection.Next)
-                },
-                onValueChange = {
-                    categoryName = it
-                },
-                enabled = false
+        if(isError)
+            ErrorAlertDialog {
+                isError = false
+            }
+
+        Row (
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(0.dp, 100.dp)
+        ) {
+            Text(
+                text = categoryName,
+                fontSize = 26.sp,
+                textAlign = TextAlign.Center,
+                modifier = Modifier
+                    .fillMaxWidth(0.7f)
+                    .padding(8.dp, 0.dp)
             )
 
             Box (
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .wrapContentSize(align = Alignment.Center),
+                    .fillMaxWidth(0.3f)
+                    .wrapContentSize(align = Alignment.Center)
+                    .padding(0.dp, 24.dp),
                 contentAlignment = Alignment.Center,
             ) {
                 IconButton(
@@ -133,6 +168,7 @@ fun EditCategoryScreen(modifier: Modifier, navController: NavHostController?, lo
                             onClick = {
                                 expanded = false
                                 selectedIcon = icon
+                                validateForm()
                             }
                         )
                     }
@@ -140,8 +176,7 @@ fun EditCategoryScreen(modifier: Modifier, navController: NavHostController?, lo
             }
         }
 
-        Spacer(modifier = Modifier.height(8.dp))
-
+        Spacer(modifier = Modifier.height(12.dp))
         OutlinedTextField(
             label = { Text(text = "Description") },
             value = categoryDescription,
@@ -151,19 +186,29 @@ fun EditCategoryScreen(modifier: Modifier, navController: NavHostController?, lo
             },
             onValueChange = {
                 categoryDescription = it
+                validateForm()
             },
             modifier = Modifier
                 .fillMaxWidth()
         )
 
         Spacer(modifier = Modifier.height(8.dp))
-
         Button(
             onClick = {
-                val category = Category(categoryName, categoryDescription, selectedIcon!!.name,selectedCategory!!.totalPois,selectedCategory.approvals,
-                    selectedCategory.userUIDsApprovals,userUID)
-                firebaseViewModel.addCategoryToFirestore(category) {
-                    navController?.popBackStack()
+                if (!isValidForm)
+                    isError = true
+                else {
+                    val category = Category(
+                        categoryName,
+                        categoryDescription,
+                        selectedIcon!!.name,
+                        selectedCategory!!.totalPois,
+                        0,
+                        emptyList(), userUID
+                    )
+                    firebaseViewModel.addCategoryToFirestore(category) {
+                        navController?.popBackStack()
+                    }
                 }
             }
         ) {

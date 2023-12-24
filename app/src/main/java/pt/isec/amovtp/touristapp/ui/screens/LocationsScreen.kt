@@ -19,7 +19,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons.Default
 import androidx.compose.material.icons.filled.CheckCircle
-import androidx.compose.material.icons.filled.DeleteForever
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
@@ -226,7 +226,7 @@ fun LocationsScreen(navController: NavHostController?,viewModel : LocationViewMo
                                         modifier = Modifier.padding(8.dp),
                                     ) {
                                         Icon(
-                                            imageVector = Default.DeleteForever,
+                                            imageVector = Default.Delete,
                                             contentDescription = null
                                         )
                                     }

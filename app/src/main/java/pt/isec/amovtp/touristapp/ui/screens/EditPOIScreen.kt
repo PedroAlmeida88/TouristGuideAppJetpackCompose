@@ -6,15 +6,14 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.CutCornerShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.verticalScroll
@@ -22,6 +21,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -35,11 +35,14 @@ import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import pt.isec.amovtp.touristapp.data.Category
 import pt.isec.amovtp.touristapp.data.PointOfInterest
 import pt.isec.amovtp.touristapp.ui.composables.DropDownComposable
+import pt.isec.amovtp.touristapp.ui.composables.ErrorAlertDialog
 import pt.isec.amovtp.touristapp.ui.composables.TakePhotoOrLoadFromGallery
 import pt.isec.amovtp.touristapp.ui.viewmodels.FirebaseViewModel
 import pt.isec.amovtp.touristapp.ui.viewmodels.LocationViewModel
@@ -48,12 +51,13 @@ import pt.isec.amovtp.touristapp.ui.viewmodels.LocationViewModel
 @Composable
 fun EditPOIScreen(modifier: Modifier.Companion, navController: NavHostController?,locationViewModel: LocationViewModel, firebaseViewModel: FirebaseViewModel) {
     val selectedPoi = locationViewModel.selectedPoi
-
-
     val context = LocalContext.current
     val selectedLocation = locationViewModel.selectedLocation
     locationViewModel.selectedCategory = selectedPoi!!.category
     var selectedCategory = locationViewModel.selectedCategory
+    val location = locationViewModel.currentLocation.observeAsState()
+    val focusManager = LocalFocusManager.current
+    val userUID = firebaseViewModel.authUser.value!!.uid
 
     var poiName by remember { mutableStateOf(selectedPoi!!.name) }
     var poiDescription by remember { mutableStateOf(selectedPoi!!.description) }
@@ -63,13 +67,7 @@ fun EditPOIScreen(modifier: Modifier.Companion, navController: NavHostController
     var isFormValid by remember { mutableStateOf(false) }
     var isInputEnabled by remember { mutableStateOf(false) }
     var isError by remember { mutableStateOf(false) }
-
-    //coordenadas
-    val location = locationViewModel.currentLocation.observeAsState()
-    val focusManager = LocalFocusManager.current
     var writenCoords by remember { mutableStateOf(selectedPoi!!.writenCoords) }
-
-    val userUID = firebaseViewModel.authUser.value!!.uid
 
     fun validateForm() {
         val longitudeDouble: Double? = longitude.toDoubleOrNull()
@@ -93,38 +91,20 @@ fun EditPOIScreen(modifier: Modifier.Companion, navController: NavHostController
     ) {
 
         if(isError)
-            Text(
-                text = "Preencher todos os campos (corretamente)",
-                modifier = Modifier
-                    .align(Alignment.CenterHorizontally),
-                color = Color.Red
-            )
+            ErrorAlertDialog {
+                isError = false
+            }
+
         Text(
-            text = "POI Name",
+            text = poiName,
+            textAlign = TextAlign.Center,
+            fontSize = 26.sp,
             modifier = Modifier
-                .align(Alignment.CenterHorizontally)
+                .fillMaxWidth()
+                .padding(0.dp, 12.dp)
         )
 
-        OutlinedTextField(
-            value = poiName,
-            onValueChange ={
-                poiName = it
-                validateForm()
-            },
-            singleLine = true,
-            keyboardActions = KeyboardActions {
-                focusManager.moveFocus(FocusDirection.Next)
-            },
-            enabled = false,
-            label = { Text(text = "POI Name") },
-
-        )
         Spacer(modifier = Modifier.height(16.dp))
-        Text(
-            text = "POI Description",
-            modifier = Modifier
-                .align(Alignment.CenterHorizontally)
-        )
         OutlinedTextField(
             value = poiDescription,
             onValueChange ={
@@ -136,7 +116,9 @@ fun EditPOIScreen(modifier: Modifier.Companion, navController: NavHostController
                 focusManager.clearFocus()
             },
             label = { Text(text = "Location Description") },
+            modifier = Modifier.fillMaxWidth()
         )
+
         Spacer(modifier = Modifier.height(16.dp))
         DropDownComposable(
             navController = navController,
@@ -145,56 +127,39 @@ fun EditPOIScreen(modifier: Modifier.Companion, navController: NavHostController
         )
 
         Row(
+            verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier
                 .fillMaxWidth()
-                .height(IntrinsicSize.Min)
-                .padding(8.dp)
+                .padding(0.dp, 16.dp)
         ) {
-            Button(
-                onClick = {
-                    isInputEnabled = false;
-                    latitude = (location.value?.latitude ?: 0.0).toString()
-                    longitude = (location.value?.longitude ?: 0.0).toString()
-                    writenCoords = false
-                    validateForm()
-
+            Text(
+                text = "Get Coordinates",
+                textAlign = TextAlign.Center,
+                modifier = Modifier.padding(6.dp, 0.dp)
+            )
+            Switch(
+                checked = isInputEnabled,
+                onCheckedChange = {
+                    isInputEnabled = it
+                    writenCoords = it
                 },
-                modifier = Modifier
-                    .weight(1f)
-                    .height(96.dp)
-                    .padding(end = 8.dp),
-                colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.primary),
-                shape = CutCornerShape(percent = 0)
-                ) {
-                Text(text = "Get coordinates from current location")
-            }
-
-            Button(
-                onClick = {
-                    isInputEnabled = true
-                    writenCoords = true
-                    validateForm()
-                },
-                modifier = Modifier
-                    .weight(1f)
-                    .height(96.dp)
-                    .padding(end = 8.dp),
-                colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.primary),
-                shape = CutCornerShape(percent = 0)
-                ) {
-                Text(text = "Write coordinates")
-            }
+                modifier = Modifier.padding(4.dp, 0.dp)
+            )
+            Text(
+                text = "Write Coordinates",
+                textAlign = TextAlign.Center,
+                modifier = Modifier.padding(6.dp, 0.dp)
+            )
         }
 
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(IntrinsicSize.Min)
-                .padding(8.dp)
+                .padding(0.dp, 12.dp)
         ) {
             OutlinedTextField(
                 value = longitude,
-                onValueChange = {
+                onValueChange ={
                     longitude = it
                     validateForm()
                 },
@@ -204,24 +169,27 @@ fun EditPOIScreen(modifier: Modifier.Companion, navController: NavHostController
                 },
                 label = { Text(text = "Longitude") },
                 enabled = isInputEnabled,
-                modifier = Modifier.weight(1f)
+                modifier = Modifier
+                    .weight(1f, false)
             )
+            Spacer(modifier = Modifier.width(8.dp))
             OutlinedTextField(
                 value = latitude,
-                onValueChange = {
+                onValueChange ={
                     latitude = it
                     validateForm()
                 },
                 singleLine = true,
                 keyboardActions = KeyboardActions {
-                    focusManager.moveFocus(FocusDirection.Next)
+                    focusManager.clearFocus()
                 },
                 label = { Text(text = "Latitude") },
                 enabled = isInputEnabled,
-                modifier = Modifier.weight(1f)
-
+                modifier = Modifier
+                    .weight(1f, false)
             )
         }
+
         Box(
             modifier = Modifier
                 .fillMaxSize()
