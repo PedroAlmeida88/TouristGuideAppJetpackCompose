@@ -10,4 +10,23 @@
     <string name="msgPassword">Palavra-passe</string>
     <string name="msgHomeMenu">Menu Inicial</string>
     <string name="msgLogout">Sair da Conta</string>
+    <string name="btnSubmit">Adicionar</string>
+    <string name="msgName">Nome</string>
+    <string name="msgDescription">Descrição</string>
+    <string name="msgComment">Comentário</string>
+    <string name="msgGetCoordinates">Obtém Coordenadas</string>
+    <string name="msgWriteCoordinates">Escreve Coordenadas</string>
+    <string name="msgLatitude">Latitude</string>
+    <string name="msgLongitude">Longitude</string>
+    <string name="msgSuccess">Success</string>
+    <string name="msgHello">"Olá, "</string>
+    <string name="msgCloseToMe">Perto de mim</string>
+    <string name="msgAlphabetic">Ordem alfabética</string>
+    <string name="msgCoordsWritten">Coordenadas foram escritas</string>
+    <string name="msgCoordsLocation">Coordenadas obtidas pela localização</string>
+    <string name="msgRegisterPhrase">Se não possui conta, clique no botão abaixo</string>
+    <string name="btnRegister">Registe-se agora</string>
+    <string name="msgFirstName">Primeiro Nome</string>
+    <string name="msgLastName">Último Nome</string>
+    <string name="msgCreateAccount">Criar Conta</string>
 </resources>

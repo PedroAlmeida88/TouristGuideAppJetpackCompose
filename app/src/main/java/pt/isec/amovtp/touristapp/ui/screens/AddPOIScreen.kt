@@ -35,9 +35,11 @@ import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import pt.isec.amovtp.touristapp.R
 import pt.isec.amovtp.touristapp.data.Category
 import pt.isec.amovtp.touristapp.data.PointOfInterest
 import pt.isec.amovtp.touristapp.ui.composables.DropDownComposable
@@ -102,7 +104,7 @@ fun AddPOIScreen(modifier: Modifier.Companion, navController: NavHostController?
             keyboardActions = KeyboardActions {
                 focusManager.moveFocus(FocusDirection.Next)
             },
-            label = { Text(text = "POI Name") },
+            label = { Text(text = stringResource(id = R.string.msgName)) },
             modifier = Modifier.fillMaxWidth()
         )
 
@@ -117,7 +119,7 @@ fun AddPOIScreen(modifier: Modifier.Companion, navController: NavHostController?
             keyboardActions = KeyboardActions {
                 focusManager.clearFocus()
             },
-            label = { Text(text = "Location Description") },
+            label = { Text(text = stringResource(id = R.string.msgDescription)) },
             modifier = Modifier.fillMaxWidth()
         )
 
@@ -135,7 +137,7 @@ fun AddPOIScreen(modifier: Modifier.Companion, navController: NavHostController?
                 .padding(0.dp, 16.dp)
         ) {
             Text(
-                text = "Get Coordinates",
+                text = stringResource(id = R.string.msgGetCoordinates),
                 textAlign = TextAlign.Center,
                 modifier = Modifier.padding(6.dp, 0.dp)
             )
@@ -148,7 +150,7 @@ fun AddPOIScreen(modifier: Modifier.Companion, navController: NavHostController?
                 modifier = Modifier.padding(4.dp, 0.dp)
             )
             Text(
-                text = "Write Coordinates",
+                text = stringResource(id = R.string.msgWriteCoordinates),
                 textAlign = TextAlign.Center,
                 modifier = Modifier.padding(6.dp, 0.dp)
             )
@@ -169,7 +171,7 @@ fun AddPOIScreen(modifier: Modifier.Companion, navController: NavHostController?
                 keyboardActions = KeyboardActions {
                     focusManager.moveFocus(FocusDirection.Next)
                 },
-                label = { Text(text = "Longitude") },
+                label = { Text(text = stringResource(id = R.string.msgLongitude)) },
                 enabled = isInputEnabled,
                 modifier = Modifier
                     .weight(1f, false)
@@ -185,7 +187,7 @@ fun AddPOIScreen(modifier: Modifier.Companion, navController: NavHostController?
                 keyboardActions = KeyboardActions {
                     focusManager.clearFocus()
                 },
-                label = { Text(text = "Latitude") },
+                label = { Text(text = stringResource(id = R.string.msgLatitude)) },
                 enabled = isInputEnabled,
                 modifier = Modifier
                     .weight(1f, false)
@@ -226,7 +228,7 @@ fun AddPOIScreen(modifier: Modifier.Companion, navController: NavHostController?
                     firebaseViewModel.uploadPOIToStorage(directory = "images/" + selectedLocation?.name +"/pois/",imageName = poiName, path = locationViewModel.imagePath.value ?: "", locationName = selectedLocation?.name ?: "" )
                     locationViewModel.imagePath.value = null
                     navController?.popBackStack()
-                    Toast.makeText(context,"POI adicionada com sucesso!",Toast.LENGTH_LONG).show()
+                    Toast.makeText(context,"Success",Toast.LENGTH_LONG).show()
                 }
             },
             modifier = Modifier
@@ -235,7 +237,7 @@ fun AddPOIScreen(modifier: Modifier.Companion, navController: NavHostController?
                 .padding(8.dp),
             colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.primary),
         ) {
-            Text(text = "Submit")
+            Text(text = stringResource(id = R.string.btnSubmit))
         }
 
 

@@ -35,10 +35,12 @@ import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import pt.isec.amovtp.touristapp.R
 import pt.isec.amovtp.touristapp.data.Location
 import pt.isec.amovtp.touristapp.ui.composables.ErrorAlertDialog
 import pt.isec.amovtp.touristapp.ui.composables.TakePhotoOrLoadFromGallery
@@ -108,7 +110,7 @@ fun EditLocationScreen( navController: NavHostController?, locationViewModel: Lo
             keyboardActions = KeyboardActions {
                 focusManager.clearFocus()
             },
-            label = { Text(text = "Location Description") },
+            label = { Text(text = stringResource(id = R.string.msgDescription)) },
             modifier = Modifier.fillMaxWidth()
         )
 
@@ -120,7 +122,7 @@ fun EditLocationScreen( navController: NavHostController?, locationViewModel: Lo
                 .padding(16.dp)
         ) {
             Text(
-                text = "Get Coordinates",
+                text = stringResource(id = R.string.msgGetCoordinates),
                 textAlign = TextAlign.Center,
                 modifier = Modifier.padding(6.dp, 0.dp)
             )
@@ -133,7 +135,7 @@ fun EditLocationScreen( navController: NavHostController?, locationViewModel: Lo
                 modifier = Modifier.padding(4.dp, 0.dp)
             )
             Text(
-                text = "Write Coordinates",
+                text = stringResource(id = R.string.msgWriteCoordinates),
                 textAlign = TextAlign.Center,
                 modifier = Modifier.padding(6.dp, 0.dp)
             )
@@ -154,7 +156,7 @@ fun EditLocationScreen( navController: NavHostController?, locationViewModel: Lo
                 keyboardActions = KeyboardActions {
                     focusManager.moveFocus(FocusDirection.Next)
                 },
-                label = { Text(text = "Longitude") },
+                label = { Text(text = stringResource(id = R.string.msgLongitude)) },
                 enabled = isInputEnabled,
                 modifier = Modifier
                     .weight(1f, false)
@@ -170,7 +172,7 @@ fun EditLocationScreen( navController: NavHostController?, locationViewModel: Lo
                 keyboardActions = KeyboardActions {
                     focusManager.clearFocus()
                 },
-                label = { Text(text = "Latitude") },
+                label = { Text(text = stringResource(id = R.string.msgLatitude)) },
                 enabled = isInputEnabled,
                 modifier = Modifier
                     .weight(1f, false)
@@ -210,7 +212,7 @@ fun EditLocationScreen( navController: NavHostController?, locationViewModel: Lo
                     firebaseViewModel.uploadLocationToStorage(directory = "images/"+locationName ,imageName = locationName, path = locationViewModel.imagePath.value ?: "")
                     locationViewModel.imagePath.value = null
                     navController?.popBackStack()
-                    Toast.makeText(context,"Localização editada com sucesso!", Toast.LENGTH_LONG).show()
+                    Toast.makeText(context,"Success", Toast.LENGTH_LONG).show()
                 }
             },
             modifier = Modifier
@@ -219,7 +221,7 @@ fun EditLocationScreen( navController: NavHostController?, locationViewModel: Lo
                 .padding(8.dp),
             colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.primary),
         ) {
-            Text(text = "Submit")
+            Text(text = stringResource(id = R.string.btnSubmit))
         }
     }
 }

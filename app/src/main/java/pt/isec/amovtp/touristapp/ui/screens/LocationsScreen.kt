@@ -41,10 +41,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
+import pt.isec.amovtp.touristapp.R
 import pt.isec.amovtp.touristapp.data.Location
 import pt.isec.amovtp.touristapp.ui.viewmodels.FirebaseViewModel
 import pt.isec.amovtp.touristapp.ui.viewmodels.LocationViewModel
@@ -92,7 +94,7 @@ fun LocationsScreen(navController: NavHostController?,viewModel : LocationViewMo
                     locations = locations.sortedBy { it.name }
                 }
             ) {
-                Text(text = "Ordem Alfabética")
+                Text(text = stringResource(id = R.string.msgAlphabetic))
             }
             Spacer(modifier = Modifier.width(12.dp))
             Button(
@@ -107,7 +109,7 @@ fun LocationsScreen(navController: NavHostController?,viewModel : LocationViewMo
                     }
                 }
             ) {
-                Text(text = "Perto de mim")
+                Text(text = stringResource(id = R.string.msgCloseToMe))
             }
         }
         Spacer(Modifier.height(16.dp))
@@ -247,10 +249,10 @@ fun LocationsScreen(navController: NavHostController?,viewModel : LocationViewMo
                                         fontSize = 8.sp
                                     )
                                     if (location.writenCoords)
-                                        Text(text = "Coords were writen", fontSize = 8.sp)
+                                        Text(text = stringResource(id = R.string.msgCoordsWritten), fontSize = 8.sp)
                                     else
                                         Text(
-                                            text = "Coords were got from location",
+                                            text = stringResource(id = R.string.msgCoordsLocation),
                                             fontSize = 8.sp
                                         )
                                 }

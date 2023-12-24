@@ -134,7 +134,7 @@ fun LoginScreen(
                 .align(Alignment.BottomCenter)
         ) {
             Text(
-                text = "If you don't have an account, click the button bellow",
+                text = stringResource(id = R.string.msgRegisterPhrase),
                 textAlign = TextAlign.Center,
                 softWrap = true,
                 //modifier = Modifier.weight(3f, true)
@@ -147,7 +147,7 @@ fun LoginScreen(
                 colors = buttonColors(MaterialTheme.colorScheme.primary),
                 modifier = Modifier.align(Alignment.CenterHorizontally)
             ) {
-                Text(text = "Register Now")
+                Text(text = stringResource(id = R.string.btnRegister))
             }
         }
     }

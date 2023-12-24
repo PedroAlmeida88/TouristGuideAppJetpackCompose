@@ -27,7 +27,6 @@ import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.PasswordVisualTransformation
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
@@ -77,7 +76,7 @@ fun RegisterScreen(navController: NavHostController, firebaseViewModel: Firebase
         }
 
         Text(
-            text = "Create Account",
+            text = stringResource(id = R.string.msgCreateAccount),
             fontSize = 26.sp,
             modifier = Modifier.padding(24.dp, 0.dp, 24.dp, 64.dp)
         )
@@ -85,10 +84,6 @@ fun RegisterScreen(navController: NavHostController, firebaseViewModel: Firebase
         Column (
             modifier = Modifier.fillMaxWidth()
         ) {
-            Text(
-                text = "First and Last Name",
-                textAlign = TextAlign.Start
-            )
             Row (
                 modifier = Modifier
                     .fillMaxWidth()
@@ -103,7 +98,7 @@ fun RegisterScreen(navController: NavHostController, firebaseViewModel: Firebase
                     keyboardActions = KeyboardActions{
                         focusManager.moveFocus(FocusDirection.Next)
                     },
-                    label = { Text(text = "First Name") },
+                    label = { Text(text = stringResource(id = R.string.msgFirstName)) },
                     modifier = Modifier.weight(1f, false)
                 )
                 Spacer(modifier = Modifier.width(8.dp))
@@ -117,18 +112,13 @@ fun RegisterScreen(navController: NavHostController, firebaseViewModel: Firebase
                     keyboardActions = KeyboardActions{
                         focusManager.moveFocus(FocusDirection.Next)
                     },
-                    label = { Text(text = "Last Name") },
+                    label = { Text(text = stringResource(id = R.string.msgLastName)) },
                     modifier = Modifier.weight(1f, false)
                 )
             }
         }
 
         Spacer(modifier = Modifier.height(20.dp))
-        Text(
-            text = "Email",
-            textAlign = TextAlign.Start,
-            modifier = Modifier.fillMaxWidth()
-        )
         OutlinedTextField(
             value = email,
             onValueChange ={
@@ -139,16 +129,11 @@ fun RegisterScreen(navController: NavHostController, firebaseViewModel: Firebase
             keyboardActions = KeyboardActions{
                 focusManager.moveFocus(FocusDirection.Next)
             },
-            label = { Text(text = "Email") },
+            label = { Text(text = stringResource(id = R.string.msgUsername)) },
             modifier = Modifier.fillMaxWidth()
         )
 
         Spacer(modifier = Modifier.height(20.dp))
-        Text(
-            text = "Password",
-            textAlign = TextAlign.Start,
-            modifier = Modifier.fillMaxWidth()
-        )
         OutlinedTextField(
             value = password,
             onValueChange = {
@@ -178,7 +163,7 @@ fun RegisterScreen(navController: NavHostController, firebaseViewModel: Firebase
             },
             colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.primary),
         ) {
-            Text(text = "Register")
+            Text(text = stringResource(id = R.string.btnRegister))
         }
     }
 }

@@ -45,8 +45,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import pt.isec.amovtp.touristapp.R
 import pt.isec.amovtp.touristapp.data.Category
 import pt.isec.amovtp.touristapp.ui.composables.ErrorAlertDialog
 import pt.isec.amovtp.touristapp.ui.viewmodels.FirebaseViewModel
@@ -106,7 +108,7 @@ fun AddCategoryScreen(modifier: Modifier, navController: NavHostController?, fir
                 }
 
             OutlinedTextField(
-                label = { Text(text = "Name") },
+                label = { Text(text = stringResource(id = R.string.msgName)) },
                 value = categoryName,
                 singleLine = true,
                 keyboardActions = KeyboardActions {
@@ -159,7 +161,7 @@ fun AddCategoryScreen(modifier: Modifier, navController: NavHostController?, fir
 
         Spacer(modifier = Modifier.height(8.dp))
         OutlinedTextField(
-            label = { Text(text = "Description") },
+            label = { Text(text = stringResource(id = R.string.msgDescription)) },
             value = categoryDescription,
             singleLine = true,
             keyboardActions = KeyboardActions {
@@ -189,7 +191,7 @@ fun AddCategoryScreen(modifier: Modifier, navController: NavHostController?, fir
                 }
             }
         ) {
-            Text(text = "Submit")
+            Text(text = stringResource(id = R.string.btnSubmit))
         }
     }
 }

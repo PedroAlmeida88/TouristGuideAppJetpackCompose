@@ -10,4 +10,23 @@
     <string name="msgPassword">Password</string>
     <string name="msgHomeMenu">Home Menu</string>
     <string name="msgLogout">Logout</string>
+    <string name="btnSubmit">Submit</string>
+    <string name="msgName">Name</string>
+    <string name="msgDescription">Description</string>
+    <string name="msgComment">Comment</string>
+    <string name="msgGetCoordinates">" Get Coordinates"</string>
+    <string name="msgWriteCoordinates">Write Coordinates</string>
+    <string name="msgLatitude">Latitude</string>
+    <string name="msgLongitude">Longitude</string>
+    <string name="msgSuccess">Success</string>
+    <string name="msgHello">"Hello, "</string>
+    <string name="msgCloseToMe">Close to me</string>
+    <string name="msgAlphabetic">Alphabetic Order</string>
+    <string name="msgCoordsWritten">Coords were written</string>
+    <string name="msgCoordsLocation">Coords obtain from location</string>
+    <string name="msgRegisterPhrase">If you don\'t have an account, click the button below</string>
+    <string name="btnRegister">Register Now</string>
+    <string name="msgFirstName">First Name</string>
+    <string name="msgLastName">Last Name</string>
+    <string name="msgCreateAccount">Create Account</string>
 </resources>

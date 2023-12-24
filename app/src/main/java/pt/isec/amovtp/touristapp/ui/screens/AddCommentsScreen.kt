@@ -35,9 +35,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import pt.isec.amovtp.touristapp.R
 import pt.isec.amovtp.touristapp.data.Comment
 import pt.isec.amovtp.touristapp.ui.composables.ErrorAlertDialog
 import pt.isec.amovtp.touristapp.ui.composables.RatingBar
@@ -87,7 +89,7 @@ fun AddCommentsScreen(modfier: Modifier.Companion, locationViewModel: LocationVi
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
-            text = "Comentários [${selectedPoi?.name}]",
+            text = "Comentários" + selectedPoi?.name,
             fontSize = 24.sp,
             textAlign = TextAlign.Center,
             modifier = Modifier
@@ -119,7 +121,7 @@ fun AddCommentsScreen(modfier: Modifier.Companion, locationViewModel: LocationVi
                     },
                     singleLine = false,
                     maxLines = 5,
-                    label = { Text(text = "Comment") },
+                    label = { Text(text = stringResource(id = R.string.msgComment)) },
                     enabled = isInputEnabled,
                     modifier = Modifier
                         .fillMaxWidth()
@@ -151,7 +153,7 @@ fun AddCommentsScreen(modfier: Modifier.Companion, locationViewModel: LocationVi
                     colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.primary),
                     shape = CutCornerShape(percent = 0)
                 ) {
-                    Text(text = "Submit Comment")
+                    Text(text = stringResource(id = R.string.btnSubmit))
                 }
             }
 
@@ -192,7 +194,7 @@ fun AddCommentsScreen(modfier: Modifier.Companion, locationViewModel: LocationVi
                     },
                     enabled = isRatingEnabled
                 ) {
-                    Icon(Icons.Default.ThumbUp, contentDescription = "Submit")
+                    Icon(Icons.Default.ThumbUp, contentDescription = stringResource(id = R.string.btnSubmit))
                 }
 
             }
@@ -212,9 +214,8 @@ fun AddCommentsScreen(modfier: Modifier.Companion, locationViewModel: LocationVi
                         .padding(8.dp),
                     elevation = CardDefaults.cardElevation(4.dp),
                     colors = CardDefaults.cardColors(
-                        containerColor = Color(128, 192, 255)
-                    ),
-                    onClick = {}
+                        containerColor = MaterialTheme.colorScheme.primary
+                    )
                 ) {
                     Column(
                         modifier = Modifier
@@ -223,30 +224,32 @@ fun AddCommentsScreen(modfier: Modifier.Companion, locationViewModel: LocationVi
                         horizontalAlignment = Alignment.Start
                     ) {
                         Row(
-                            modifier = Modifier.fillMaxWidth(),
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(4.dp),
                             horizontalArrangement = Arrangement.SpaceBetween
                         ) {
                             Text(
                                 text = comment!!.userName,
                                 fontSize = 14.sp,
-                                modifier = Modifier.weight(1f)
                             )
                             if(comment.rating != 0)
                                 Text(
                                     text = comment.rating.toString()+ "*", //+ Icons.Filled.Star,
                                     fontSize = 14.sp,
-                                    modifier = Modifier.weight(0.5f)
                                 )
                             Text(
                                 text = comment.date,
                                 fontSize = 14.sp,
-                                modifier = Modifier
-
                             )
                         }
                         Spacer(modifier = Modifier.height(4.dp))
                         if(comment?.description != "")
-                            Text(text = comment!!.description, fontSize = 20.sp)
+                            Text(
+                                text = comment!!.description,
+                                fontSize = 20.sp,
+                                modifier = Modifier.padding(4.dp)
+                            )
                     }
                 }
 
