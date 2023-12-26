@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
@@ -29,6 +30,7 @@ import androidx.compose.material.icons.Icons.Default
 import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -135,7 +137,7 @@ fun LocationsScreen(navController: NavHostController?,viewModel : LocationViewMo
                 .fillMaxSize()
         ) {
             items(locations) { location ->
-                val borderColor = when (location.approvals) {
+                val warningColor = when (location.approvals) {
                     0 -> Color.Red
                     1 -> Color.Yellow
                     else -> MaterialTheme.colorScheme.primary
@@ -145,7 +147,6 @@ fun LocationsScreen(navController: NavHostController?,viewModel : LocationViewMo
                         .fillMaxHeight()
                         .fillMaxWidth()
                         .padding(8.dp)
-                        .border(2.dp, borderColor, shape = RoundedCornerShape(16.dp))
                         .clip(shape = RoundedCornerShape(16.dp)),
                     elevation = CardDefaults.cardElevation(4.dp),
                     colors = CardDefaults.cardColors(
@@ -165,6 +166,37 @@ fun LocationsScreen(navController: NavHostController?,viewModel : LocationViewMo
                             .wrapContentHeight(Alignment.Bottom),
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
+                        //Linha do aviso
+                        if(location.approvals < 2){
+                            Row(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(8.dp)
+                                    .height(IntrinsicSize.Min),
+                                horizontalArrangement = Arrangement.Start,
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                Icon(
+                                    imageVector = Default.Warning,
+                                    contentDescription = null,
+                                    tint = warningColor,
+                                    modifier = Modifier.size(20.dp)
+                                )
+                                Spacer(modifier = Modifier.width(8.dp)) // Adiciona espaço entre o ícone e o texto
+                                Text(
+                                    text = "Atenção: esta localização ainda não foi aprovada (${location.approvals}/2)",
+                                    fontSize = 12.sp,
+                                    color = MaterialTheme.colorScheme.tertiary,
+                                )
+                            }
+                            Divider(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .height(2.dp)
+                                    .background(MaterialTheme.colorScheme.tertiary)
+                                //.padding(vertical = 16.dp)
+                            )
+                        }
                         //linha com a coluna de imagem e coluna de texto
                         Row (
                             modifier = Modifier
@@ -386,7 +418,7 @@ fun LandscapeLocationsScreen(navController: NavHostController?, viewModel: Locat
             columns = GridCells.Fixed(count = 2)
         ){
             items(locations) { location ->
-                val borderColor = when (location.approvals) {
+                val warningColor = when (location.approvals) {
                     0 -> Color.Red
                     1 -> Color.Yellow
                     else -> MaterialTheme.colorScheme.primary
@@ -396,7 +428,6 @@ fun LandscapeLocationsScreen(navController: NavHostController?, viewModel: Locat
                         .fillMaxHeight()
                         .fillMaxWidth()
                         .padding(8.dp)
-                        .border(2.dp, borderColor, shape = RoundedCornerShape(16.dp))
                         .clip(shape = RoundedCornerShape(16.dp)),
                     elevation = CardDefaults.cardElevation(4.dp),
                     colors = CardDefaults.cardColors(
@@ -416,6 +447,37 @@ fun LandscapeLocationsScreen(navController: NavHostController?, viewModel: Locat
                             .wrapContentHeight(Alignment.Bottom),
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
+                        //Linha do aviso
+                        if(location.approvals < 2){
+                            Row(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(8.dp)
+                                    .height(IntrinsicSize.Min),
+                                horizontalArrangement = Arrangement.Start,
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                Icon(
+                                    imageVector = Default.Warning,
+                                    contentDescription = null,
+                                    tint = warningColor,
+                                    modifier = Modifier.size(20.dp)
+                                )
+                                Spacer(modifier = Modifier.width(8.dp)) // Adiciona espaço entre o ícone e o texto
+                                Text(
+                                    text = "Atenção: esta localização ainda não foi aprovada (${location.approvals}/2)",
+                                    fontSize = 12.sp,
+                                    color = MaterialTheme.colorScheme.tertiary,
+                                )
+                            }
+                            Divider(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .height(2.dp)
+                                    .background(MaterialTheme.colorScheme.tertiary)
+                                //.padding(vertical = 16.dp)
+                            )
+                        }
                         //linha com a coluna de imagem e coluna de texto
                         Row (
                             modifier = Modifier

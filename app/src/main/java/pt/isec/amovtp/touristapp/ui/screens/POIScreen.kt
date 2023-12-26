@@ -14,6 +14,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
@@ -31,6 +33,7 @@ import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.FormatListNumberedRtl
 import androidx.compose.material.icons.filled.PhotoLibrary
 import androidx.compose.material.icons.filled.RestartAlt
+import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Divider
@@ -130,7 +133,7 @@ fun POIScreen(modifier: Modifier = Modifier, navController: NavHostController?, 
                 .fillMaxSize()
         ) {
             items(pois.filter { it.category.name == selectedCategory?.name || selectedCategory?.name == ""}) { poi ->
-                val borderColor = when (poi.approvals) {
+                val warningColor = when (poi.approvals) {
                     0 -> Color.Red
                     1 -> Color.Yellow
                     else -> MaterialTheme.colorScheme.primary
@@ -140,7 +143,6 @@ fun POIScreen(modifier: Modifier = Modifier, navController: NavHostController?, 
                         .fillMaxHeight()
                         .fillMaxWidth()
                         .padding(8.dp)
-                        .border(2.dp, borderColor, shape = RoundedCornerShape(16.dp))
                         .clip(shape = RoundedCornerShape(16.dp)),
                     elevation = CardDefaults.cardElevation(4.dp),
                     colors = CardDefaults.cardColors(
@@ -151,6 +153,36 @@ fun POIScreen(modifier: Modifier = Modifier, navController: NavHostController?, 
                         navController?.navigate(Screens.POI_DESCRIPTION.route)
                     }
                 ) {
+                    if(poi.approvals < 2){
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(8.dp)
+                                .height(IntrinsicSize.Min),
+                            horizontalArrangement = Arrangement.Start,
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Icon(
+                                imageVector = Default.Warning,
+                                contentDescription = null,
+                                tint = warningColor,
+                                modifier = Modifier.size(20.dp)
+                            )
+                            Spacer(modifier = Modifier.width(8.dp)) // Adiciona espaço entre o ícone e o texto
+                            Text(
+                                text = "Atenção: este POI ainda não foi aprovado (${poi.approvals}/2)",
+                                fontSize = 12.sp,
+                                color = MaterialTheme.colorScheme.tertiary,
+                            )
+                        }
+                        Divider(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .height(2.dp)
+                                .background(MaterialTheme.colorScheme.tertiary)
+                            //.padding(vertical = 16.dp)
+                        )
+                    }
                     //linha com a coluna de imagem e coluna de texto
                     Row (
                         modifier = Modifier
@@ -363,7 +395,7 @@ fun LandscapePOIScreen(navController: NavHostController?, viewModel: LocationVie
             columns = GridCells.Fixed(count = 2)
         ){
             items(pois.filter { it.category.name == selectedCategory?.name || selectedCategory?.name == ""}) { poi ->
-                val borderColor = when (poi.approvals) {
+                val warningColor = when (poi.approvals) {
                     0 -> Color.Red
                     1 -> Color.Yellow
                     else -> MaterialTheme.colorScheme.primary
@@ -373,7 +405,6 @@ fun LandscapePOIScreen(navController: NavHostController?, viewModel: LocationVie
                         .fillMaxHeight()
                         .fillMaxWidth()
                         .padding(8.dp)
-                        .border(2.dp, borderColor, shape = RoundedCornerShape(16.dp))
                         .clip(shape = RoundedCornerShape(16.dp)),
                     elevation = CardDefaults.cardElevation(4.dp),
                     colors = CardDefaults.cardColors(
@@ -384,6 +415,36 @@ fun LandscapePOIScreen(navController: NavHostController?, viewModel: LocationVie
                         navController?.navigate(Screens.POI_DESCRIPTION.route)
                     }
                 ) {
+                    if(poi.approvals < 2){
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(8.dp)
+                                .height(IntrinsicSize.Min),
+                            horizontalArrangement = Arrangement.Start,
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Icon(
+                                imageVector = Default.Warning,
+                                contentDescription = null,
+                                tint = warningColor,
+                                modifier = Modifier.size(20.dp)
+                            )
+                            Spacer(modifier = Modifier.width(8.dp)) // Adiciona espaço entre o ícone e o texto
+                            Text(
+                                text = "Atenção: este POI ainda não foi aprovado (${poi.approvals}/2)",
+                                fontSize = 12.sp,
+                                color = MaterialTheme.colorScheme.tertiary,
+                            )
+                        }
+                        Divider(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .height(2.dp)
+                                .background(MaterialTheme.colorScheme.tertiary)
+                            //.padding(vertical = 16.dp)
+                        )
+                    }
                     //linha com a coluna de imagem e coluna de texto
                     Row (
                         modifier = Modifier
