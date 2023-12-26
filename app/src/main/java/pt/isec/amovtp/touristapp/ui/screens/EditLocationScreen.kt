@@ -93,6 +93,7 @@ fun EditLocationScreen( navController: NavHostController?, locationViewModel: Lo
             text = locationName,
             textAlign = TextAlign.Center,
             fontSize = 24.sp,
+            color = MaterialTheme.colorScheme.tertiary,
             modifier = Modifier.fillMaxWidth()
         )
 
@@ -107,7 +108,7 @@ fun EditLocationScreen( navController: NavHostController?, locationViewModel: Lo
             keyboardActions = KeyboardActions {
                 focusManager.clearFocus()
             },
-            label = { Text(text = stringResource(id = R.string.msgDescription)) },
+            label = { Text(text = stringResource(id = R.string.msgDescription), color = MaterialTheme.colorScheme.tertiary) },
             modifier = Modifier.fillMaxWidth()
         )
 
@@ -119,6 +120,7 @@ fun EditLocationScreen( navController: NavHostController?, locationViewModel: Lo
         ) {
             Text(
                 text = stringResource(id = R.string.msgGetCoordinates),
+                color = MaterialTheme.colorScheme.tertiary,
                 textAlign = TextAlign.Center,
                 modifier = Modifier.padding(6.dp, 0.dp)
             )
@@ -133,6 +135,7 @@ fun EditLocationScreen( navController: NavHostController?, locationViewModel: Lo
             Text(
                 text = stringResource(id = R.string.msgWriteCoordinates),
                 textAlign = TextAlign.Center,
+                color = MaterialTheme.colorScheme.tertiary,
                 modifier = Modifier.padding(6.dp, 0.dp)
             )
         }
@@ -152,7 +155,7 @@ fun EditLocationScreen( navController: NavHostController?, locationViewModel: Lo
                 keyboardActions = KeyboardActions {
                     focusManager.moveFocus(FocusDirection.Next)
                 },
-                label = { Text(text = stringResource(id = R.string.msgLongitude)) },
+                label = { Text(text = stringResource(id = R.string.msgLongitude),color = MaterialTheme.colorScheme.tertiary) },
                 enabled = isInputEnabled,
                 modifier = Modifier
                     .weight(1f, false)
@@ -168,7 +171,7 @@ fun EditLocationScreen( navController: NavHostController?, locationViewModel: Lo
                 keyboardActions = KeyboardActions {
                     focusManager.clearFocus()
                 },
-                label = { Text(text = stringResource(id = R.string.msgLatitude)) },
+                label = { Text(text = stringResource(id = R.string.msgLatitude),color = MaterialTheme.colorScheme.tertiary) },
                 enabled = isInputEnabled,
                 modifier = Modifier
                     .weight(1f, false)

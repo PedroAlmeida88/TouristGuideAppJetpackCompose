@@ -1,6 +1,7 @@
 package pt.isec.amovtp.touristapp.ui.screens
 
 import android.widget.Toast
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -16,6 +17,10 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyGridScope
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -27,7 +32,10 @@ import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Divider
+import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -97,7 +105,10 @@ fun LocationsScreen(navController: NavHostController?,viewModel : LocationViewMo
                     locations = locations.sortedBy { it.name }
                 }
             ) {
-                Text(text = stringResource(id = R.string.msgAlphabetic))
+                Text(
+                    text = stringResource(id = R.string.msgAlphabetic),
+                    color = MaterialTheme.colorScheme.secondary
+                )
             }
             Spacer(modifier = Modifier.width(12.dp))
             Button(
@@ -112,7 +123,10 @@ fun LocationsScreen(navController: NavHostController?,viewModel : LocationViewMo
                     }
                 }
             ) {
-                Text(text = stringResource(id = R.string.msgCloseToMe))
+                Text(
+                    text = stringResource(id = R.string.msgCloseToMe),
+                    color = MaterialTheme.colorScheme.secondary
+                )
             }
         }
         Spacer(Modifier.height(16.dp))
@@ -124,7 +138,7 @@ fun LocationsScreen(navController: NavHostController?,viewModel : LocationViewMo
                 val borderColor = when (location.approvals) {
                     0 -> Color.Red
                     1 -> Color.Yellow
-                    else -> MaterialTheme.colorScheme.tertiary
+                    else -> MaterialTheme.colorScheme.primary
                 }
                 Card(
                     modifier = Modifier
@@ -135,7 +149,7 @@ fun LocationsScreen(navController: NavHostController?,viewModel : LocationViewMo
                         .clip(shape = RoundedCornerShape(16.dp)),
                     elevation = CardDefaults.cardElevation(4.dp),
                     colors = CardDefaults.cardColors(
-                        containerColor = MaterialTheme.colorScheme.tertiary
+                        containerColor = MaterialTheme.colorScheme.primary
                     ),
 
                     onClick = {
@@ -143,136 +157,168 @@ fun LocationsScreen(navController: NavHostController?,viewModel : LocationViewMo
                         navController?.navigate(Screens.POI.route)
                     }
                 ) {
-
+                    //Coluna com to_do o conteudo da card
                     Column(
                         modifier = Modifier
                             .fillMaxSize()
                             //.padding(8.dp)
                             .wrapContentHeight(Alignment.Bottom),
                         horizontalAlignment = Alignment.CenterHorizontally
-
                     ) {
-                        //Image(painter = painterResource(u = ), contentDescription = "city picture")
-                        AsyncImage(model = location.photoUrl, contentDescription = "City Picture")
-                        Column(
+                        //linha com a coluna de imagem e coluna de texto
+                        Row (
                             modifier = Modifier
-                                .fillMaxSize()
-                                .padding(8.dp)
-                                .wrapContentHeight(Alignment.Bottom),
-                            horizontalAlignment = Alignment.CenterHorizontally
-                        ) {
-                            Row(
+                                .fillMaxWidth()
+                                .height(200.dp)
+                        ){
+                            //  Coluna da imagem
+                            Column (
+                                verticalArrangement = Arrangement.Center,
+                                horizontalAlignment = Alignment.CenterHorizontally,
                                 modifier = Modifier
-                                    .fillMaxWidth()
-                                    .height(IntrinsicSize.Min),
-                                horizontalArrangement = Arrangement.SpaceBetween,
-                                verticalAlignment = Alignment.CenterVertically
+                                    .weight(1f)
+                                    .fillMaxHeight()
+                                    .padding(8.dp),
+                            ){
+                                AsyncImage(
+                                    model = location.photoUrl,
+                                    contentDescription = "City Picture"
+                                )
+                            }
+                            //Coluna do texto
+                            Column(
+                                verticalArrangement = Arrangement.Center,
+                                horizontalAlignment = Alignment.Start,
+                                modifier = Modifier
+                                    .weight(1.5f)
+                                    .fillMaxHeight()
+                                    .padding(8.dp),
+
                             ) {
-                                if(location.approvals < 2) {
-                                    Row (
-                                        verticalAlignment = Alignment.CenterVertically
-                                    ) {
-                                        IconButton(
-                                            onClick = {
-                                                firebaseViewModel.updateAprovalLocationInFirestore(
-                                                    location,
-                                                    userUID
-                                                )
-                                                firebaseViewModel.getLocationFromFirestore { loadedLocations ->
-                                                    locations = loadedLocations
-                                                    for (l in locations) {
-                                                        if (userUID in l.userUIDsApprovals || userUID == l.userUID) {
-                                                            l.enableBtn = false
-                                                        }
+                                Text(text = location.name, fontSize = 20.sp)
+                                Text(text = location.description, fontSize = 14.sp)
+
+                                Text(
+                                    text = "${location.latitude} ${location.longitude}",
+                                    fontSize = 8.sp,
+                                    color = MaterialTheme.colorScheme.tertiary
+                                )
+                                if (location.writenCoords)
+                                    Text(
+                                        text = stringResource(id = R.string.msgCoordsWritten),
+                                        fontSize = 8.sp,
+                                        color = MaterialTheme.colorScheme.tertiary
+
+                                    )
+                                else
+                                    Text(
+                                        text = stringResource(id = R.string.msgCoordsLocation),
+                                        fontSize = 8.sp,
+                                        color = MaterialTheme.colorScheme.tertiary
+                                    )
+                            }
+                        }
+                        Divider(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .height(2.dp)
+                                .background(MaterialTheme.colorScheme.tertiary)
+                            //.padding(vertical = 16.dp)
+                        )
+                        //Linha do icons
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .height(IntrinsicSize.Min),
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            if(location.approvals < 2) {
+                                Row (
+                                    verticalAlignment = Alignment.CenterVertically
+                                ) {
+                                    IconButton(
+                                        onClick = {
+                                            firebaseViewModel.updateAprovalLocationInFirestore(
+                                                location,
+                                                userUID
+                                            )
+                                            firebaseViewModel.getLocationFromFirestore { loadedLocations ->
+                                                locations = loadedLocations
+                                                for (l in locations) {
+                                                    if (userUID in l.userUIDsApprovals || userUID == l.userUID) {
+                                                        l.enableBtn = false
                                                     }
                                                 }
-                                            },
-                                            modifier = Modifier.padding(8.dp),
-                                            enabled = location.enableBtn
-                                        ) {
-                                            Icon(
-                                                imageVector = Default.CheckCircle,
-                                                contentDescription = null
-                                            )
-                                        }
-                                        Text(text = "${location.approvals}/2")
-                                    }
-
-                                }
-
-                                if(location.userUID == userUID) {
-                                    IconButton(
-                                        onClick = {
-                                            viewModel.selectedLocation = location
-                                            navController?.navigate(Screens.EDIT_LOCATION.route)
+                                            }
                                         },
                                         modifier = Modifier.padding(8.dp),
+                                        enabled = location.enableBtn
                                     ) {
                                         Icon(
-                                            imageVector = Default.Edit,
+                                            imageVector = Default.CheckCircle,
                                             contentDescription = null
                                         )
                                     }
-
-                                    IconButton(
-                                        onClick = {
-                                            if(location.totalPois == 0) {
-                                                firebaseViewModel.deleteLocationsFromFirestore(
-                                                    location
-                                                )
-                                                firebaseViewModel.getLocationFromFirestore { loadedLocations ->
-                                                    locations = loadedLocations
-                                                }
-                                                Toast.makeText(context, "Localização eliminada com sucesso!", Toast.LENGTH_LONG).show()
-                                            }else
-                                                Toast.makeText(context, "Localização não eliminada.Já existem POIS associados", Toast.LENGTH_LONG).show()
-
-                                        },
-                                        modifier = Modifier.padding(8.dp),
-                                    ) {
-                                        Icon(
-                                            imageVector = Default.Delete,
-                                            contentDescription = null
-                                        )
-                                    }
+                                    Text(text = "${location.approvals}/2")
                                 }
 
-                                Column(
-                                    modifier = Modifier
-                                        .weight(1f)
-                                        .fillMaxHeight()
-                                        .padding(8.dp),
-                                    verticalArrangement = Arrangement.Center,
-                                    horizontalAlignment = Alignment.CenterHorizontally
+                            }
+
+                            if(location.userUID == userUID) {
+                                IconButton(
+                                    onClick = {
+                                        viewModel.selectedLocation = location
+                                        navController?.navigate(Screens.EDIT_LOCATION.route)
+                                    },
+                                    modifier = Modifier.padding(8.dp),
                                 ) {
-                                    Text(text = location.name, fontSize = 20.sp)
-                                    Text(text = location.description, fontSize = 14.sp)
-                                    Text(
-                                        text = "${location.latitude} ${location.longitude}",
-                                        fontSize = 8.sp
+                                    Icon(
+                                        imageVector = Default.Edit,
+                                        contentDescription = null
                                     )
-                                    if (location.writenCoords)
-                                        Text(text = stringResource(id = R.string.msgCoordsWritten), fontSize = 8.sp)
-                                    else
-                                        Text(
-                                            text = stringResource(id = R.string.msgCoordsLocation),
-                                            fontSize = 8.sp
-                                        )
+                                }
+
+                                IconButton(
+                                    onClick = {
+                                        if(location.totalPois == 0) {
+                                            firebaseViewModel.deleteLocationsFromFirestore(
+                                                location
+                                            )
+                                            firebaseViewModel.getLocationFromFirestore { loadedLocations ->
+                                                locations = loadedLocations
+                                            }
+                                            Toast.makeText(context, "Localização eliminada com sucesso!", Toast.LENGTH_LONG).show()
+                                        }else
+                                            Toast.makeText(context, "Localização não eliminada.Já existem POIS associados", Toast.LENGTH_LONG).show()
+
+                                    },
+                                    modifier = Modifier.padding(8.dp),
+                                ) {
+                                    Icon(
+                                        imageVector = Default.Delete,
+                                        contentDescription = null
+                                    )
                                 }
                             }
                         }
                     }
-
                 }
+                Divider(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(2.dp)
+                        .background(MaterialTheme.colorScheme.tertiary)
+                        //.padding(vertical = 16.dp)
+                )
             }
         }
-
     }
-
 }
 
 @Composable
 fun LandscapeLocationsScreen(navController: NavHostController?, viewModel: LocationViewModel, firebaseViewModel: FirebaseViewModel) {
+    //geopoint
     val myLocation = viewModel.currentLocation.observeAsState()
 
     val context = LocalContext.current
@@ -293,26 +339,27 @@ fun LandscapeLocationsScreen(navController: NavHostController?, viewModel: Locat
 
         }
     }
-
     Column(
         verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
             .fillMaxSize()
             .padding(8.dp)
-            .verticalScroll(rememberScrollState())
     ) {
         Row(
             horizontalArrangement = Arrangement.Start,
             verticalAlignment = Alignment.Top
-        ) {
+        ){
 
             Button(
                 onClick = {
                     locations = locations.sortedBy { it.name }
                 }
             ) {
-                Text(text = stringResource(id = R.string.msgAlphabetic))
+                Text(
+                    text = stringResource(id = R.string.msgAlphabetic),
+                    color = MaterialTheme.colorScheme.secondary
+                )
             }
             Spacer(modifier = Modifier.width(12.dp))
             Button(
@@ -327,19 +374,22 @@ fun LandscapeLocationsScreen(navController: NavHostController?, viewModel: Locat
                     }
                 }
             ) {
-                Text(text = stringResource(id = R.string.msgCloseToMe))
+                Text(
+                    text = stringResource(id = R.string.msgCloseToMe),
+                    color = MaterialTheme.colorScheme.secondary
+                )
             }
         }
 
-        LazyRow(
-            modifier = Modifier
-                .fillMaxSize()
-        ) {
+        LazyVerticalGrid(
+            modifier = Modifier.fillMaxSize(),
+            columns = GridCells.Fixed(count = 2)
+        ){
             items(locations) { location ->
                 val borderColor = when (location.approvals) {
                     0 -> Color.Red
                     1 -> Color.Yellow
-                    else -> MaterialTheme.colorScheme.tertiary
+                    else -> MaterialTheme.colorScheme.primary
                 }
                 Card(
                     modifier = Modifier
@@ -350,7 +400,7 @@ fun LandscapeLocationsScreen(navController: NavHostController?, viewModel: Locat
                         .clip(shape = RoundedCornerShape(16.dp)),
                     elevation = CardDefaults.cardElevation(4.dp),
                     colors = CardDefaults.cardColors(
-                        containerColor = MaterialTheme.colorScheme.tertiary
+                        containerColor = MaterialTheme.colorScheme.primary
                     ),
 
                     onClick = {
@@ -358,128 +408,163 @@ fun LandscapeLocationsScreen(navController: NavHostController?, viewModel: Locat
                         navController?.navigate(Screens.POI.route)
                     }
                 ) {
-
+                    //Coluna com to_do o conteudo da card
                     Column(
                         modifier = Modifier
                             .fillMaxSize()
+                            //.padding(8.dp)
                             .wrapContentHeight(Alignment.Bottom),
                         horizontalAlignment = Alignment.CenterHorizontally
-
                     ) {
-                        //Image(painter = painterResource(u = ), contentDescription = "city picture")
-                        AsyncImage(model = location.photoUrl, contentDescription = "City Picture")
-                        Column(
+                        //linha com a coluna de imagem e coluna de texto
+                        Row (
                             modifier = Modifier
-                                .fillMaxSize()
-                                .padding(8.dp)
-                                .wrapContentHeight(Alignment.Bottom),
-                            horizontalAlignment = Alignment.CenterHorizontally
-                        ) {
-                            Row(
+                                .fillMaxWidth()
+                                .height(200.dp)
+                        ){
+                            //  Coluna da imagem
+                            Column (
+                                verticalArrangement = Arrangement.Center,
+                                horizontalAlignment = Alignment.CenterHorizontally,
                                 modifier = Modifier
-                                    .fillMaxWidth()
-                                    .height(IntrinsicSize.Min),
-                                horizontalArrangement = Arrangement.SpaceBetween,
-                                verticalAlignment = Alignment.CenterVertically
-                            ) {
-                                if(location.approvals < 2) {
-                                    Row (
-                                        verticalAlignment = Alignment.CenterVertically
-                                    ) {
-                                        IconButton(
-                                            onClick = {
-                                                firebaseViewModel.updateAprovalLocationInFirestore(
-                                                    location,
-                                                    userUID
-                                                )
-                                                firebaseViewModel.getLocationFromFirestore { loadedLocations ->
-                                                    locations = loadedLocations
-                                                    for (l in locations) {
-                                                        if (userUID in l.userUIDsApprovals || userUID == l.userUID) {
-                                                            l.enableBtn = false
-                                                        }
+                                    .weight(1f)
+                                    .fillMaxHeight()
+                                    .padding(8.dp),
+                            ){
+                                AsyncImage(
+                                    model = location.photoUrl,
+                                    contentDescription = "City Picture"
+                                )
+                            }
+                            //Coluna do texto
+                            Column(
+                                verticalArrangement = Arrangement.Center,
+                                horizontalAlignment = Alignment.Start,
+                                modifier = Modifier
+                                    .weight(1.5f)
+                                    .fillMaxHeight()
+                                    .padding(8.dp),
+
+                                ) {
+                                Text(text = location.name, fontSize = 20.sp)
+                                Text(text = location.description, fontSize = 14.sp)
+
+                                Text(
+                                    text = "${location.latitude} ${location.longitude}",
+                                    fontSize = 8.sp,
+                                    color = MaterialTheme.colorScheme.tertiary
+                                )
+                                if (location.writenCoords)
+                                    Text(
+                                        text = stringResource(id = R.string.msgCoordsWritten),
+                                        fontSize = 8.sp,
+                                        color = MaterialTheme.colorScheme.tertiary
+
+                                    )
+                                else
+                                    Text(
+                                        text = stringResource(id = R.string.msgCoordsLocation),
+                                        fontSize = 8.sp,
+                                        color = MaterialTheme.colorScheme.tertiary
+                                    )
+                            }
+                        }
+                        Divider(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .height(2.dp)
+                                .background(MaterialTheme.colorScheme.tertiary)
+                            //.padding(vertical = 16.dp)
+                        )
+                        //Linha do icons
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .height(IntrinsicSize.Min),
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            if(location.approvals < 2) {
+                                Row (
+                                    verticalAlignment = Alignment.CenterVertically
+                                ) {
+                                    IconButton(
+                                        onClick = {
+                                            firebaseViewModel.updateAprovalLocationInFirestore(
+                                                location,
+                                                userUID
+                                            )
+                                            firebaseViewModel.getLocationFromFirestore { loadedLocations ->
+                                                locations = loadedLocations
+                                                for (l in locations) {
+                                                    if (userUID in l.userUIDsApprovals || userUID == l.userUID) {
+                                                        l.enableBtn = false
                                                     }
                                                 }
-                                            },
-                                            modifier = Modifier.padding(8.dp),
-                                            enabled = location.enableBtn
-                                        ) {
-                                            Icon(
-                                                imageVector = Default.CheckCircle,
-                                                contentDescription = null
-                                            )
-                                        }
-                                        Text(text = "${location.approvals}/2")
-                                    }
-
-                                }
-
-                                if(location.userUID == userUID) {
-                                    IconButton(
-                                        onClick = {
-                                            viewModel.selectedLocation = location
-                                            navController?.navigate(Screens.EDIT_LOCATION.route)
+                                            }
                                         },
                                         modifier = Modifier.padding(8.dp),
+                                        enabled = location.enableBtn
                                     ) {
                                         Icon(
-                                            imageVector = Default.Edit,
+                                            imageVector = Default.CheckCircle,
                                             contentDescription = null
                                         )
                                     }
-
-                                    IconButton(
-                                        onClick = {
-                                            if(location.totalPois == 0) {
-                                                firebaseViewModel.deleteLocationsFromFirestore(
-                                                    location
-                                                )
-                                                firebaseViewModel.getLocationFromFirestore { loadedLocations ->
-                                                    locations = loadedLocations
-                                                }
-                                                Toast.makeText(context, "Localização eliminada com sucesso!", Toast.LENGTH_LONG).show()
-                                            }else
-                                                Toast.makeText(context, "Localização não eliminada.Já existem POIS associados", Toast.LENGTH_LONG).show()
-
-                                        },
-                                        modifier = Modifier.padding(8.dp),
-                                    ) {
-                                        Icon(
-                                            imageVector = Default.Delete,
-                                            contentDescription = null
-                                        )
-                                    }
+                                    Text(text = "${location.approvals}/2")
                                 }
 
-                                Column(
-                                    modifier = Modifier
-                                        .weight(1f)
-                                        .fillMaxHeight()
-                                        .padding(8.dp),
-                                    verticalArrangement = Arrangement.Center,
-                                    horizontalAlignment = Alignment.CenterHorizontally
+                            }
+
+                            if(location.userUID == userUID) {
+                                IconButton(
+                                    onClick = {
+                                        viewModel.selectedLocation = location
+                                        navController?.navigate(Screens.EDIT_LOCATION.route)
+                                    },
+                                    modifier = Modifier.padding(8.dp),
                                 ) {
-                                    Text(text = location.name, fontSize = 20.sp)
-                                    Text(text = location.description, fontSize = 14.sp)
-                                    Text(
-                                        text = "${location.latitude} ${location.longitude}",
-                                        fontSize = 8.sp
+                                    Icon(
+                                        imageVector = Default.Edit,
+                                        contentDescription = null
                                     )
-                                    if (location.writenCoords)
-                                        Text(text = stringResource(id = R.string.msgCoordsWritten), fontSize = 8.sp)
-                                    else
-                                        Text(
-                                            text = stringResource(id = R.string.msgCoordsLocation),
-                                            fontSize = 8.sp
-                                        )
+                                }
+
+                                IconButton(
+                                    onClick = {
+                                        if(location.totalPois == 0) {
+                                            firebaseViewModel.deleteLocationsFromFirestore(
+                                                location
+                                            )
+                                            firebaseViewModel.getLocationFromFirestore { loadedLocations ->
+                                                locations = loadedLocations
+                                            }
+                                            Toast.makeText(context, "Localização eliminada com sucesso!", Toast.LENGTH_LONG).show()
+                                        }else
+                                            Toast.makeText(context, "Localização não eliminada.Já existem POIS associados", Toast.LENGTH_LONG).show()
+
+                                    },
+                                    modifier = Modifier.padding(8.dp),
+                                ) {
+                                    Icon(
+                                        imageVector = Default.Delete,
+                                        contentDescription = null
+                                    )
                                 }
                             }
                         }
                     }
-
                 }
+                Divider(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(2.dp)
+                        .background(MaterialTheme.colorScheme.tertiary)
+                    //.padding(vertical = 16.dp)
+                )
             }
         }
+
 
     }
 }

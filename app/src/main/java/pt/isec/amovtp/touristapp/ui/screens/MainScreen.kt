@@ -28,6 +28,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -89,7 +90,10 @@ fun MainScreen(navController:NavHostController = rememberNavController(),
             if(currentScreen != null && Screens.valueOf(currentScreen!!.destination.route!!).showAppBar) {
                 CenterAlignedTopAppBar(
                     title = {
-                        Text(text = stringResource(R.string.app_name))
+                        Text(text = stringResource(R.string.app_name),
+                            color = MaterialTheme.colorScheme.tertiary
+                        )
+
                     },
                     navigationIcon = {
                         IconButton(onClick = { navController.navigateUp()

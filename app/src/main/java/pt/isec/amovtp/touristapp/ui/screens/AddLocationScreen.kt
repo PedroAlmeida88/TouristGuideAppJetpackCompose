@@ -90,6 +90,7 @@ fun AddLocationScreen(modifier: Modifier.Companion, navController: NavHostContro
             text = stringResource(id = R.string.msgAddLocation),
             fontSize = 26.sp,
             textAlign = TextAlign.Center,
+            color = MaterialTheme.colorScheme.tertiary,
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(0.dp, 24.dp)
@@ -105,7 +106,7 @@ fun AddLocationScreen(modifier: Modifier.Companion, navController: NavHostContro
             keyboardActions = KeyboardActions {
                 focusManager.moveFocus(FocusDirection.Next)
             },
-            label = { Text(text = stringResource(id = R.string.msgName)) },
+            label = { Text(text = stringResource(id = R.string.msgName),color = MaterialTheme.colorScheme.tertiary,) },
             modifier = Modifier.fillMaxWidth()
         )
 
@@ -120,7 +121,7 @@ fun AddLocationScreen(modifier: Modifier.Companion, navController: NavHostContro
             keyboardActions = KeyboardActions {
                 focusManager.clearFocus()
             },
-            label = { Text(text = stringResource(id = R.string.msgDescription)) },
+            label = { Text(text = stringResource(id = R.string.msgDescription),color = MaterialTheme.colorScheme.tertiary,) },
             modifier = Modifier.fillMaxWidth()
         )
 
@@ -132,6 +133,7 @@ fun AddLocationScreen(modifier: Modifier.Companion, navController: NavHostContro
         ) {
             Text(
                 text = stringResource(id = R.string.msgGetCoordinates),
+                color = MaterialTheme.colorScheme.tertiary,
                 textAlign = TextAlign.Center,
                 modifier = Modifier.padding(6.dp, 0.dp)
             )
@@ -145,6 +147,7 @@ fun AddLocationScreen(modifier: Modifier.Companion, navController: NavHostContro
             )
             Text(
                 text = stringResource(id = R.string.msgWriteCoordinates),
+                color = MaterialTheme.colorScheme.tertiary,
                 textAlign = TextAlign.Center,
                 modifier = Modifier.padding(6.dp, 0.dp)
             )
@@ -165,7 +168,7 @@ fun AddLocationScreen(modifier: Modifier.Companion, navController: NavHostContro
                 keyboardActions = KeyboardActions {
                     focusManager.moveFocus(FocusDirection.Next)
                 },
-                label = { Text(text = stringResource(id = R.string.msgLongitude)) },
+                label = { Text(text = stringResource(id = R.string.msgLongitude),color = MaterialTheme.colorScheme.tertiary) },
                 enabled = isInputEnabled,
                 modifier = Modifier
                     .weight(1f, false)
@@ -181,7 +184,7 @@ fun AddLocationScreen(modifier: Modifier.Companion, navController: NavHostContro
                 keyboardActions = KeyboardActions {
                     focusManager.clearFocus()
                 },
-                label = { Text(text = stringResource(id = R.string.msgLatitude)) },
+                label = { Text(text = stringResource(id = R.string.msgLatitude),color = MaterialTheme.colorScheme.tertiary) },
                 enabled = isInputEnabled,
                 modifier = Modifier
                     .weight(1f, false)
@@ -267,6 +270,7 @@ fun LandscapeAddLocationScreen(modifier: Modifier, navController: NavHostControl
 
         Text(
             text = stringResource(id = R.string.msgAddLocation),
+            color = MaterialTheme.colorScheme.tertiary,
             fontSize = 26.sp,
             textAlign = TextAlign.Center,
             modifier = Modifier
@@ -291,7 +295,7 @@ fun LandscapeAddLocationScreen(modifier: Modifier, navController: NavHostControl
                     keyboardActions = KeyboardActions {
                         focusManager.moveFocus(FocusDirection.Next)
                     },
-                    label = { Text(text = stringResource(id = R.string.msgName)) },
+                    label = { Text(text = stringResource(id = R.string.msgName),color = MaterialTheme.colorScheme.tertiary) },
                     modifier = Modifier.fillMaxWidth()
                 )
 
@@ -305,7 +309,7 @@ fun LandscapeAddLocationScreen(modifier: Modifier, navController: NavHostControl
                     keyboardActions = KeyboardActions {
                         focusManager.clearFocus()
                     },
-                    label = { Text(text = stringResource(id = R.string.msgDescription)) },
+                    label = { Text(text = stringResource(id = R.string.msgDescription),color = MaterialTheme.colorScheme.tertiary,) },
                     modifier = Modifier.fillMaxWidth()
                 )
 
@@ -317,6 +321,7 @@ fun LandscapeAddLocationScreen(modifier: Modifier, navController: NavHostControl
                 ) {
                     Text(
                         text = stringResource(id = R.string.msgGetCoordinates),
+                        color = MaterialTheme.colorScheme.tertiary,
                         textAlign = TextAlign.Center,
                         modifier = Modifier.padding(6.dp, 0.dp)
                     )
@@ -330,6 +335,7 @@ fun LandscapeAddLocationScreen(modifier: Modifier, navController: NavHostControl
                     )
                     Text(
                         text = stringResource(id = R.string.msgWriteCoordinates),
+                        color = MaterialTheme.colorScheme.tertiary,
                         textAlign = TextAlign.Center,
                         modifier = Modifier.padding(6.dp, 0.dp)
                     )
@@ -350,7 +356,7 @@ fun LandscapeAddLocationScreen(modifier: Modifier, navController: NavHostControl
                         keyboardActions = KeyboardActions {
                             focusManager.moveFocus(FocusDirection.Next)
                         },
-                        label = { Text(text = stringResource(id = R.string.msgLongitude)) },
+                        label = { Text(text = stringResource(id = R.string.msgLongitude),color = MaterialTheme.colorScheme.tertiary) },
                         enabled = isInputEnabled,
                         modifier = Modifier
                             .weight(1f, false)
@@ -366,7 +372,7 @@ fun LandscapeAddLocationScreen(modifier: Modifier, navController: NavHostControl
                         keyboardActions = KeyboardActions {
                             focusManager.clearFocus()
                         },
-                        label = { Text(text = stringResource(id = R.string.msgLatitude)) },
+                        label = { Text(text = stringResource(id = R.string.msgLatitude),color = MaterialTheme.colorScheme.tertiary) },
                         enabled = isInputEnabled,
                         modifier = Modifier
                             .weight(1f, false)

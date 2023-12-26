@@ -1,6 +1,8 @@
 package pt.isec.amovtp.touristapp.ui.screens
 
+import android.R
 import android.widget.Toast
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -15,6 +17,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -28,6 +33,7 @@ import androidx.compose.material.icons.filled.PhotoLibrary
 import androidx.compose.material.icons.filled.RestartAlt
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -92,8 +98,9 @@ fun POIScreen(modifier: Modifier = Modifier, navController: NavHostController?, 
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
             .fillMaxSize()
-            .padding(8.dp)
-    ) {
+            //.background(MaterialTheme.colorScheme.onBackground)
+            .padding(8.dp),
+        ) {
         Row(
             horizontalArrangement = Arrangement.Center,
             verticalAlignment = Alignment.CenterVertically,
@@ -126,7 +133,7 @@ fun POIScreen(modifier: Modifier = Modifier, navController: NavHostController?, 
                 val borderColor = when (poi.approvals) {
                     0 -> Color.Red
                     1 -> Color.Yellow
-                    else -> MaterialTheme.colorScheme.tertiary
+                    else -> MaterialTheme.colorScheme.primary
                 }
                 Card(
                     modifier = Modifier
@@ -137,143 +144,153 @@ fun POIScreen(modifier: Modifier = Modifier, navController: NavHostController?, 
                         .clip(shape = RoundedCornerShape(16.dp)),
                     elevation = CardDefaults.cardElevation(4.dp),
                     colors = CardDefaults.cardColors(
-                        containerColor = MaterialTheme.colorScheme.tertiary
+                        containerColor = MaterialTheme.colorScheme.primary
                     ),
-
                     onClick = {
                         viewModel.selectedPoi = poi
                         navController?.navigate(Screens.POI_DESCRIPTION.route)
                     }
                 ) {
-                    AsyncImage(model = poi.photoUrl, contentDescription = "Point of Interest Picture")
-                    Column(
+                    //linha com a coluna de imagem e coluna de texto
+                    Row (
                         modifier = Modifier
-                            .fillMaxSize()
-                            .padding(8.dp)
-                            .wrapContentHeight(Alignment.Bottom),
-                        horizontalAlignment = Alignment.CenterHorizontally
-
-                    ) {
-                        Row(
+                            .fillMaxWidth()
+                            .height(200.dp)
+                    ){
+                        //  Coluna da imagem
+                        Column (
+                            verticalArrangement = Arrangement.Center,
+                            horizontalAlignment = Alignment.CenterHorizontally,
                             modifier = Modifier
-                                .fillMaxWidth()
-                                .height(IntrinsicSize.Min),
-                            horizontalArrangement = Arrangement.SpaceBetween,
-                            verticalAlignment = Alignment.CenterVertically
+                                .weight(1f)
+                                .fillMaxHeight()
+                                .padding(8.dp),
+                        ){
+                            AsyncImage(model = poi.photoUrl, contentDescription = "Point of Interest Picture")
+                        }
+                        //Coluna do texto
+                        Column(
+                            verticalArrangement = Arrangement.Center,
+                            horizontalAlignment = Alignment.Start,
+                            modifier = Modifier
+                                .weight(1.5f)
+                                .fillMaxHeight()
+                                .padding(8.dp),
+
+                        ){
+                            Text(text = poi.name, fontSize = 20.sp,color = MaterialTheme.colorScheme.tertiary)
+                            Text(text = poi.description, fontSize = 14.sp,color = MaterialTheme.colorScheme.tertiary)
+                            Text(text = "${poi.latitude} ${poi.longitude}", fontSize = 8.sp,color = MaterialTheme.colorScheme.tertiary)
+                        }
+                    }
+                    Divider(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(2.dp)
+                            .background(MaterialTheme.colorScheme.tertiary)
+                        //.padding(vertical = 16.dp)
+                    )
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(IntrinsicSize.Min),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        IconButton(
+                            onClick = {
+                                viewModel.selectedPoi = poi
+                                navController?.navigate(Screens.ADD_COMMENTS.route)
+                            },
+                            modifier = Modifier.padding(4.dp, 0.dp),
                         ) {
-                            Column(
-                                modifier = Modifier
-                                    .weight(1f)
-                                    .fillMaxHeight()
-                                    .padding(8.dp),
-                                verticalArrangement = Arrangement.Center,
-                                horizontalAlignment = Alignment.CenterHorizontally
-                            ) {
-                                Text(text = poi.name, fontSize = 20.sp)
-                                Text(text = poi.description, fontSize = 14.sp)
-                                Text(text = "${poi.latitude} ${poi.longitude}", fontSize = 8.sp)
+                            Icon(
+                                painter = painterResource(id = android.R.drawable.sym_action_chat),
+                                contentDescription = null
+                            )
+                        }
+                        IconButton(
+                            onClick = {
+                                viewModel.selectedPoi = poi
+                                navController?.navigate(Screens.ADD_POI_PICTURES.route)
+                            },
+                            modifier = Modifier.padding(4.dp, 0.dp),
+                        ) {
+                            Icon(
+                                imageVector = Default.PhotoLibrary,
+                                contentDescription = null
+                            )
+                        }
+
+                        if (poi.approvals < 2) {
+                            Row (
+                                verticalAlignment = Alignment.CenterVertically,
+                                modifier = Modifier.padding(4.dp, 0.dp)
+                            ){
+                                IconButton(
+                                    onClick = {
+                                        firebaseViewModel.updateAprovalPOIsInFirestore(
+                                            selectedLocation,
+                                            poi,
+                                            userUID
+                                        )
+                                        firebaseViewModel.getPoisFromFirestore(selectedLocation) { loadedPois ->
+                                            pois = loadedPois
+                                            for (p in pois)
+                                                if (userUID in p.userUIDsApprovals || userUID == p.userUID)
+                                                    p.enableBtn = false
+                                        }
+
+                                    },
+                                    enabled = poi.enableBtn
+                                ) {
+                                    Icon(
+                                        imageVector = Default.CheckCircle,
+                                        contentDescription = null
+                                    )
+                                }
+                                Text(
+                                    text = "${poi.approvals}/2",
+                                )
                             }
                         }
-                        Row(
-                            verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.Center,
-                            modifier = Modifier
-                                .fillMaxWidth()
-                        ) {
+                        if(poi.userUID == userUID) {
                             IconButton(
                                 onClick = {
                                     viewModel.selectedPoi = poi
-                                    navController?.navigate(Screens.ADD_COMMENTS.route)
+                                    navController?.navigate(Screens.EDIT_POI.route)
                                 },
                                 modifier = Modifier.padding(4.dp, 0.dp),
                             ) {
                                 Icon(
-                                    painter = painterResource(id = android.R.drawable.sym_action_chat),
+                                    imageVector = Default.Edit,
                                     contentDescription = null
                                 )
                             }
+
                             IconButton(
                                 onClick = {
-                                    viewModel.selectedPoi = poi
-                                    navController?.navigate(Screens.ADD_POI_PICTURES.route)
-                                },
-                                modifier = Modifier.padding(4.dp, 0.dp),
-                            ) {
-                                Icon(
-                                    imageVector = Default.PhotoLibrary,
-                                    contentDescription = null
-                                )
-                            }
-
-                            if (poi.approvals < 2) {
-                                Row (
-                                    verticalAlignment = Alignment.CenterVertically,
-                                    modifier = Modifier.padding(4.dp, 0.dp)
-                                ){
-                                    IconButton(
-                                        onClick = {
-                                            firebaseViewModel.updateAprovalPOIsInFirestore(
-                                                selectedLocation,
-                                                poi,
-                                                userUID
-                                            )
-                                            firebaseViewModel.getPoisFromFirestore(selectedLocation) { loadedPois ->
-                                                pois = loadedPois
-                                                for (p in pois)
-                                                    if (userUID in p.userUIDsApprovals || userUID == p.userUID)
-                                                        p.enableBtn = false
-                                            }
-
-                                        },
-                                        enabled = poi.enableBtn
-                                    ) {
-                                        Icon(
-                                            imageVector = Default.CheckCircle,
-                                            contentDescription = null
-                                        )
-                                    }
-                                    Text(
-                                        text = "${poi.approvals}/2",
-                                    )
-                                }
-                            }
-                            if(poi.userUID == userUID) {
-                                IconButton(
-                                    onClick = {
-                                        viewModel.selectedPoi = poi
-                                        navController?.navigate(Screens.EDIT_POI.route)
-                                    },
-                                    modifier = Modifier.padding(4.dp, 0.dp),
-                                ) {
-                                    Icon(
-                                        imageVector = Default.Edit,
-                                        contentDescription = null
-                                    )
-                                }
-
-                                IconButton(
-                                    onClick = {
-                                        if(poi.approvals == 0) {
-                                            firebaseViewModel.deletePOIFromFirestore(selectedLocation?.name ?: "", poi)
-                                            firebaseViewModel.getPoisFromFirestore(selectedLocation) { loadedPois ->
-                                                pois = loadedPois
-                                            }
-                                            Toast.makeText(context, "Poi eliminada com sucesso!", Toast.LENGTH_LONG).show()
-                                        }else{
-                                            Toast.makeText(context, "Poi com já tem votos!", Toast.LENGTH_LONG).show()
-
+                                    if(poi.approvals == 0) {
+                                        firebaseViewModel.deletePOIFromFirestore(selectedLocation?.name ?: "", poi)
+                                        firebaseViewModel.getPoisFromFirestore(selectedLocation) { loadedPois ->
+                                            pois = loadedPois
                                         }
-                                    },
-                                    modifier = Modifier.padding(4.dp, 0.dp),
-                                ) {
-                                    Icon(
-                                        imageVector = Default.DeleteForever,
-                                        contentDescription = null
-                                    )
-                                }
+                                        Toast.makeText(context, "Poi eliminada com sucesso!", Toast.LENGTH_LONG).show()
+                                    }else{
+                                        Toast.makeText(context, "Poi com já tem votos!", Toast.LENGTH_LONG).show()
+
+                                    }
+                                },
+                                modifier = Modifier.padding(4.dp, 0.dp),
+                            ) {
+                                Icon(
+                                    imageVector = Default.DeleteForever,
+                                    contentDescription = null
+                                )
                             }
                         }
                     }
+
                 }
             }
         }
@@ -316,7 +333,6 @@ fun LandscapePOIScreen(navController: NavHostController?, viewModel: LocationVie
         modifier = Modifier
             .fillMaxSize()
             .padding(8.dp)
-            .verticalScroll(rememberScrollState())
     ) {
         Row(
             horizontalArrangement = Arrangement.Center,
@@ -342,15 +358,15 @@ fun LandscapePOIScreen(navController: NavHostController?, viewModel: LocationVie
             }
         }
         Spacer(Modifier.height(16.dp))
-        LazyRow(
-            modifier = Modifier
-                .fillMaxSize()
-        ) {
+        LazyVerticalGrid(
+            modifier = Modifier.fillMaxSize(),
+            columns = GridCells.Fixed(count = 2)
+        ){
             items(pois.filter { it.category.name == selectedCategory?.name || selectedCategory?.name == ""}) { poi ->
                 val borderColor = when (poi.approvals) {
                     0 -> Color.Red
                     1 -> Color.Yellow
-                    else -> MaterialTheme.colorScheme.tertiary
+                    else -> MaterialTheme.colorScheme.primary
                 }
                 Card(
                     modifier = Modifier
@@ -361,143 +377,153 @@ fun LandscapePOIScreen(navController: NavHostController?, viewModel: LocationVie
                         .clip(shape = RoundedCornerShape(16.dp)),
                     elevation = CardDefaults.cardElevation(4.dp),
                     colors = CardDefaults.cardColors(
-                        containerColor = MaterialTheme.colorScheme.tertiary
+                        containerColor = MaterialTheme.colorScheme.primary
                     ),
-
                     onClick = {
                         viewModel.selectedPoi = poi
                         navController?.navigate(Screens.POI_DESCRIPTION.route)
                     }
                 ) {
-                    AsyncImage(model = poi.photoUrl, contentDescription = "Point of Interest Picture")
-                    Column(
+                    //linha com a coluna de imagem e coluna de texto
+                    Row (
                         modifier = Modifier
-                            .fillMaxSize()
-                            .padding(8.dp)
-                            .wrapContentHeight(Alignment.Bottom),
-                        horizontalAlignment = Alignment.CenterHorizontally
-
-                    ) {
-                        Row(
+                            .fillMaxWidth()
+                            .height(200.dp)
+                    ){
+                        //  Coluna da imagem
+                        Column (
+                            verticalArrangement = Arrangement.Center,
+                            horizontalAlignment = Alignment.CenterHorizontally,
                             modifier = Modifier
-                                .fillMaxWidth()
-                                .height(IntrinsicSize.Min),
-                            horizontalArrangement = Arrangement.SpaceBetween,
-                            verticalAlignment = Alignment.CenterVertically
+                                .weight(1f)
+                                .fillMaxHeight()
+                                .padding(8.dp),
+                        ){
+                            AsyncImage(model = poi.photoUrl, contentDescription = "Point of Interest Picture")
+                        }
+                        //Coluna do texto
+                        Column(
+                            verticalArrangement = Arrangement.Center,
+                            horizontalAlignment = Alignment.Start,
+                            modifier = Modifier
+                                .weight(1.5f)
+                                .fillMaxHeight()
+                                .padding(8.dp),
+
+                            ){
+                            Text(text = poi.name, fontSize = 20.sp,color = MaterialTheme.colorScheme.tertiary)
+                            Text(text = poi.description, fontSize = 14.sp,color = MaterialTheme.colorScheme.tertiary)
+                            Text(text = "${poi.latitude} ${poi.longitude}", fontSize = 8.sp,color = MaterialTheme.colorScheme.tertiary)
+                        }
+                    }
+                    Divider(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(2.dp)
+                            .background(MaterialTheme.colorScheme.tertiary)
+                        //.padding(vertical = 16.dp)
+                    )
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(IntrinsicSize.Min),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        IconButton(
+                            onClick = {
+                                viewModel.selectedPoi = poi
+                                navController?.navigate(Screens.ADD_COMMENTS.route)
+                            },
+                            modifier = Modifier.padding(4.dp, 0.dp),
                         ) {
-                            Column(
-                                modifier = Modifier
-                                    .weight(1f)
-                                    .fillMaxHeight()
-                                    .padding(8.dp),
-                                verticalArrangement = Arrangement.Center,
-                                horizontalAlignment = Alignment.CenterHorizontally
-                            ) {
-                                Text(text = poi.name, fontSize = 20.sp)
-                                Text(text = poi.description, fontSize = 14.sp)
-                                Text(text = "${poi.latitude} ${poi.longitude}", fontSize = 8.sp)
+                            Icon(
+                                painter = painterResource(id = android.R.drawable.sym_action_chat),
+                                contentDescription = null
+                            )
+                        }
+                        IconButton(
+                            onClick = {
+                                viewModel.selectedPoi = poi
+                                navController?.navigate(Screens.ADD_POI_PICTURES.route)
+                            },
+                            modifier = Modifier.padding(4.dp, 0.dp),
+                        ) {
+                            Icon(
+                                imageVector = Default.PhotoLibrary,
+                                contentDescription = null
+                            )
+                        }
+
+                        if (poi.approvals < 2) {
+                            Row (
+                                verticalAlignment = Alignment.CenterVertically,
+                                modifier = Modifier.padding(4.dp, 0.dp)
+                            ){
+                                IconButton(
+                                    onClick = {
+                                        firebaseViewModel.updateAprovalPOIsInFirestore(
+                                            selectedLocation,
+                                            poi,
+                                            userUID
+                                        )
+                                        firebaseViewModel.getPoisFromFirestore(selectedLocation) { loadedPois ->
+                                            pois = loadedPois
+                                            for (p in pois)
+                                                if (userUID in p.userUIDsApprovals || userUID == p.userUID)
+                                                    p.enableBtn = false
+                                        }
+
+                                    },
+                                    enabled = poi.enableBtn
+                                ) {
+                                    Icon(
+                                        imageVector = Default.CheckCircle,
+                                        contentDescription = null
+                                    )
+                                }
+                                Text(
+                                    text = "${poi.approvals}/2",
+                                )
                             }
                         }
-                        Row(
-                            verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.Center,
-                            modifier = Modifier
-                                .fillMaxWidth()
-                        ) {
+                        if(poi.userUID == userUID) {
                             IconButton(
                                 onClick = {
                                     viewModel.selectedPoi = poi
-                                    navController?.navigate(Screens.ADD_COMMENTS.route)
+                                    navController?.navigate(Screens.EDIT_POI.route)
                                 },
                                 modifier = Modifier.padding(4.dp, 0.dp),
                             ) {
                                 Icon(
-                                    painter = painterResource(id = android.R.drawable.sym_action_chat),
+                                    imageVector = Default.Edit,
                                     contentDescription = null
                                 )
                             }
+
                             IconButton(
                                 onClick = {
-                                    viewModel.selectedPoi = poi
-                                    navController?.navigate(Screens.ADD_POI_PICTURES.route)
-                                },
-                                modifier = Modifier.padding(4.dp, 0.dp),
-                            ) {
-                                Icon(
-                                    imageVector = Default.PhotoLibrary,
-                                    contentDescription = null
-                                )
-                            }
-
-                            if (poi.approvals < 2) {
-                                Row (
-                                    verticalAlignment = Alignment.CenterVertically,
-                                    modifier = Modifier.padding(4.dp, 0.dp)
-                                ){
-                                    IconButton(
-                                        onClick = {
-                                            firebaseViewModel.updateAprovalPOIsInFirestore(
-                                                selectedLocation,
-                                                poi,
-                                                userUID
-                                            )
-                                            firebaseViewModel.getPoisFromFirestore(selectedLocation) { loadedPois ->
-                                                pois = loadedPois
-                                                for (p in pois)
-                                                    if (userUID in p.userUIDsApprovals || userUID == p.userUID)
-                                                        p.enableBtn = false
-                                            }
-
-                                        },
-                                        enabled = poi.enableBtn
-                                    ) {
-                                        Icon(
-                                            imageVector = Default.CheckCircle,
-                                            contentDescription = null
-                                        )
-                                    }
-                                    Text(
-                                        text = "${poi.approvals}/2",
-                                    )
-                                }
-                            }
-                            if(poi.userUID == userUID) {
-                                IconButton(
-                                    onClick = {
-                                        viewModel.selectedPoi = poi
-                                        navController?.navigate(Screens.EDIT_POI.route)
-                                    },
-                                    modifier = Modifier.padding(4.dp, 0.dp),
-                                ) {
-                                    Icon(
-                                        imageVector = Default.Edit,
-                                        contentDescription = null
-                                    )
-                                }
-
-                                IconButton(
-                                    onClick = {
-                                        if(poi.approvals == 0) {
-                                            firebaseViewModel.deletePOIFromFirestore(selectedLocation?.name ?: "", poi)
-                                            firebaseViewModel.getPoisFromFirestore(selectedLocation) { loadedPois ->
-                                                pois = loadedPois
-                                            }
-                                            Toast.makeText(context, "Poi eliminada com sucesso!", Toast.LENGTH_LONG).show()
-                                        }else{
-                                            Toast.makeText(context, "Poi com já tem votos!", Toast.LENGTH_LONG).show()
-
+                                    if(poi.approvals == 0) {
+                                        firebaseViewModel.deletePOIFromFirestore(selectedLocation?.name ?: "", poi)
+                                        firebaseViewModel.getPoisFromFirestore(selectedLocation) { loadedPois ->
+                                            pois = loadedPois
                                         }
-                                    },
-                                    modifier = Modifier.padding(4.dp, 0.dp),
-                                ) {
-                                    Icon(
-                                        imageVector = Default.DeleteForever,
-                                        contentDescription = null
-                                    )
-                                }
+                                        Toast.makeText(context, "Poi eliminada com sucesso!", Toast.LENGTH_LONG).show()
+                                    }else{
+                                        Toast.makeText(context, "Poi com já tem votos!", Toast.LENGTH_LONG).show()
+
+                                    }
+                                },
+                                modifier = Modifier.padding(4.dp, 0.dp),
+                            ) {
+                                Icon(
+                                    imageVector = Default.DeleteForever,
+                                    contentDescription = null
+                                )
                             }
                         }
                     }
+
                 }
             }
         }

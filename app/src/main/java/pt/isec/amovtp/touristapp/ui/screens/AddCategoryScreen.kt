@@ -34,6 +34,7 @@ import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -104,6 +105,7 @@ fun AddCategoryScreen(modifier: Modifier, navController: NavHostController?, fir
         Text(
             text = stringResource(id = R.string.msgAddCategory),
             fontSize = 26.sp,
+            color = MaterialTheme.colorScheme.tertiary,
             textAlign = TextAlign.Center,
             modifier = Modifier
                 .fillMaxWidth()
@@ -240,6 +242,7 @@ fun LandscapeAddCategoryScreen(modifier: Modifier = Modifier, navController: Nav
         Text(
             text = stringResource(id = R.string.msgAddCategory),
             fontSize = 26.sp,
+            color = MaterialTheme.colorScheme.tertiary,
             textAlign = TextAlign.Center,
             modifier = Modifier
                 .fillMaxWidth()

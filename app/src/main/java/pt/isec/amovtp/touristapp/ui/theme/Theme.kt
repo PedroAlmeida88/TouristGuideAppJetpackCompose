@@ -21,17 +21,30 @@ private val DarkColorScheme = darkColorScheme(
     onPrimary = Color.LightGray,
     secondary = Color(0xFF1E1E1E),
     onSecondary = Color.LightGray,
-    tertiary = Color(0xFF404040),
+    tertiary = Color.White,
     onTertiary = Color.LightGray,
 )
 
 private val LightColorScheme = lightColorScheme(
+
+    primary = Color(0xFFF7F2F9),
+    onPrimary = Color.DarkGray,
+    secondary = Color(0xFF644F9F),
+    onSecondary = Color.DarkGray,
+    tertiary = Color.Black,             //texto
+    onTertiary = Color.DarkGray,
+    onBackground = Color.LightGray,     //fundo
+
+
+    /*
     primary = Color(0xFF87CEEB),
     onPrimary = Color.DarkGray,
     secondary = Color(0xFFFFFFFF),
     onSecondary = Color.DarkGray,
     tertiary = Color(0xFFD3D3D3),
     onTertiary = Color.DarkGray
+
+     */
 
     /* Other default colors to override
     background = Color(0xFFFFFBFE),

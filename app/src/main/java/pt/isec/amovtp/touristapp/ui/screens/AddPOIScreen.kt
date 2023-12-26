@@ -96,6 +96,7 @@ fun AddPOIScreen(modifier: Modifier.Companion, navController: NavHostController?
         Text(
             text = stringResource(id = R.string.msgAddPOI),
             fontSize = 26.sp,
+            color = MaterialTheme.colorScheme.tertiary,
             textAlign = TextAlign.Center,
             modifier = Modifier
                 .fillMaxWidth()
@@ -112,7 +113,7 @@ fun AddPOIScreen(modifier: Modifier.Companion, navController: NavHostController?
             keyboardActions = KeyboardActions {
                 focusManager.moveFocus(FocusDirection.Next)
             },
-            label = { Text(text = stringResource(id = R.string.msgName)) },
+            label = { Text(text = stringResource(id = R.string.msgName),color = MaterialTheme.colorScheme.tertiary,) },
             modifier = Modifier.fillMaxWidth()
         )
 
@@ -127,7 +128,7 @@ fun AddPOIScreen(modifier: Modifier.Companion, navController: NavHostController?
             keyboardActions = KeyboardActions {
                 focusManager.clearFocus()
             },
-            label = { Text(text = stringResource(id = R.string.msgDescription)) },
+            label = { Text(text = stringResource(id = R.string.msgDescription),color = MaterialTheme.colorScheme.tertiary,) },
             modifier = Modifier.fillMaxWidth()
         )
 
@@ -146,6 +147,7 @@ fun AddPOIScreen(modifier: Modifier.Companion, navController: NavHostController?
         ) {
             Text(
                 text = stringResource(id = R.string.msgGetCoordinates),
+                color = MaterialTheme.colorScheme.tertiary,
                 textAlign = TextAlign.Center,
                 modifier = Modifier.padding(6.dp, 0.dp)
             )
@@ -159,6 +161,7 @@ fun AddPOIScreen(modifier: Modifier.Companion, navController: NavHostController?
             )
             Text(
                 text = stringResource(id = R.string.msgWriteCoordinates),
+                color = MaterialTheme.colorScheme.tertiary,
                 textAlign = TextAlign.Center,
                 modifier = Modifier.padding(6.dp, 0.dp)
             )
@@ -179,7 +182,7 @@ fun AddPOIScreen(modifier: Modifier.Companion, navController: NavHostController?
                 keyboardActions = KeyboardActions {
                     focusManager.moveFocus(FocusDirection.Next)
                 },
-                label = { Text(text = stringResource(id = R.string.msgLongitude)) },
+                label = { Text(text = stringResource(id = R.string.msgLongitude),color = MaterialTheme.colorScheme.tertiary,) },
                 enabled = isInputEnabled,
                 modifier = Modifier
                     .weight(1f, false)
@@ -195,7 +198,7 @@ fun AddPOIScreen(modifier: Modifier.Companion, navController: NavHostController?
                 keyboardActions = KeyboardActions {
                     focusManager.clearFocus()
                 },
-                label = { Text(text = stringResource(id = R.string.msgLatitude)) },
+                label = { Text(text = stringResource(id = R.string.msgLatitude),color = MaterialTheme.colorScheme.tertiary,) },
                 enabled = isInputEnabled,
                 modifier = Modifier
                     .weight(1f, false)
@@ -311,7 +314,7 @@ fun LandscapeAddPOIScreen(modifier: Modifier = Modifier, navController: NavHostC
                     keyboardActions = KeyboardActions {
                         focusManager.moveFocus(FocusDirection.Next)
                     },
-                    label = { Text(text = stringResource(id = R.string.msgName)) },
+                    label = { Text(text = stringResource(id = R.string.msgName),color = MaterialTheme.colorScheme.tertiary,) },
                     modifier = Modifier.fillMaxWidth()
                 )
 
@@ -326,7 +329,7 @@ fun LandscapeAddPOIScreen(modifier: Modifier = Modifier, navController: NavHostC
                     keyboardActions = KeyboardActions {
                         focusManager.clearFocus()
                     },
-                    label = { Text(text = stringResource(id = R.string.msgDescription)) },
+                    label = { Text(text = stringResource(id = R.string.msgDescription),color = MaterialTheme.colorScheme.tertiary,) },
                     modifier = Modifier.fillMaxWidth()
                 )
                 Spacer(modifier = Modifier.height(16.dp))
@@ -339,6 +342,7 @@ fun LandscapeAddPOIScreen(modifier: Modifier = Modifier, navController: NavHostC
                 ) {
                     Text(
                         text = stringResource(id = R.string.msgGetCoordinates),
+                        color = MaterialTheme.colorScheme.tertiary,
                         textAlign = TextAlign.Center,
                         modifier = Modifier.padding(6.dp, 0.dp)
                     )
@@ -352,6 +356,7 @@ fun LandscapeAddPOIScreen(modifier: Modifier = Modifier, navController: NavHostC
                     )
                     Text(
                         text = stringResource(id = R.string.msgWriteCoordinates),
+                        color = MaterialTheme.colorScheme.tertiary,
                         textAlign = TextAlign.Center,
                         modifier = Modifier.padding(6.dp, 0.dp)
                     )
@@ -372,7 +377,7 @@ fun LandscapeAddPOIScreen(modifier: Modifier = Modifier, navController: NavHostC
                         keyboardActions = KeyboardActions {
                             focusManager.moveFocus(FocusDirection.Next)
                         },
-                        label = { Text(text = stringResource(id = R.string.msgLongitude)) },
+                        label = { Text(text = stringResource(id = R.string.msgLongitude),color = MaterialTheme.colorScheme.tertiary,) },
                         enabled = isInputEnabled,
                         modifier = Modifier
                             .weight(1f, false)
@@ -388,7 +393,7 @@ fun LandscapeAddPOIScreen(modifier: Modifier = Modifier, navController: NavHostC
                         keyboardActions = KeyboardActions {
                             focusManager.clearFocus()
                         },
-                        label = { Text(text = stringResource(id = R.string.msgLatitude)) },
+                        label = { Text(text = stringResource(id = R.string.msgLatitude),color = MaterialTheme.colorScheme.tertiary,) },
                         enabled = isInputEnabled,
                         modifier = Modifier
                             .weight(1f, false)

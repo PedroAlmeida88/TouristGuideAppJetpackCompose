@@ -123,7 +123,7 @@ fun AddCommentsScreen(modfier: Modifier.Companion, locationViewModel: LocationVi
                     },
                     singleLine = false,
                     maxLines = 5,
-                    label = { Text(text = stringResource(id = R.string.msgComment)) },
+                    label = { Text(text = stringResource(id = R.string.msgComment),color = MaterialTheme.colorScheme.tertiary) },
                     enabled = isInputEnabled,
                     modifier = Modifier
                         .fillMaxWidth()
@@ -202,7 +202,7 @@ fun AddCommentsScreen(modfier: Modifier.Companion, locationViewModel: LocationVi
             }
 
         if(comments.size == 0){
-            Text(text = "Ainda não há comentários...", fontSize = 24.sp)
+            Text(text = "Ainda não há comentários...", fontSize = 24.sp,color = MaterialTheme.colorScheme.tertiary,)
         }
 
 
@@ -339,7 +339,7 @@ fun LandscapeAddCommentsScreen(modfier: Modifier.Companion, locationViewModel: L
                     },
                     singleLine = false,
                     maxLines = 5,
-                    label = { Text(text = stringResource(id = R.string.msgComment)) },
+                    label = { Text(text = stringResource(id = R.string.msgComment),color = MaterialTheme.colorScheme.tertiary) },
                     enabled = isInputEnabled,
                     modifier = Modifier
                         .weight(6f)
@@ -415,7 +415,7 @@ fun LandscapeAddCommentsScreen(modfier: Modifier.Companion, locationViewModel: L
             }
 
         if(comments.size == 0){
-            Text(text = "Ainda não há comentários...", fontSize = 24.sp)
+            Text(text = "Ainda não há comentários...", fontSize = 24.sp,color = MaterialTheme.colorScheme.tertiary)
         }
 
 

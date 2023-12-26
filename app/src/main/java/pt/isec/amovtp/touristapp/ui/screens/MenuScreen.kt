@@ -2,6 +2,7 @@ package pt.isec.amovtp.touristapp.ui.screens
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -20,6 +21,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -40,6 +42,7 @@ fun MenuScreen(
     Box(
         modifier = Modifier
             .fillMaxSize()
+            .background(MaterialTheme.colorScheme.onBackground)
     ) {
         Box (modifier = Modifier.align(Alignment.TopCenter)) {
             Column (modifier = Modifier.align(Alignment.TopCenter)) {
@@ -48,7 +51,8 @@ fun MenuScreen(
                         text= stringResource(id = R.string.msgHello) + firebaseViewModel.user.value?.firstName + " " + firebaseViewModel.user.value?.lastName,
                         fontSize = 26.sp,
                         modifier = Modifier
-                            .padding(24.dp, 64.dp, 24.dp, 24.dp)
+                            .padding(24.dp, 64.dp, 24.dp, 24.dp),
+                        color = MaterialTheme.colorScheme.tertiary
                     )
                 else
                     CircularProgressIndicator(
@@ -115,6 +119,7 @@ fun LandscapeMenuScreen(stringResource: String, navController: NavHostController
             Text(
                 text= stringResource(id = R.string.msgHello) + firebaseViewModel.user.value?.firstName + " " + firebaseViewModel.user.value?.lastName,
                 fontSize = 26.sp,
+                color = MaterialTheme.colorScheme.tertiary,
                 textAlign = TextAlign.Center,
                 modifier = Modifier
                     .padding(24.dp, 48.dp)

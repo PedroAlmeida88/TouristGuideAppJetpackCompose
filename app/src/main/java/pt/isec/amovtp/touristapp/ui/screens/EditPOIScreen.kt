@@ -99,6 +99,7 @@ fun EditPOIScreen(modifier: Modifier.Companion, navController: NavHostController
             text = poiName,
             textAlign = TextAlign.Center,
             fontSize = 26.sp,
+            color = MaterialTheme.colorScheme.tertiary,
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(0.dp, 12.dp)
@@ -115,7 +116,7 @@ fun EditPOIScreen(modifier: Modifier.Companion, navController: NavHostController
             keyboardActions = KeyboardActions {
                 focusManager.clearFocus()
             },
-            label = { Text(text = stringResource(id = R.string.msgDescription)) },
+            label = { Text(text = stringResource(id = R.string.msgDescription),color = MaterialTheme.colorScheme.tertiary,) },
             modifier = Modifier.fillMaxWidth()
         )
 
@@ -134,6 +135,7 @@ fun EditPOIScreen(modifier: Modifier.Companion, navController: NavHostController
         ) {
             Text(
                 text = stringResource(id = R.string.msgGetCoordinates),
+                color = MaterialTheme.colorScheme.tertiary,
                 textAlign = TextAlign.Center,
                 modifier = Modifier.padding(6.dp, 0.dp)
             )
@@ -147,6 +149,7 @@ fun EditPOIScreen(modifier: Modifier.Companion, navController: NavHostController
             )
             Text(
                 text = stringResource(id = R.string.msgWriteCoordinates),
+                color = MaterialTheme.colorScheme.tertiary,
                 textAlign = TextAlign.Center,
                 modifier = Modifier.padding(6.dp, 0.dp)
             )
@@ -167,7 +170,7 @@ fun EditPOIScreen(modifier: Modifier.Companion, navController: NavHostController
                 keyboardActions = KeyboardActions {
                     focusManager.moveFocus(FocusDirection.Next)
                 },
-                label = { Text(text = stringResource(id = R.string.msgLongitude)) },
+                label = { Text(text = stringResource(id = R.string.msgLongitude),color = MaterialTheme.colorScheme.tertiary,) },
                 enabled = isInputEnabled,
                 modifier = Modifier
                     .weight(1f, false)
@@ -183,7 +186,7 @@ fun EditPOIScreen(modifier: Modifier.Companion, navController: NavHostController
                 keyboardActions = KeyboardActions {
                     focusManager.clearFocus()
                 },
-                label = { Text(text = stringResource(id = R.string.msgLatitude)) },
+                label = { Text(text = stringResource(id = R.string.msgLatitude),color = MaterialTheme.colorScheme.tertiary,) },
                 enabled = isInputEnabled,
                 modifier = Modifier
                     .weight(1f, false)
@@ -279,6 +282,7 @@ fun LandscapeEditPOIScreen(modifier: Modifier = Modifier, navController: NavHost
             text = poiName,
             textAlign = TextAlign.Center,
             fontSize = 26.sp,
+            color = MaterialTheme.colorScheme.tertiary,
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(0.dp, 12.dp)
@@ -301,7 +305,7 @@ fun LandscapeEditPOIScreen(modifier: Modifier = Modifier, navController: NavHost
                     keyboardActions = KeyboardActions {
                         focusManager.clearFocus()
                     },
-                    label = { Text(text = stringResource(id = R.string.msgDescription)) },
+                    label = { Text(text = stringResource(id = R.string.msgDescription),color = MaterialTheme.colorScheme.tertiary) },
                     modifier = Modifier.fillMaxWidth()
                 )
 
@@ -313,6 +317,7 @@ fun LandscapeEditPOIScreen(modifier: Modifier = Modifier, navController: NavHost
                 ) {
                     Text(
                         text = stringResource(id = R.string.msgGetCoordinates),
+                        color = MaterialTheme.colorScheme.tertiary,
                         textAlign = TextAlign.Center,
                         modifier = Modifier.padding(6.dp, 0.dp)
                     )
@@ -326,6 +331,7 @@ fun LandscapeEditPOIScreen(modifier: Modifier = Modifier, navController: NavHost
                     )
                     Text(
                         text = stringResource(id = R.string.msgWriteCoordinates),
+                        color = MaterialTheme.colorScheme.tertiary,
                         textAlign = TextAlign.Center,
                         modifier = Modifier.padding(6.dp, 0.dp)
                     )
@@ -346,7 +352,7 @@ fun LandscapeEditPOIScreen(modifier: Modifier = Modifier, navController: NavHost
                         keyboardActions = KeyboardActions {
                             focusManager.moveFocus(FocusDirection.Next)
                         },
-                        label = { Text(text = stringResource(id = R.string.msgLongitude)) },
+                        label = { Text(text = stringResource(id = R.string.msgLongitude),color = MaterialTheme.colorScheme.tertiary,) },
                         enabled = isInputEnabled,
                         modifier = Modifier
                             .weight(1f, false)
@@ -362,7 +368,7 @@ fun LandscapeEditPOIScreen(modifier: Modifier = Modifier, navController: NavHost
                         keyboardActions = KeyboardActions {
                             focusManager.clearFocus()
                         },
-                        label = { Text(text = stringResource(id = R.string.msgLatitude)) },
+                        label = { Text(text = stringResource(id = R.string.msgLatitude),color = MaterialTheme.colorScheme.tertiary,) },
                         enabled = isInputEnabled,
                         modifier = Modifier
                             .weight(1f, false)
