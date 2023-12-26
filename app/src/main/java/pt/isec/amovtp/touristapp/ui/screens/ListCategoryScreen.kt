@@ -215,6 +215,156 @@ fun ListCategoryScreen(navController: NavHostController?,modifier: Modifier = Mo
 }
 
 @Composable
-fun LandscapeListCategoryScreen(navController: NavHostController, modifier: Modifier.Companion, viewModel: LocationViewModel, firebaseViewModel: FirebaseViewModel) {
+fun LandscapeListCategoryScreen(navController: NavHostController?, modifier: Modifier = Modifier, viewModel: LocationViewModel, firebaseViewModel: FirebaseViewModel) {
+    var myRating by remember { mutableIntStateOf(0) }
+    val context = LocalContext.current
+    var isRatingEnabled by remember { mutableStateOf(true) }
+    val currentPoi = viewModel.selectedPoi
+    val userUID = firebaseViewModel.authUser.value!!.uid
+
+    var categories by remember {
+        mutableStateOf<List<Category>>(emptyList())
+    }
+
+    //sempre que é iniciado, carrega as categorias
+    LaunchedEffect(Unit) {
+        firebaseViewModel.getCategoriesFromFirestore(){ loadedCategories ->
+            categories = loadedCategories
+            for (c in categories) {
+                if (userUID in c.userUIDsApprovals || userUID == c.userUID) {
+                    c.enableBtn = false
+                }
+            }
+        }
+    }
+
+    LazyColumn(
+        modifier = modifier
+        .fillMaxSize()
+        .padding(64.dp, 8.dp),
+        verticalArrangement = Arrangement.SpaceBetween,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        items(categories) { category ->
+            val borderColor = when (category.approvals) {
+                0 -> Color.Red
+                1 -> Color.Yellow
+                else -> MaterialTheme.colorScheme.tertiary
+            }
+            Card(
+                modifier = Modifier
+                    .fillMaxHeight()
+                    .fillMaxWidth()
+                    .padding(8.dp)
+                    .border(2.dp, borderColor, shape = RoundedCornerShape(16.dp))
+                    .clip(shape = RoundedCornerShape(16.dp)),
+                elevation = CardDefaults.cardElevation(4.dp),
+                colors = CardDefaults.cardColors(
+                    containerColor = MaterialTheme.colorScheme.tertiary
+                ),
+            ) {
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(16.dp),
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Text(
+                        text = category.name,
+                        fontSize = 20.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = MaterialTheme.colorScheme.secondary
+                    )
+                    Spacer(modifier = Modifier.height(4.dp))
+                    Text(
+                        text = category.description,
+                        fontSize = 16.sp,
+                        color = MaterialTheme.colorScheme.onSurface
+                    )
+
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(IntrinsicSize.Min),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        if (category.approvals < 2){
+                            Row(
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                IconButton(
+                                    onClick = {
+                                        firebaseViewModel.updateAprovalCategoryInFirestore(
+                                            category,
+                                            userUID
+                                        )
+                                        firebaseViewModel.getCategoriesFromFirestore() { loadedCategories ->
+                                            categories = loadedCategories
+                                            for (c in categories) {
+                                                if (userUID in c.userUIDsApprovals || userUID == c.userUID) {
+                                                    c.enableBtn = false
+                                                }
+                                            }
+                                        }
+                                    },
+                                    modifier = Modifier.padding(8.dp),
+                                    enabled = category.enableBtn
+                                ) {
+                                    Icon(
+                                        imageVector = Icons.Default.CheckCircle,
+                                        contentDescription = null
+                                    )
+                                }
+                                Text("${category.approvals}/2") // Uncomment this line if needed
+                            }
+                        }
+
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.SpaceEvenly
+                        ) {
+                            if(category.userUID == userUID) {
+
+                                IconButton(
+                                    onClick = {
+                                        viewModel.selectedCategory = category
+                                        navController?.navigate(Screens.EDIT_CATEGORY.route)
+                                    },
+                                    modifier = Modifier.padding(8.dp),
+                                ) {
+                                    Icon(
+                                        imageVector = Icons.Default.Edit,
+                                        contentDescription = null
+                                    )
+                                }
+
+                                IconButton(
+                                    onClick = {
+                                        if(category.totalPois == 0) {
+                                            firebaseViewModel.deleteCategoryFromFirestore(category)
+                                            firebaseViewModel.getCategoriesFromFirestore() { loadedCategories ->
+                                                categories = loadedCategories
+                                            }
+                                            Toast.makeText(context, "Categoria eliminada com sucesso!", Toast.LENGTH_LONG).show()
+                                        }else
+                                            Toast.makeText(context, "Categoria não eliminada.Já existem POIS associados", Toast.LENGTH_LONG).show()
+
+                                    },
+                                    modifier = Modifier.padding(8.dp),
+                                ) {
+                                    Icon(
+                                        imageVector = Icons.Default.Delete,
+                                        contentDescription = null
+                                    )
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
 
 }

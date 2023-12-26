@@ -28,4 +28,7 @@
     <string name="msgFirstName">First Name</string>
     <string name="msgLastName">Last Name</string>
     <string name="msgCreateAccount">Create Account</string>
+    <string name="msgAddLocation">Add Location</string>
+    <string name="msgAddPOI">Add Point of Interest</string>
+    <string name="msgAddCategory">Add Category</string>
 </resources>

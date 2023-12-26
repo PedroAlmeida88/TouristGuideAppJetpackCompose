@@ -23,6 +23,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
@@ -103,6 +104,46 @@ fun MenuScreen(
 }
 
 @Composable
-fun LandscapeMenuScreen(stringResource: String, navController: NavHostController, firebaseViewModel: FirebaseViewModel, route: String, route1: String) {
+fun LandscapeMenuScreen(stringResource: String, navController: NavHostController?, firebaseViewModel: FirebaseViewModel, vararg options: String,) {
+    Column (
+        verticalArrangement = Arrangement.Center,
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(64.dp, 8.dp)
+    ) {
+        if(firebaseViewModel.user.value != null)
+            Text(
+                text= stringResource(id = R.string.msgHello) + firebaseViewModel.user.value?.firstName + " " + firebaseViewModel.user.value?.lastName,
+                fontSize = 26.sp,
+                textAlign = TextAlign.Center,
+                modifier = Modifier
+                    .padding(24.dp, 48.dp)
+            )
+        else
+            CircularProgressIndicator(
+                modifier = Modifier
+                    .width(64.dp)
+                    .padding(24.dp),
+                color = MaterialTheme.colorScheme.secondary,
+                trackColor = MaterialTheme.colorScheme.surfaceVariant,
+            )
 
+        for (btnName in options) {
+            Button(
+                onClick = { navController?.navigate(btnName) },
+                shape = CutCornerShape(percent = 0),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(24.dp, 0.dp, 24.dp, 0.dp)
+            ) {
+                Text(
+                    text = btnName,
+                    fontSize = 20.sp,
+                    modifier = Modifier
+                        .padding(16.dp)
+                )
+            }
+            Spacer(modifier = Modifier.height(16.dp))
+        }
+    }
 }

@@ -9,7 +9,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
@@ -170,5 +172,134 @@ fun RegisterScreen(navController: NavHostController, firebaseViewModel: Firebase
 
 @Composable
 fun LandscapeRegisterScreen(navController: NavHostController, firebaseViewModel: FirebaseViewModel) {
+    var firstName by remember { mutableStateOf("") }
+    var lastName by remember { mutableStateOf("") }
+    var password by remember { mutableStateOf("") }
+    var email by remember { mutableStateOf("") }
 
+    var error by remember { firebaseViewModel.error }
+    var isFormValid by remember { mutableStateOf(false) }
+    var isError by remember { mutableStateOf(false) }
+    var isButtonClicked by remember { mutableStateOf(false) }
+
+    val focusManager = LocalFocusManager.current
+
+    fun validateForm () {
+        isFormValid = firstName.isNotBlank() && lastName.isNotBlank() && password.isNotBlank() && email.isNotBlank()
+    }
+
+    LaunchedEffect(key1 = isButtonClicked) {
+        if(error == null && isButtonClicked){
+            firebaseViewModel.signOut()
+            navController.navigate(Screens.LOGIN.route)
+        }
+    }
+
+    Column (
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(64.dp, 16.dp)
+            .verticalScroll(rememberScrollState())
+    ) {
+        if (isError || error != null) {
+            ErrorAlertDialog {
+                isError = false
+                isButtonClicked = false
+                error = null
+            }
+        }
+
+        Text(
+            text = stringResource(id = R.string.msgCreateAccount),
+            fontSize = 26.sp,
+            modifier = Modifier.padding(24.dp, 0.dp, 24.dp, 24.dp)
+        )
+
+        Column (
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Row (
+                modifier = Modifier
+                    .fillMaxWidth(1f)
+            ) {
+                OutlinedTextField(
+                    value = firstName,
+                    onValueChange ={
+                        firstName = it
+                        validateForm()
+                    },
+                    singleLine = true,
+                    keyboardActions = KeyboardActions{
+                        focusManager.moveFocus(FocusDirection.Next)
+                    },
+                    label = { Text(text = stringResource(id = R.string.msgFirstName)) },
+                    modifier = Modifier.weight(1f, false)
+                )
+                Spacer(modifier = Modifier.width(24.dp))
+                OutlinedTextField(
+                    value = lastName,
+                    onValueChange ={
+                        lastName = it
+                        validateForm()
+                    },
+                    singleLine = true,
+                    keyboardActions = KeyboardActions{
+                        focusManager.moveFocus(FocusDirection.Next)
+                    },
+                    label = { Text(text = stringResource(id = R.string.msgLastName)) },
+                    modifier = Modifier.weight(1f, false)
+                )
+            }
+        }
+
+        Spacer(modifier = Modifier.height(10.dp))
+        OutlinedTextField(
+            value = email,
+            onValueChange ={
+                email = it
+                validateForm()
+            },
+            singleLine = true,
+            keyboardActions = KeyboardActions{
+                focusManager.moveFocus(FocusDirection.Next)
+            },
+            label = { Text(text = stringResource(id = R.string.msgUsername)) },
+            modifier = Modifier.fillMaxWidth()
+        )
+
+        Spacer(modifier = Modifier.height(10.dp))
+        OutlinedTextField(
+            value = password,
+            onValueChange = {
+                password = it
+                validateForm()
+            },
+            singleLine = true,
+            keyboardActions = KeyboardActions{
+                focusManager.clearFocus()
+            },
+            visualTransformation = PasswordVisualTransformation(Char(42)),
+            label = { Text(text = stringResource(R.string.msgPassword),) },
+            modifier = Modifier.fillMaxWidth()
+        )
+
+        Spacer(modifier = Modifier.height(10.dp))
+        Button(
+            onClick = {
+                if (!isFormValid) {
+                    isError = true
+                } else {
+                    val user = User(email, firstName, lastName)
+                    firebaseViewModel.createUserWithEmail(user, password) {
+                        isButtonClicked = true
+                    }
+                }
+            },
+            colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.primary),
+        ) {
+            Text(text = stringResource(id = R.string.btnRegister))
+        }
+    }
 }

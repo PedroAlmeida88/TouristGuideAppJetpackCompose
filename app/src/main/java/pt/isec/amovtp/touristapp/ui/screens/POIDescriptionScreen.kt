@@ -5,6 +5,7 @@ import android.graphics.drawable.shapes.OvalShape
 import android.util.Log
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -122,6 +123,90 @@ fun POIDescriptionScreen(modifier: Modifier = Modifier, viewModel: LocationViewM
 }
 
 @Composable
-fun LandscapePOIDescriptionScreen(modifier: Modifier.Companion, viewModel: LocationViewModel, firebaseViewModel: FirebaseViewModel) {
+fun LandscapePOIDescriptionScreen(modifier: Modifier = Modifier, viewModel: LocationViewModel, firebaseViewModel: FirebaseViewModel) {
+    var myRating by remember { mutableIntStateOf(0) }
+    val context = LocalContext.current
+    var isRatingEnabled by remember { mutableStateOf(true) }
+    val currentPoi = viewModel.selectedPoi
 
+    val currentGeoPoint by remember{ mutableStateOf(GeoPoint(
+        currentPoi?.latitude ?: 0.0, currentPoi?.longitude ?: 0.0
+    )) }
+    var pois by remember { mutableStateOf<List<PointOfInterest>>(emptyList()) }
+    val selectedLocation = viewModel.selectedLocation
+
+    var loaded by remember { mutableStateOf(false)    }
+    //sempre que é iniciado, carrega os POIS
+    LaunchedEffect(Unit) {
+        firebaseViewModel.getPoisFromFirestore(selectedLocation) { loadedPois ->
+            pois = loadedPois
+            loaded = true
+        }
+    }
+
+    Row (
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(8.dp)
+    ) {
+        Column (
+            modifier = Modifier.weight(1f)
+        ) {
+            Text(
+                text = currentPoi!!.name,
+                textAlign = TextAlign.Center,
+                fontSize = 26.sp,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(0.dp, 20.dp)
+            )
+
+            Text(
+                text = currentPoi.description,
+                textAlign = TextAlign.Start,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(0.dp, 24.dp)
+            )
+        }
+        Box (
+            modifier = Modifier
+                .weight(1f)
+                .fillMaxWidth()
+                .clipToBounds()
+        ) {
+            if(loaded)
+                AndroidView(
+                    factory = { context ->
+                        MapView(context).apply {
+                            setTileSource(TileSourceFactory.MAPNIK);//==TileSourceFactory.DEFAULT_TILE_SOURCE
+                            setMultiTouchControls(true)
+                            controller.setCenter(currentGeoPoint)
+                            controller.setZoom(13.0)
+                            Log.i("POIS_FOR", "POIDescriptionScreen: " + pois)
+                            for(poi in pois) {
+                                val marker = Marker(this).apply {
+                                    position = GeoPoint(poi.latitude, poi.longitude)
+                                    setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM)
+                                    title = poi.name
+                                    subDescription = poi.description
+                                    //icon = ShapeDrawable(OvalShape())
+                                }
+                                if(! poi.name.equals(currentPoi?.name))
+                                    marker.icon = ShapeDrawable(OvalShape()).apply {
+                                        intrinsicHeight = 40 // Altura do círculo em pixels
+                                        intrinsicWidth = 40 // Largura do círculo em pixels
+                                        paint.color = Color.Red.toArgb()
+                                    }
+                                overlays.add(marker)
+                            }
+
+                        }
+                    },
+                    update = { view ->
+                        view.controller.setCenter(currentGeoPoint)
+                    }
+                )
+        }
+    }
 }
