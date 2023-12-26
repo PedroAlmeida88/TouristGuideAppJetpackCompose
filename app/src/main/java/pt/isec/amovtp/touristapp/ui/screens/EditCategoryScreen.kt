@@ -76,22 +76,6 @@ fun getImageVectorFromName (iconName: String) : ImageVector? {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun EditCategoryScreen(modifier: Modifier, navController: NavHostController?, locationViewModel: LocationViewModel,firebaseViewModel: FirebaseViewModel) {
-    val icons = listOf(
-        Icons.Default.Call,
-        Icons.Default.Face,
-        Icons.Default.Favorite,
-        Icons.Default.Delete,
-        Icons.Default.ShoppingCart,
-        Icons.Default.Home,
-        Icons.Default.Build,
-        Icons.Default.Warning,
-        Icons.Default.LocationOn,
-        Icons.Default.Create,
-        Icons.Default.Email,
-        Icons.Default.Star,
-        Icons.Default.Lock
-    )
-
     var selectedCategory = locationViewModel.selectedCategory
     val scrollState = rememberScrollState()
     val focusManager = LocalFocusManager.current
@@ -221,5 +205,124 @@ fun EditCategoryScreen(modifier: Modifier, navController: NavHostController?, lo
 
 @Composable
 fun LandscapeEditCategoryScreen(navController: NavHostController, modifier: Modifier.Companion, locationViewModel: LocationViewModel, firebaseViewModel: FirebaseViewModel) {
+    var selectedCategory = locationViewModel.selectedCategory
+    val scrollState = rememberScrollState()
+    val focusManager = LocalFocusManager.current
+    val userUID = firebaseViewModel.authUser.value!!.uid
 
+    var expanded by remember { mutableStateOf(false) }
+
+    var selectedIcon by remember { mutableStateOf(getImageVectorFromName(selectedCategory!!.icon)) }
+    var categoryName by remember { mutableStateOf(selectedCategory!!.name) }
+    var categoryDescription by remember { mutableStateOf(selectedCategory!!.description) }
+
+    var isValidForm by remember { mutableStateOf(false) }
+    var isError by remember { mutableStateOf(false) }
+
+    fun validateForm () {
+        isValidForm = selectedIcon != null &&
+                categoryName.isNotBlank() &&
+                categoryDescription.isNotBlank()
+    }
+
+    Column (
+        horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = modifier
+            .padding(64.dp, 12.dp)
+            .fillMaxSize()
+    ) {
+        Row (
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(0.dp, 15.dp)
+        ) {
+            Text(
+                text = categoryName,
+                fontSize = 26.sp,
+                textAlign = TextAlign.Center,
+                modifier = Modifier
+                    .fillMaxWidth(0.7f)
+                    .padding(8.dp, 0.dp)
+            )
+
+            Box (
+                modifier = Modifier
+                    .fillMaxWidth(0.3f)
+                    .wrapContentSize(align = Alignment.Center)
+                    .padding(0.dp, 24.dp),
+                contentAlignment = Alignment.Center,
+            ) {
+                IconButton(
+                    onClick = {
+                        expanded = true
+                    }
+                ) {
+                    if(selectedIcon == null)
+                        Icon(Icons.Default.List, contentDescription = "List")
+                    else
+                        Icon(selectedIcon!!, contentDescription = selectedIcon!!.name)
+                }
+
+                DropdownMenu(
+                    expanded = expanded,
+                    onDismissRequest = { expanded = false },
+                    scrollState = scrollState
+                ) {
+                    for (icon in icons) {
+                        DropdownMenuItem(
+                            text = {
+                                Text(icon.name)
+                            },
+                            leadingIcon = { Icon(imageVector = icon, contentDescription = icon.name) },
+                            onClick = {
+                                expanded = false
+                                selectedIcon = icon
+                                validateForm()
+                            }
+                        )
+                    }
+                }
+            }
+        }
+
+        Spacer(modifier = Modifier.height(12.dp))
+        OutlinedTextField(
+            label = { Text(text = stringResource(id = R.string.msgDescription)) },
+            value = categoryDescription,
+            singleLine = true,
+            keyboardActions = KeyboardActions {
+                focusManager.clearFocus()
+            },
+            onValueChange = {
+                categoryDescription = it
+                validateForm()
+            },
+            modifier = Modifier
+                .fillMaxWidth()
+        )
+
+        Spacer(modifier = Modifier.height(8.dp))
+        Button(
+            onClick = {
+                if (!isValidForm)
+                    isError = true
+                else {
+                    val category = Category(
+                        categoryName,
+                        categoryDescription,
+                        selectedIcon!!.name,
+                        selectedCategory!!.totalPois,
+                        0,
+                        emptyList(), userUID
+                    )
+                    firebaseViewModel.addCategoryToFirestore(category) {
+                        navController?.popBackStack()
+                    }
+                }
+            }
+        ) {
+            Text(text = stringResource(id = R.string.btnSubmit))
+        }
+    }
 }

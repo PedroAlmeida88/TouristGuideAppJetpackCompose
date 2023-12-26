@@ -1,12 +1,15 @@
 package pt.isec.amovtp.touristapp.ui.screens
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults.buttonColors
@@ -154,6 +157,118 @@ fun LoginScreen(
 }
 
 @Composable
-fun LandscapeLoginScreen(navController: NavHostController, firebaseViewModel: FirebaseViewModel, content: () -> Unit) {
+fun LandscapeLoginScreen(navController: NavHostController?, firebaseViewModel: FirebaseViewModel, onSuccess: () -> Unit) {
+    var email by remember { mutableStateOf("") }
+    var password by remember { mutableStateOf("") }
+    var error by remember { firebaseViewModel.error }
+    val authUser by remember { firebaseViewModel.authUser }
+    var isFormValid by remember { mutableStateOf(false) }
+    var isError by remember { mutableStateOf(false) }
 
+    val focusManager = LocalFocusManager.current
+
+    LaunchedEffect(key1 = authUser) {
+        if(authUser != null && error == null)
+            onSuccess()
+    }
+
+    fun validateForm (){
+        isFormValid = email.isNotBlank() && password.isNotBlank()
+    }
+
+    Box (
+        contentAlignment = Alignment.TopCenter,
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(24.dp)
+    ) {
+
+        if(isError || error != null){
+            ErrorAlertDialog {
+                isError = false
+                error = null
+            }
+        }
+
+        Text(
+            text = stringResource(R.string.msgWB),
+            fontSize = 26.sp,
+            modifier = Modifier
+                .align(Alignment.TopCenter)
+                .padding(24.dp)
+        )
+
+        Column (
+            modifier = Modifier.align(Alignment.Center)
+        ){
+            OutlinedTextField(
+                value = email,
+                onValueChange ={
+                    email = it
+                    validateForm()
+                },
+                singleLine = true,
+                keyboardActions = KeyboardActions {
+                    focusManager.moveFocus(FocusDirection.Next)
+                },
+                label = { Text(text = stringResource(R.string.msgUsername),) }
+            )
+            Spacer(modifier = Modifier.height(4.dp))
+            OutlinedTextField(
+                value = password,
+                onValueChange ={
+                    password = it
+                    validateForm()
+                },
+                singleLine = true,
+                keyboardActions = KeyboardActions {
+                    focusManager.clearFocus()
+                },
+                visualTransformation = PasswordVisualTransformation(Char(42)),
+                label = { Text(text = stringResource(R.string.msgPassword),) }
+            )
+            Spacer(modifier = Modifier.height(4.dp))
+            Button(
+                onClick = {
+                    if (!isFormValid) {
+                        isError = true
+                    } else {
+                        firebaseViewModel.signInWithEmail(email, password)
+                        if (firebaseViewModel.authUser.value != null) {
+                            navController?.navigate(Screens.MENU.route)
+                        }
+                    }
+                },
+                colors = buttonColors(MaterialTheme.colorScheme.primary),
+                modifier = Modifier.align(Alignment.CenterHorizontally)
+            ) {
+                Text(text = stringResource(R.string.btnSignIn))
+            }
+        }
+
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.Center,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(8.dp)
+                .align(Alignment.BottomCenter)
+        ) {
+            Text(
+                text = stringResource(id = R.string.msgRegisterPhrase),
+                textAlign = TextAlign.Center,
+                softWrap = true,
+                //modifier = Modifier.weight(3f, true)
+            )
+            Spacer(modifier = Modifier.width(12.dp))
+            Button(
+                onClick = {
+                    navController?.navigate(Screens.REGISTER.route)
+                },
+                colors = buttonColors(MaterialTheme.colorScheme.primary),
+            ) {
+                Text(text = stringResource(id = R.string.btnRegister))
+            }
+        }
+    }
 }

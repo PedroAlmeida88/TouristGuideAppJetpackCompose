@@ -29,4 +29,7 @@
     <string name="msgFirstName">Primeiro Nome</string>
     <string name="msgLastName">Último Nome</string>
     <string name="msgCreateAccount">Criar Conta</string>
+    <string name="msgAddLocation">Adicionar Localização</string>
+    <string name="msgAddPOI">Adicionar Ponto de Interesse</string>
+    <string name="msgAddCategory">Adicionar Categoria</string>
 </resources>
