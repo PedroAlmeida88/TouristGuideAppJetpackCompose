@@ -154,6 +154,8 @@ class StorageUtil {
                 "WritenCoords" to poi.writenCoords,
                 "Approvals" to poi.approvals,
                 "UserUID" to poi.userUID,
+                "TotalLikes" to 0,
+                "TotalDislikes" to 0,
             )
 
             db.collection(Collections.Locations.route)
