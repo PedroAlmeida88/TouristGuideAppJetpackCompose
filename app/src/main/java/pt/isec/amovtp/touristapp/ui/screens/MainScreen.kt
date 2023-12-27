@@ -53,7 +53,6 @@ enum class Screens(val display: String, val showAppBar : Boolean) {
     ADD_CATEGORY("Add Category", true),
     LIST_CATEGORY("List Category", true),
     EDIT_CATEGORY("Edit Category", true),
-    SHOW_MAP("Show map", true),
     CREDITS("Credits", true),
     ADD_COMMENTS("Add Comments", true),
     ADD_POI_PICTURES("Add POI Pictures", true);
@@ -89,11 +88,26 @@ fun MainScreen(navController:NavHostController = rememberNavController(),
         topBar = {
             if(currentScreen != null && Screens.valueOf(currentScreen!!.destination.route!!).showAppBar) {
                 CenterAlignedTopAppBar(
-                    title = {
-                        Text(text = stringResource(R.string.app_name),
-                            color = MaterialTheme.colorScheme.tertiary
+                    title = { Text(
+                        text = when (currentScreen!!.destination.route) {
+                            Screens.LOCATIONS.route -> stringResource(R.string.msgLocations)
+                            Screens.ADD_LOCATIONS.route -> stringResource(R.string.msgAddLocation)
+                            Screens.ADD_CATEGORY.route -> stringResource(R.string.msgAddCategory)
+                            Screens.ADD_COMMENTS.route -> stringResource(R.string.msgComments)
+                            Screens.ADD_POI_PICTURES.route -> stringResource(R.string.msgAddPOIPicture)
+                            Screens.ADD_POI.route -> stringResource(R.string.msgAddPOI)
+                            Screens.CREDITS.route -> stringResource(R.string.btnCredits)
+                            Screens.EDIT_POI.route -> stringResource(R.string.msgEditPOI)
+                            Screens.EDIT_LOCATION.route -> stringResource(R.string.msgEditLocation)
+                            Screens.EDIT_CATEGORY.route -> stringResource(R.string.msgEditCategory)
+                            Screens.LIST_CATEGORY.route -> stringResource(R.string.msgCategories)
+                            Screens.POI.route -> stringResource(R.string.msgPOIS)
+                            else -> {
+                                stringResource(R.string.app_name)
+                            }
+                        },
+                        color = MaterialTheme.colorScheme.tertiary
                         )
-
                     },
                     navigationIcon = {
                         IconButton(onClick = { navController.navigateUp()
@@ -106,10 +120,11 @@ fun MainScreen(navController:NavHostController = rememberNavController(),
                     },
                     actions = {
                         if (Screens.valueOf(currentScreen!!.destination.route!!) != Screens.LOGIN)
-                        IconButton(onClick = {
-                            firebaseViewModel.signOut()
-                            navController.navigate(Screens.LOGIN.route) {
-                                popUpTo(Screens.LOGIN.route) { inclusive = true }
+                        IconButton(
+                            onClick = {
+                                firebaseViewModel.signOut()
+                                navController.navigate(Screens.LOGIN.route) {
+                                    popUpTo(Screens.LOGIN.route) { inclusive = true }
                             }
                         }) {
                             Icon(

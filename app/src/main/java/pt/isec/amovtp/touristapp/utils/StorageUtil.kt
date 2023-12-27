@@ -333,7 +333,6 @@ class StorageUtil {
                     val locations = mutableListOf<Location>()
 
                     for (document in result) {
-                        Log.i(TAG, "getLocationFromFirestore: " +document.data.toString())
                         val name = document.id
                         val description = document.getString("Description") ?: ""
                         val latitude = document.getDouble("Latitude") ?: 0.0
@@ -382,8 +381,6 @@ class StorageUtil {
                             val catIcon = categoryData["icon"].toString()
                             val catDesc = categoryData["description"].toString()
 
-                            Log.i(TAG, "getPoisFromFirestore: " + categoryData.toString())
-                            Log.i(TAG, "getPoisFromFirestore DESCRICAO: " +catDesc)
 
                             val pointOfInterest = PointOfInterest(name, description, latitude, longitude, imageUrl,Category(catName,catIcon,catDesc,-1,-1,
                                 emptyList(),""),writenCoords,approvals,userUIDs,userUID)

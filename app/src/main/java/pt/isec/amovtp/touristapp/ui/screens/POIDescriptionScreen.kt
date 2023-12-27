@@ -2,13 +2,14 @@ package pt.isec.amovtp.touristapp.ui.screens
 
 import android.graphics.drawable.ShapeDrawable
 import android.graphics.drawable.shapes.OvalShape
-import android.util.Log
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -37,9 +38,6 @@ import pt.isec.amovtp.touristapp.ui.viewmodels.LocationViewModel
 
 @Composable
 fun POIDescriptionScreen(modifier: Modifier = Modifier, viewModel: LocationViewModel,firebaseViewModel: FirebaseViewModel) {
-    var myRating by remember { mutableIntStateOf(0) }
-    val context = LocalContext.current
-    var isRatingEnabled by remember { mutableStateOf(true) }
     val currentPoi = viewModel.selectedPoi
 
     val currentGeoPoint by remember{ mutableStateOf(GeoPoint(
@@ -60,24 +58,17 @@ fun POIDescriptionScreen(modifier: Modifier = Modifier, viewModel: LocationViewM
     Column(
         modifier = modifier
             .fillMaxSize()
-            .padding(8.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
+            .padding(16.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Text(
             text = currentPoi!!.name,
             textAlign = TextAlign.Center,
-            fontSize = 26.sp,
+            fontSize = 28.sp,
+            color = MaterialTheme.colorScheme.tertiary,
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(0.dp, 64.dp)
-        )
-
-        Text(
-            text = currentPoi.description,
-            textAlign = TextAlign.Start,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(0.dp, 24.dp)
+                .padding(bottom = 16.dp)
         )
 
         Box (
@@ -85,6 +76,7 @@ fun POIDescriptionScreen(modifier: Modifier = Modifier, viewModel: LocationViewM
                 .padding(8.dp)
                 .fillMaxWidth()
                 .clipToBounds()
+                .border(1.dp, color = MaterialTheme.colorScheme.tertiary)
         ){
             if(loaded)
                 AndroidView(
@@ -94,7 +86,6 @@ fun POIDescriptionScreen(modifier: Modifier = Modifier, viewModel: LocationViewM
                             setMultiTouchControls(true)
                             controller.setCenter(currentGeoPoint)
                             controller.setZoom(13.0)
-                            Log.i("POIS_FOR", "POIDescriptionScreen: " + pois)
                                 for(poi in pois) {
                                     val marker = Marker(this).apply {
                                         position = GeoPoint(poi.latitude, poi.longitude)
@@ -111,7 +102,6 @@ fun POIDescriptionScreen(modifier: Modifier = Modifier, viewModel: LocationViewM
                                         }
                                     overlays.add(marker)
                                 }
-
                         }
                     },
                     update = { view ->
@@ -124,9 +114,6 @@ fun POIDescriptionScreen(modifier: Modifier = Modifier, viewModel: LocationViewM
 
 @Composable
 fun LandscapePOIDescriptionScreen(modifier: Modifier = Modifier, viewModel: LocationViewModel, firebaseViewModel: FirebaseViewModel) {
-    var myRating by remember { mutableIntStateOf(0) }
-    val context = LocalContext.current
-    var isRatingEnabled by remember { mutableStateOf(true) }
     val currentPoi = viewModel.selectedPoi
 
     val currentGeoPoint by remember{ mutableStateOf(GeoPoint(
@@ -144,37 +131,28 @@ fun LandscapePOIDescriptionScreen(modifier: Modifier = Modifier, viewModel: Loca
         }
     }
 
-    Row (
-        modifier = Modifier
+    Column(
+        modifier = modifier
             .fillMaxSize()
-            .padding(8.dp)
+            .padding(16.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-        Column (
-            modifier = Modifier.weight(1f)
-        ) {
-            Text(
-                text = currentPoi!!.name,
-                textAlign = TextAlign.Center,
-                fontSize = 26.sp,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(0.dp, 20.dp)
-            )
+        Text(
+            text = currentPoi!!.name,
+            textAlign = TextAlign.Center,
+            fontSize = 18.sp,
+            color = MaterialTheme.colorScheme.tertiary,
+            modifier = Modifier
+                .fillMaxWidth()
+        )
 
-            Text(
-                text = currentPoi.description,
-                textAlign = TextAlign.Start,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(0.dp, 24.dp)
-            )
-        }
         Box (
             modifier = Modifier
-                .weight(1f)
+                .padding(8.dp)
                 .fillMaxWidth()
                 .clipToBounds()
-        ) {
+                .border(1.dp, color = MaterialTheme.colorScheme.tertiary)
+        ){
             if(loaded)
                 AndroidView(
                     factory = { context ->
@@ -183,7 +161,6 @@ fun LandscapePOIDescriptionScreen(modifier: Modifier = Modifier, viewModel: Loca
                             setMultiTouchControls(true)
                             controller.setCenter(currentGeoPoint)
                             controller.setZoom(13.0)
-                            Log.i("POIS_FOR", "POIDescriptionScreen: " + pois)
                             for(poi in pois) {
                                 val marker = Marker(this).apply {
                                     position = GeoPoint(poi.latitude, poi.longitude)
@@ -200,7 +177,6 @@ fun LandscapePOIDescriptionScreen(modifier: Modifier = Modifier, viewModel: Loca
                                     }
                                 overlays.add(marker)
                             }
-
                         }
                     },
                     update = { view ->

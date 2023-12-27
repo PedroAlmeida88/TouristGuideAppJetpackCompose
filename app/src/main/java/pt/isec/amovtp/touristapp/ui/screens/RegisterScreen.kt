@@ -79,6 +79,7 @@ fun RegisterScreen(navController: NavHostController, firebaseViewModel: Firebase
 
         Text(
             text = stringResource(id = R.string.msgCreateAccount),
+            color = MaterialTheme.colorScheme.tertiary,
             fontSize = 26.sp,
             modifier = Modifier.padding(24.dp, 0.dp, 24.dp, 64.dp)
         )

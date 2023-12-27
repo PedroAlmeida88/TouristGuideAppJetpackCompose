@@ -11,8 +11,13 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Visibility
+import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults.buttonColors
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
@@ -28,6 +33,7 @@ import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -48,6 +54,7 @@ fun LoginScreen(
     val authUser by remember { firebaseViewModel.authUser }
     var isFormValid by remember { mutableStateOf(false) }
     var isError by remember { mutableStateOf(false) }
+    var passwordVisibility by remember { mutableStateOf(false) }
 
     val focusManager = LocalFocusManager.current
 
@@ -76,6 +83,7 @@ fun LoginScreen(
 
         Text(
             text = stringResource(R.string.msgWB),
+            color = MaterialTheme.colorScheme.tertiary,
             fontSize = 26.sp,
             modifier = Modifier
                 .align(Alignment.TopCenter)
@@ -95,7 +103,7 @@ fun LoginScreen(
                 keyboardActions = KeyboardActions {
                     focusManager.moveFocus(FocusDirection.Next)
                 },
-                label = { Text(text = stringResource(R.string.msgUsername),) }
+                label = { Text(text = stringResource(R.string.msgUsername),color = MaterialTheme.colorScheme.tertiary,) }
             )
             Spacer(modifier = Modifier.height(16.dp))
             OutlinedTextField(
@@ -108,8 +116,22 @@ fun LoginScreen(
                 keyboardActions = KeyboardActions {
                     focusManager.clearFocus()
                 },
-                visualTransformation = PasswordVisualTransformation(Char(42)),
-                label = { Text(text = stringResource(R.string.msgPassword),) }
+                visualTransformation = if (passwordVisibility) {
+                    VisualTransformation.None
+                } else {
+                    PasswordVisualTransformation('*')
+                },
+                trailingIcon = {
+                    IconButton(
+                        onClick = { passwordVisibility = !passwordVisibility }
+                    ) {
+                        Icon(
+                            imageVector = if (passwordVisibility) Icons.Filled.Visibility else Icons.Filled.VisibilityOff,
+                            contentDescription = null
+                        )
+                    }
+                },
+                label = { Text(text = stringResource(R.string.msgPassword),color = MaterialTheme.colorScheme.tertiary) }
             )
             Spacer(modifier = Modifier.height(16.dp))
             Button(
@@ -138,6 +160,7 @@ fun LoginScreen(
         ) {
             Text(
                 text = stringResource(id = R.string.msgRegisterPhrase),
+                color = MaterialTheme.colorScheme.tertiary,
                 textAlign = TextAlign.Center,
                 softWrap = true,
                 //modifier = Modifier.weight(3f, true)

@@ -1,15 +1,22 @@
 package pt.isec.amovtp.touristapp.ui.screens
 
 import android.widget.Toast
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
@@ -31,6 +38,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -70,7 +78,8 @@ fun AddPOIPicturesScreen(modfier: Modifier.Companion, locationViewModel: Locatio
         modifier = Modifier
             .fillMaxSize()
             .padding(8.dp)
-            .verticalScroll(rememberScrollState())
+            //.background(color = MaterialTheme.colorScheme.onBackground)
+            //.verticalScroll(rememberScrollState())
     ) {
         if (alreadyPosted)
             Text(
@@ -126,36 +135,65 @@ fun AddPOIPicturesScreen(modfier: Modifier.Companion, locationViewModel: Locatio
                 }
             }
 
-        for (image in images)
-            Card(
-                modifier = Modifier
-                    .fillMaxHeight()
-                    .fillMaxWidth()
-                    .padding(8.dp)
-                    .clip(shape = RoundedCornerShape(16.dp)),
-                elevation = CardDefaults.cardElevation(4.dp),
-                colors = CardDefaults.cardColors(
-                    containerColor = MaterialTheme.colorScheme.tertiary
-                ),
-
-                ) {
-                Column(
+        LazyVerticalGrid(
+            modifier = Modifier.fillMaxSize(),
+            columns = GridCells.Fixed(count = 2)
+        ) {
+            items(images) { image ->
+                Card(
                     modifier = Modifier
-                        .fillMaxSize()
-                        //.padding(8.dp)
-                        .wrapContentHeight(Alignment.Bottom),
-                    horizontalAlignment = Alignment.CenterHorizontally
-
+                        .fillMaxHeight()
+                        .fillMaxWidth()
+                        .padding(8.dp)
+                        //.background(color = MaterialTheme.colorScheme.onBackground)
+                        .clip(shape = RoundedCornerShape(16.dp)),
+                    elevation = CardDefaults.cardElevation(4.dp),
+                    colors = CardDefaults.cardColors(
+                        containerColor = MaterialTheme.colorScheme.tertiary
+                    ),
                 ) {
-                    //Image(painter = painterResource(u = ), contentDescription = "city picture")
-                    AsyncImage(model = image.photoUrl, contentDescription = "POI Picture")
-                    Text(text = image.userName, fontSize = 20.sp)
-                    Text(text = image.date, fontSize = 20.sp)
-
+                    Column(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .background(color = MaterialTheme.colorScheme.tertiary)
+                            //.padding(8.dp)
+                            .wrapContentHeight(Alignment.Bottom),
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        AsyncImage(
+                            model = image.photoUrl,
+                            contentDescription = "POI Picture",
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .aspectRatio(1f),
+                            contentScale = ContentScale.Crop
+                        )
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .background(color =MaterialTheme.colorScheme.primary)
+                                .padding(8.dp),
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            verticalAlignment = Alignment.CenterVertically
+                        ){
+                            Text(
+                                text = image.userName,
+                                fontSize = 10.sp,
+                                color = MaterialTheme.colorScheme.tertiary
+                            )
+                            Text(
+                                text = image.date,
+                                fontSize = 10.sp,
+                                color = MaterialTheme.colorScheme.tertiary
+                            )
+                        }
+                    }
                 }
             }
+        }
     }
 }
+
 
 @Composable
 fun LandscapeAddPOIPicturesScreen(modfier: Modifier.Companion, locationViewModel: LocationViewModel, firebaseViewModel: FirebaseViewModel) {
@@ -182,20 +220,27 @@ fun LandscapeAddPOIPicturesScreen(modfier: Modifier.Companion, locationViewModel
         }
     }
 
-    Row (
+    Column (
         modifier = Modifier
             .fillMaxSize()
             .padding(8.dp)
-            .horizontalScroll(rememberScrollState())
+        //.background(color = MaterialTheme.colorScheme.onBackground)
+        //.verticalScroll(rememberScrollState())
     ) {
-        if (!alreadyPosted)
-            Column (
+        if (alreadyPosted)
+            Text(
+                text = "You already posted",
+                color = Color.Green, fontSize = 16.sp,
+                modifier = Modifier.align(Alignment.CenterHorizontally)
+            )
+        else
+            Row (
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Box (
                     modifier = Modifier.weight(5f)
                 ) {
-                    LandscapeTakePhotoOrLoadFromGallery(locationViewModel.imagePath, Modifier.fillMaxHeight())
+                    TakePhotoOrLoadFromGallery(locationViewModel.imagePath, Modifier.fillMaxWidth())
                 }
                 IconButton(
                     onClick = {
@@ -230,39 +275,68 @@ fun LandscapeAddPOIPicturesScreen(modfier: Modifier.Companion, locationViewModel
                     },
                     modifier = Modifier
                         .weight(1f)
-                        .align(Alignment.CenterHorizontally)
+                        .align(Alignment.CenterVertically)
                 ) {
                     Icon(Icons.Default.AddAPhoto, contentDescription = "Photo")
                 }
             }
 
-        for (image in images)
-            Card(
-                modifier = Modifier
-                    .fillMaxHeight()
-                    .fillMaxWidth()
-                    .padding(8.dp)
-                    .clip(shape = RoundedCornerShape(16.dp)),
-                elevation = CardDefaults.cardElevation(4.dp),
-                colors = CardDefaults.cardColors(
-                        containerColor = MaterialTheme.colorScheme.tertiary
-                    )
-                ) {
-                Column(
+        LazyVerticalGrid(
+            modifier = Modifier.fillMaxSize(),
+            columns = GridCells.Fixed(count = 4)
+        ) {
+            items(images) { image ->
+                Card(
                     modifier = Modifier
-                        .fillMaxSize()
-                        .verticalScroll(rememberScrollState()),
-                    horizontalAlignment = Alignment.CenterHorizontally
-
+                        .fillMaxHeight()
+                        .fillMaxWidth()
+                        .padding(8.dp)
+                        //.background(color = MaterialTheme.colorScheme.onBackground)
+                        .clip(shape = RoundedCornerShape(16.dp)),
+                    elevation = CardDefaults.cardElevation(4.dp),
+                    colors = CardDefaults.cardColors(
+                        containerColor = MaterialTheme.colorScheme.tertiary
+                    ),
                 ) {
-                    AsyncImage(
-                        model = image.photoUrl,
-                        contentDescription = "POI Picture"
-                    )
-                    Text(text = image.userName, fontSize = 20.sp)
-                    Text(text = image.date, fontSize = 20.sp)
-
+                    Column(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .background(color = MaterialTheme.colorScheme.tertiary)
+                            //.padding(8.dp)
+                            .wrapContentHeight(Alignment.Bottom),
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        AsyncImage(
+                            model = image.photoUrl,
+                            contentDescription = "POI Picture",
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .aspectRatio(1f),
+                            contentScale = ContentScale.Crop
+                        )
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .background(color =MaterialTheme.colorScheme.primary)
+                                .padding(8.dp),
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            verticalAlignment = Alignment.CenterVertically
+                        ){
+                            Text(
+                                text = image.userName,
+                                fontSize = 10.sp,
+                                color = MaterialTheme.colorScheme.tertiary
+                            )
+                            Text(
+                                text = image.date,
+                                fontSize = 10.sp,
+                                color = MaterialTheme.colorScheme.tertiary
+                            )
+                        }
+                    }
                 }
             }
+        }
     }
 }
+

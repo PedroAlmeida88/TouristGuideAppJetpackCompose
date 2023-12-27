@@ -31,7 +31,6 @@ class FusedLocationHandler(private val locationProvider: FusedLocationProviderCl
         locationProvider.lastLocation
             .addOnSuccessListener { location ->
                 location?.let(notify)
-                Log.i("Teste", "startLocationUpdates: $location")
             }
 
         val locationRequest =

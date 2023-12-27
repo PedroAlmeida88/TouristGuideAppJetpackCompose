@@ -1,6 +1,5 @@
 package pt.isec.amovtp.touristapp.ui.screens
 
-import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -228,7 +227,6 @@ fun AddPOIScreen(modifier: Modifier.Companion, navController: NavHostController?
                         userUIDsApprovals = emptyList(),
                         userUID = userUID
                     )
-                    Log.i("TAG", "AddPOIScreen: " + POI)
 
                     firebaseViewModel.addPOIToFirestore(selectedLocation?.name ?: ""  ,POI)
                     firebaseViewModel.uploadPOIToStorage(directory = "images/" + selectedLocation?.name +"/pois/",imageName = poiName, path = locationViewModel.imagePath.value ?: "", locationName = selectedLocation?.name ?: "" )
@@ -437,7 +435,6 @@ fun LandscapeAddPOIScreen(modifier: Modifier = Modifier, navController: NavHostC
                         userUIDsApprovals = emptyList(),
                         userUID = userUID
                     )
-                    Log.i("TAG", "AddPOIScreen: " + POI)
 
                     firebaseViewModel.addPOIToFirestore(selectedLocation?.name ?: ""  ,POI)
                     firebaseViewModel.uploadPOIToStorage(directory = "images/" + selectedLocation?.name +"/pois/",imageName = poiName, path = locationViewModel.imagePath.value ?: "", locationName = selectedLocation?.name ?: "" )

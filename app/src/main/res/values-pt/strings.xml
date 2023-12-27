@@ -32,4 +32,12 @@
     <string name="msgAddLocation">Adicionar Localização</string>
     <string name="msgAddPOI">Adicionar Ponto de Interesse</string>
     <string name="msgAddCategory">Adicionar Categoria</string>
+    <string name="msgComments">Comentários</string>
+    <string name="msgEditPOI">Editar Ponto de Interesse</string>
+    <string name="msgEditCategory">Editar Categoria</string>
+    <string name="msgEditLocation">Editar Localização</string>
+    <string name="msgCategories">Categorias</string>
+    <string name="msgPOIS">Pontos de Interesse</string>
+    <string name="msgLocations">Localizações</string>
+    <string name="msgAddPOIPicture">Adicionar fotografia</string>
 </resources>

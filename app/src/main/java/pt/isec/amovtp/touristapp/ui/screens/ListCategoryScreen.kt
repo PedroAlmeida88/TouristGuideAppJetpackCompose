@@ -22,13 +22,16 @@ import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AccessAlarm
 import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material.icons.filled.Expand
 import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Divider
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -44,6 +47,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -58,10 +62,10 @@ fun ListCategoryScreen(navController: NavHostController?,modifier: Modifier = Mo
     val context = LocalContext.current
     val userUID = firebaseViewModel.authUser.value!!.uid
 
-
     var categories by remember {
         mutableStateOf<List<Category>>(emptyList())
     }
+
 
     //sempre que é iniciado, carrega as categorias
     LaunchedEffect(Unit) {
@@ -133,11 +137,11 @@ fun ListCategoryScreen(navController: NavHostController?,modifier: Modifier = Mo
                                     color = MaterialTheme.colorScheme.tertiary,
                                 )
                             }
-                            Divider(
+                            HorizontalDivider(
                                 modifier = Modifier
                                     .fillMaxWidth()
                                     .height(2.dp)
-                                    .background(MaterialTheme.colorScheme.tertiary)
+                                    .background(MaterialTheme.colorScheme.onTertiary)
                                 //.padding(vertical = 16.dp)
                             )
                         }
@@ -149,12 +153,21 @@ fun ListCategoryScreen(navController: NavHostController?,modifier: Modifier = Mo
                             verticalAlignment = Alignment.CenterVertically
                         ){
                             Column {
-                                Text(
-                                    text = category.name,
-                                    fontSize = 20.sp,
-                                    fontWeight = FontWeight.Bold,
-                                    color = MaterialTheme.colorScheme.secondary
-                                )
+                                Row{
+
+                                    Text(
+                                        text = category.icon,
+                                        fontSize = 20.sp,
+                                        fontWeight = FontWeight.Bold,
+                                        color = MaterialTheme.colorScheme.secondary
+                                    )
+                                    Icon(
+                                        imageVector = getImageVectorFromName(category.icon)!!,
+                                        contentDescription = "",
+                                        Modifier.size(20.dp)
+                                    )
+
+                                }
                                 Spacer(modifier = Modifier.height(4.dp))
                                 Text(
                                     text = category.description,
@@ -164,11 +177,11 @@ fun ListCategoryScreen(navController: NavHostController?,modifier: Modifier = Mo
                             }
                         }
                         Spacer(modifier = Modifier.height(16.dp))
-                        Divider(
+                        HorizontalDivider(
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .height(2.dp)
-                                .background(MaterialTheme.colorScheme.tertiary)
+                                .background(MaterialTheme.colorScheme.onTertiary)
                             //.padding(vertical = 16.dp)
                         )
                         Row(
@@ -340,11 +353,11 @@ fun LandscapeListCategoryScreen(navController: NavHostController?, modifier: Mod
                                     color = MaterialTheme.colorScheme.tertiary,
                                 )
                             }
-                            Divider(
+                            HorizontalDivider(
                                 modifier = Modifier
                                     .fillMaxWidth()
                                     .height(2.dp)
-                                    .background(MaterialTheme.colorScheme.tertiary)
+                                    .background(MaterialTheme.colorScheme.onTertiary)
                                 //.padding(vertical = 16.dp)
                             )
                         }
@@ -371,11 +384,11 @@ fun LandscapeListCategoryScreen(navController: NavHostController?, modifier: Mod
                             }
                         }
                         Spacer(modifier = Modifier.height(16.dp))
-                        Divider(
+                        HorizontalDivider(
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .height(2.dp)
-                                .background(MaterialTheme.colorScheme.tertiary)
+                                .background(MaterialTheme.colorScheme.onTertiary)
                             //.padding(vertical = 16.dp)
                         )
                         Row(

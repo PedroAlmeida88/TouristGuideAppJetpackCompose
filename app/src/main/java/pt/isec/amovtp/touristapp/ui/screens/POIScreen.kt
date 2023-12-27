@@ -31,6 +31,7 @@ import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.DeleteForever
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.FormatListNumberedRtl
+import androidx.compose.material.icons.filled.Map
 import androidx.compose.material.icons.filled.PhotoLibrary
 import androidx.compose.material.icons.filled.RestartAlt
 import androidx.compose.material.icons.filled.Warning
@@ -38,6 +39,7 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -147,11 +149,7 @@ fun POIScreen(modifier: Modifier = Modifier, navController: NavHostController?, 
                     elevation = CardDefaults.cardElevation(4.dp),
                     colors = CardDefaults.cardColors(
                         containerColor = MaterialTheme.colorScheme.primary
-                    ),
-                    onClick = {
-                        viewModel.selectedPoi = poi
-                        navController?.navigate(Screens.POI_DESCRIPTION.route)
-                    }
+                    )
                 ) {
                     if(poi.approvals < 2){
                         Row(
@@ -175,11 +173,11 @@ fun POIScreen(modifier: Modifier = Modifier, navController: NavHostController?, 
                                 color = MaterialTheme.colorScheme.tertiary,
                             )
                         }
-                        Divider(
+                        HorizontalDivider(
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .height(2.dp)
-                                .background(MaterialTheme.colorScheme.tertiary)
+                                .background(MaterialTheme.colorScheme.onTertiary)
                             //.padding(vertical = 16.dp)
                         )
                     }
@@ -215,11 +213,11 @@ fun POIScreen(modifier: Modifier = Modifier, navController: NavHostController?, 
                             Text(text = "${poi.latitude} ${poi.longitude}", fontSize = 8.sp,color = MaterialTheme.colorScheme.tertiary)
                         }
                     }
-                    Divider(
+                    HorizontalDivider(
                         modifier = Modifier
                             .fillMaxWidth()
                             .height(2.dp)
-                            .background(MaterialTheme.colorScheme.tertiary)
+                            .background(MaterialTheme.colorScheme.onTertiary)
                         //.padding(vertical = 16.dp)
                     )
                     Row(
@@ -253,7 +251,18 @@ fun POIScreen(modifier: Modifier = Modifier, navController: NavHostController?, 
                                 contentDescription = null
                             )
                         }
-
+                        IconButton(
+                            onClick = {
+                                viewModel.selectedPoi = poi
+                                navController?.navigate(Screens.POI_DESCRIPTION.route)
+                            },
+                            modifier = Modifier.padding(4.dp, 0.dp),
+                        ) {
+                            Icon(
+                                imageVector = Default.Map,
+                                contentDescription = null
+                            )
+                        }
                         if (poi.approvals < 2) {
                             Row (
                                 verticalAlignment = Alignment.CenterVertically,
@@ -437,11 +446,11 @@ fun LandscapePOIScreen(navController: NavHostController?, viewModel: LocationVie
                                 color = MaterialTheme.colorScheme.tertiary,
                             )
                         }
-                        Divider(
+                        HorizontalDivider(
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .height(2.dp)
-                                .background(MaterialTheme.colorScheme.tertiary)
+                                .background(MaterialTheme.colorScheme.onTertiary)
                             //.padding(vertical = 16.dp)
                         )
                     }
@@ -477,13 +486,14 @@ fun LandscapePOIScreen(navController: NavHostController?, viewModel: LocationVie
                             Text(text = "${poi.latitude} ${poi.longitude}", fontSize = 8.sp,color = MaterialTheme.colorScheme.tertiary)
                         }
                     }
-                    Divider(
+                    HorizontalDivider(
                         modifier = Modifier
                             .fillMaxWidth()
                             .height(2.dp)
-                            .background(MaterialTheme.colorScheme.tertiary)
+                            .background(MaterialTheme.colorScheme.onTertiary)
                         //.padding(vertical = 16.dp)
                     )
+                    //icons
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
@@ -512,6 +522,18 @@ fun LandscapePOIScreen(navController: NavHostController?, viewModel: LocationVie
                         ) {
                             Icon(
                                 imageVector = Default.PhotoLibrary,
+                                contentDescription = null
+                            )
+                        }
+                        IconButton(
+                            onClick = {
+                                viewModel.selectedPoi = poi
+                                navController?.navigate(Screens.POI_DESCRIPTION.route)
+                            },
+                            modifier = Modifier.padding(4.dp, 0.dp),
+                        ) {
+                            Icon(
+                                imageVector = Default.Map,
                                 contentDescription = null
                             )
                         }

@@ -189,11 +189,11 @@ fun LocationsScreen(navController: NavHostController?,viewModel : LocationViewMo
                                     color = MaterialTheme.colorScheme.tertiary,
                                 )
                             }
-                            Divider(
+                            HorizontalDivider(
                                 modifier = Modifier
                                     .fillMaxWidth()
                                     .height(2.dp)
-                                    .background(MaterialTheme.colorScheme.tertiary)
+                                    .background(MaterialTheme.colorScheme.onTertiary)
                                 //.padding(vertical = 16.dp)
                             )
                         }
@@ -227,8 +227,8 @@ fun LocationsScreen(navController: NavHostController?,viewModel : LocationViewMo
                                     .padding(8.dp),
 
                             ) {
-                                Text(text = location.name, fontSize = 20.sp)
-                                Text(text = location.description, fontSize = 14.sp)
+                                Text(text = location.name, fontSize = 20.sp,color = MaterialTheme.colorScheme.tertiary)
+                                Text(text = location.description, fontSize = 14.sp,color = MaterialTheme.colorScheme.tertiary)
 
                                 Text(
                                     text = "${location.latitude} ${location.longitude}",
@@ -250,13 +250,13 @@ fun LocationsScreen(navController: NavHostController?,viewModel : LocationViewMo
                                     )
                             }
                         }
-                        Divider(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .height(2.dp)
-                                .background(MaterialTheme.colorScheme.tertiary)
-                            //.padding(vertical = 16.dp)
-                        )
+                        if(location.approvals < 2 || location.userUID == userUID)
+                            HorizontalDivider(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .height(2.dp)
+                                    .background(MaterialTheme.colorScheme.onTertiary)
+                            )
                         //Linha do icons
                         Row(
                             modifier = Modifier
@@ -266,6 +266,7 @@ fun LocationsScreen(navController: NavHostController?,viewModel : LocationViewMo
                             verticalAlignment = Alignment.CenterVertically
                         ) {
                             if(location.approvals < 2) {
+
                                 Row (
                                     verticalAlignment = Alignment.CenterVertically
                                 ) {
@@ -336,12 +337,12 @@ fun LocationsScreen(navController: NavHostController?,viewModel : LocationViewMo
                         }
                     }
                 }
-                Divider(
+                HorizontalDivider(
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(2.dp)
-                        .background(MaterialTheme.colorScheme.tertiary)
-                        //.padding(vertical = 16.dp)
+                        .background(MaterialTheme.colorScheme.onTertiary)
+                    //.padding(vertical = 16.dp)
                 )
             }
         }
@@ -470,11 +471,11 @@ fun LandscapeLocationsScreen(navController: NavHostController?, viewModel: Locat
                                     color = MaterialTheme.colorScheme.tertiary,
                                 )
                             }
-                            Divider(
+                            HorizontalDivider(
                                 modifier = Modifier
                                     .fillMaxWidth()
                                     .height(2.dp)
-                                    .background(MaterialTheme.colorScheme.tertiary)
+                                    .background(MaterialTheme.colorScheme.onTertiary)
                                 //.padding(vertical = 16.dp)
                             )
                         }
@@ -531,11 +532,11 @@ fun LandscapeLocationsScreen(navController: NavHostController?, viewModel: Locat
                                     )
                             }
                         }
-                        Divider(
+                        HorizontalDivider(
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .height(2.dp)
-                                .background(MaterialTheme.colorScheme.tertiary)
+                                .background(MaterialTheme.colorScheme.onTertiary)
                             //.padding(vertical = 16.dp)
                         )
                         //Linha do icons
@@ -617,11 +618,11 @@ fun LandscapeLocationsScreen(navController: NavHostController?, viewModel: Locat
                         }
                     }
                 }
-                Divider(
+                HorizontalDivider(
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(2.dp)
-                        .background(MaterialTheme.colorScheme.tertiary)
+                        .background(MaterialTheme.colorScheme.onTertiary)
                     //.padding(vertical = 16.dp)
                 )
             }

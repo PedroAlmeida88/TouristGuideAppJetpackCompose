@@ -29,6 +29,14 @@
     <string name="msgLastName">Last Name</string>
     <string name="msgCreateAccount">Create Account</string>
     <string name="msgAddLocation">Add Location</string>
-    <string name="msgAddPOI">Add Point of Interest</string>
+    <string name="msgAddPOI">Add Point of Interest Picture</string>
     <string name="msgAddCategory">Add Category</string>
+    <string name="msgComments">Comments</string>
+    <string name="msgEditPOI">Edit Point Of Interest</string>
+    <string name="msgEditCategory">Edit Category</string>
+    <string name="msgEditLocation">Edit Location</string>
+    <string name="msgCategories">Categories</string>
+    <string name="msgPOIS">Poins Of Interest</string>
+    <string name="msgLocations">Locations</string>
+    <string name="msgAddPOIPicture">Add Picture</string>
 </resources>
