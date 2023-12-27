@@ -118,24 +118,9 @@ fun MainScreen(navController:NavHostController = rememberNavController(),
                             )
                         }
                     },
-                    actions = {
-                        if (Screens.valueOf(currentScreen!!.destination.route!!) != Screens.LOGIN)
-                        IconButton(
-                            onClick = {
-                                firebaseViewModel.signOut()
-                                navController.navigate(Screens.LOGIN.route) {
-                                    popUpTo(Screens.LOGIN.route) { inclusive = true }
-                            }
-                        }) {
-                            Icon(
-                                Icons.Default.ExitToApp,
-                                contentDescription = stringResource(R.string.msgLogout),
-                            )
-                        }
-                    },
                     colors = TopAppBarDefaults.topAppBarColors(
-                        containerColor = MaterialTheme.colorScheme.primary,
-                        titleContentColor = Color.White
+                    containerColor = MaterialTheme.colorScheme.primary,
+                    titleContentColor = Color.White
                     ),
                 )
             }
