@@ -1,9 +1,7 @@
 package pt.isec.amovtp.touristapp.ui.screens
 
-import android.R
 import android.widget.Toast
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
@@ -16,16 +14,12 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons.Default
 import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.DeleteForever
@@ -37,7 +31,6 @@ import androidx.compose.material.icons.filled.RestartAlt
 import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -56,6 +49,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
@@ -210,7 +204,24 @@ fun POIScreen(modifier: Modifier = Modifier, navController: NavHostController?, 
                         ){
                             Text(text = poi.name, fontSize = 20.sp,color = MaterialTheme.colorScheme.tertiary)
                             Text(text = poi.description, fontSize = 14.sp,color = MaterialTheme.colorScheme.tertiary)
-                            Text(text = "${poi.latitude} ${poi.longitude}", fontSize = 8.sp,color = MaterialTheme.colorScheme.tertiary)
+                            Row (
+                                horizontalArrangement = Arrangement.SpaceBetween
+                            ){
+                                Text(text = "${poi.latitude} ${poi.longitude}", fontSize = 8.sp,color = MaterialTheme.colorScheme.tertiary)
+                                if (poi.writenCoords) {
+                                    Text(
+                                        text = stringResource(id = pt.isec.amovtp.touristapp.R.string.msgCoordsWritten),
+                                        fontSize = 6.sp,
+                                        color = MaterialTheme.colorScheme.tertiary
+                                    )
+                                }else{
+                                    Text(
+                                        text = stringResource(id = pt.isec.amovtp.touristapp.R.string.msgCoordsLocation),
+                                        fontSize = 6.sp,
+                                        color = MaterialTheme.colorScheme.tertiary
+                                    )
+                                }
+                            }
                         }
                     }
                     HorizontalDivider(
@@ -483,7 +494,24 @@ fun LandscapePOIScreen(navController: NavHostController?, viewModel: LocationVie
                             ){
                             Text(text = poi.name, fontSize = 20.sp,color = MaterialTheme.colorScheme.tertiary)
                             Text(text = poi.description, fontSize = 14.sp,color = MaterialTheme.colorScheme.tertiary)
-                            Text(text = "${poi.latitude} ${poi.longitude}", fontSize = 8.sp,color = MaterialTheme.colorScheme.tertiary)
+                            Row (
+                                horizontalArrangement = Arrangement.SpaceBetween
+                            ){
+                                Text(text = "${poi.latitude} ${poi.longitude}", fontSize = 8.sp,color = MaterialTheme.colorScheme.tertiary)
+                                if (poi.writenCoords) {
+                                    Text(
+                                        text = stringResource(id = pt.isec.amovtp.touristapp.R.string.msgCoordsWritten),
+                                        fontSize = 6.sp,
+                                        color = MaterialTheme.colorScheme.tertiary
+                                    )
+                                }else{
+                                    Text(
+                                        text = stringResource(id = pt.isec.amovtp.touristapp.R.string.msgCoordsLocation),
+                                        fontSize = 6.sp,
+                                        color = MaterialTheme.colorScheme.tertiary
+                                    )
+                                }
+                            }
                         }
                     }
                     HorizontalDivider(
