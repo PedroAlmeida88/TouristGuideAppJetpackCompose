@@ -154,6 +154,8 @@ class StorageUtil {
                 "WritenCoords" to poi.writenCoords,
                 "Approvals" to poi.approvals,
                 "UserUID" to poi.userUID,
+                "TotalLikes" to 0,
+                "TotalDislikes" to 0,
             )
 
             db.collection(Collections.Locations.route)
@@ -610,9 +612,13 @@ class StorageUtil {
                 }
             }
         }
+        fun deleteImageFromStorage(directory: String, imgFile: String, inputStream: InputStream) {
+            val storage = Firebase.storage
+            val ref1 = storage.reference
+            val ref2 = ref1.child(directory)
+            val ref3 = ref2.child(imgFile)
 
-
-
-
+            ref3.delete()
+        }
     }
 }

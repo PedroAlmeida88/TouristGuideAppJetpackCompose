@@ -186,6 +186,13 @@ class FirebaseViewModel : ViewModel() {
             }
         }
     }
+    fun deleteImageFromStorage(directory: String,imageName: String, path: String) {
+        viewModelScope.launch {
+            StorageUtil.getFileFromPath(path)?.let { inputStream ->
+                StorageUtil.deleteImageFromStorage(directory, imageName, inputStream)
+            }
+        }
+    }
 
     fun getPoisFromFirestore(selectedLocation: Location?, callback: (List<PointOfInterest>) -> Unit) {
         viewModelScope.launch {

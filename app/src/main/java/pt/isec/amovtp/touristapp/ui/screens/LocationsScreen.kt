@@ -2,7 +2,6 @@ package pt.isec.amovtp.touristapp.ui.screens
 
 import android.widget.Toast
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
@@ -17,15 +16,11 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.LazyGridScope
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons.Default
 import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.Delete
@@ -34,8 +29,6 @@ import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.Divider
-import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -228,26 +221,30 @@ fun LocationsScreen(navController: NavHostController?,viewModel : LocationViewMo
 
                             ) {
                                 Text(text = location.name, fontSize = 20.sp,color = MaterialTheme.colorScheme.tertiary)
-                                Text(text = location.description, fontSize = 14.sp,color = MaterialTheme.colorScheme.tertiary)
+                                Text(text = location.description, fontSize = 12.sp,color = MaterialTheme.colorScheme.tertiary)
 
-                                Text(
-                                    text = "${location.latitude} ${location.longitude}",
-                                    fontSize = 8.sp,
-                                    color = MaterialTheme.colorScheme.tertiary
-                                )
-                                if (location.writenCoords)
+                                Row (
+                                    horizontalArrangement = Arrangement.SpaceBetween
+                                ){
                                     Text(
-                                        text = stringResource(id = R.string.msgCoordsWritten),
-                                        fontSize = 8.sp,
-                                        color = MaterialTheme.colorScheme.tertiary
-
-                                    )
-                                else
-                                    Text(
-                                        text = stringResource(id = R.string.msgCoordsLocation),
+                                        text = "${location.latitude} ${location.longitude}",
                                         fontSize = 8.sp,
                                         color = MaterialTheme.colorScheme.tertiary
                                     )
+                                    if (location.writenCoords) {
+                                        Text(
+                                            text = stringResource(id = R.string.msgCoordsWritten),
+                                            fontSize = 6.sp,
+                                            color = MaterialTheme.colorScheme.tertiary
+                                        )
+                                    } else {
+                                        Text(
+                                            text = stringResource(id = R.string.msgCoordsLocation),
+                                            fontSize = 6.sp,
+                                            color = MaterialTheme.colorScheme.tertiary
+                                        )
+                                    }
+                                }
                             }
                         }
                         if(location.approvals < 2 || location.userUID == userUID)
@@ -520,14 +517,14 @@ fun LandscapeLocationsScreen(navController: NavHostController?, viewModel: Locat
                                 if (location.writenCoords)
                                     Text(
                                         text = stringResource(id = R.string.msgCoordsWritten),
-                                        fontSize = 8.sp,
+                                        fontSize = 6.sp,
                                         color = MaterialTheme.colorScheme.tertiary
 
                                     )
                                 else
                                     Text(
                                         text = stringResource(id = R.string.msgCoordsLocation),
-                                        fontSize = 8.sp,
+                                        fontSize = 6.sp,
                                         color = MaterialTheme.colorScheme.tertiary
                                     )
                             }
