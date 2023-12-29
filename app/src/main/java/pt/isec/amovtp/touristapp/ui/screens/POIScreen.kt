@@ -327,9 +327,9 @@ fun POIScreen(modifier: Modifier = Modifier, navController: NavHostController?, 
                                         firebaseViewModel.getPoisFromFirestore(selectedLocation) { loadedPois ->
                                             pois = loadedPois
                                         }
-                                        Toast.makeText(context, "Poi eliminada com sucesso!", Toast.LENGTH_LONG).show()
+                                        Toast.makeText(context, "Point Of Interest deleted successfully!", Toast.LENGTH_LONG).show()
                                     }else{
-                                        Toast.makeText(context, "Poi com já tem votos!", Toast.LENGTH_LONG).show()
+                                        Toast.makeText(context, "Points of Interest already have votes!", Toast.LENGTH_LONG).show()
 
                                     }
                                 },
@@ -619,9 +619,9 @@ fun LandscapePOIScreen(navController: NavHostController?, viewModel: LocationVie
                                         firebaseViewModel.getPoisFromFirestore(selectedLocation) { loadedPois ->
                                             pois = loadedPois
                                         }
-                                        Toast.makeText(context, "Poi eliminada com sucesso!", Toast.LENGTH_LONG).show()
+                                        Toast.makeText(context, "Point Of Interest deleted successfully!", Toast.LENGTH_LONG).show()
                                     }else{
-                                        Toast.makeText(context, "Poi com já tem votos!", Toast.LENGTH_LONG).show()
+                                        Toast.makeText(context, "Points of Interest already have votes!", Toast.LENGTH_LONG).show()
 
                                     }
                                 },

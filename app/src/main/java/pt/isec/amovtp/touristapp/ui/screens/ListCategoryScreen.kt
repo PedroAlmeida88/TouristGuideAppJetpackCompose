@@ -2,7 +2,6 @@ package pt.isec.amovtp.touristapp.ui.screens
 
 import android.widget.Toast
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
@@ -22,15 +21,12 @@ import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.AccessAlarm
 import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
-import androidx.compose.material.icons.filled.Expand
 import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.Divider
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -39,7 +35,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -47,7 +42,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -156,7 +150,7 @@ fun ListCategoryScreen(navController: NavHostController?,modifier: Modifier = Mo
                                 Row{
 
                                     Text(
-                                        text = category.icon,
+                                        text = category.name,
                                         fontSize = 20.sp,
                                         fontWeight = FontWeight.Bold,
                                         color = MaterialTheme.colorScheme.secondary
@@ -248,9 +242,9 @@ fun ListCategoryScreen(navController: NavHostController?,modifier: Modifier = Mo
                                                 firebaseViewModel.getCategoriesFromFirestore() { loadedCategories ->
                                                     categories = loadedCategories
                                                 }
-                                                Toast.makeText(context, "Categoria eliminada com sucesso!", Toast.LENGTH_LONG).show()
+                                                Toast.makeText(context, "Category deleted successfully!", Toast.LENGTH_LONG).show()
                                             }else
-                                                Toast.makeText(context, "Categoria não eliminada.Já existem POIS associados", Toast.LENGTH_LONG).show()
+                                                Toast.makeText(context, "Category not deleted. There are already associated Points of Interest", Toast.LENGTH_LONG).show()
 
                                         },
                                         modifier = Modifier.padding(8.dp),
@@ -455,9 +449,9 @@ fun LandscapeListCategoryScreen(navController: NavHostController?, modifier: Mod
                                                 firebaseViewModel.getCategoriesFromFirestore() { loadedCategories ->
                                                     categories = loadedCategories
                                                 }
-                                                Toast.makeText(context, "Categoria eliminada com sucesso!", Toast.LENGTH_LONG).show()
+                                                Toast.makeText(context, "Category deleted successfully!", Toast.LENGTH_LONG).show()
                                             }else
-                                                Toast.makeText(context, "Categoria não eliminada.Já existem POIS associados", Toast.LENGTH_LONG).show()
+                                                Toast.makeText(context, "Category not deleted. There are already associated Points of Interest", Toast.LENGTH_LONG).show()
 
                                         },
                                         modifier = Modifier.padding(8.dp),
