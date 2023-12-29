@@ -96,14 +96,15 @@ fun AddCommentsScreen(modfier: Modifier.Companion, locationViewModel: LocationVi
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         if(alreadyRated)
-            Text(text = "You already rated", color = Color.Green, fontSize = 16.sp)
+            Text(text = stringResource(id = R.string.msgAlreadyRated), color = Color.Green, fontSize = 16.sp)
         if(alreadyComment)
-            Text(text = "You already commented", color = Color.Green, fontSize = 16.sp)
+            Text(text = stringResource(id = R.string.msgAlreadyComment), color = Color.Green, fontSize = 16.sp)
 
         Text(
-            text = "Comentários" + selectedPoi?.name,
+            text = stringResource(id = R.string.msgComments) + " " +selectedPoi?.name,
             fontSize = 24.sp,
             textAlign = TextAlign.Center,
+            color = MaterialTheme.colorScheme.tertiary,
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(0.dp, 24.dp)
@@ -160,6 +161,7 @@ fun AddCommentsScreen(modfier: Modifier.Companion, locationViewModel: LocationVi
             }
 
         if(!alreadyRated)
+            Spacer(modifier = Modifier.height(16.dp))
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.Center,
@@ -180,19 +182,36 @@ fun AddCommentsScreen(modfier: Modifier.Companion, locationViewModel: LocationVi
 
                 IconButton(
                     onClick = {
-                        isRatingEnabled = false
-                        rating = myRating
-                        for (c in comments) {
-                            if (c?.userUID == firebaseViewModel.authUser.value?.uid) {
-                                commentToSubmit = c!!.description
+                        if(rating != 0) {
+                            isRatingEnabled = false
+                            rating = myRating
+                            for (c in comments) {
+                                if (c?.userUID == firebaseViewModel.authUser.value?.uid) {
+                                    commentToSubmit = c!!.description
+                                }
                             }
+                            firebaseViewModel.addCommentToFirestore(
+                                Comment(
+                                    commentToSubmit,
+                                    userName,
+                                    userUID,
+                                    date,
+                                    rating
+                                ), selectedLocation, selectedPoi
+                            )
+                            //atualizar a lista
+                            firebaseViewModel.getCommentsFromFirestore(
+                                selectedLocation,
+                                selectedPoi
+                            ) { loadedComments ->
+                                comments = loadedComments
+                            }
+                            Toast.makeText(
+                                context,
+                                "Classification sent successfully!",
+                                Toast.LENGTH_LONG
+                            ).show()
                         }
-                        firebaseViewModel.addCommentToFirestore(Comment(commentToSubmit,userName, userUID,date,rating),selectedLocation,selectedPoi)
-                        //atualizar a lista
-                        firebaseViewModel.getCommentsFromFirestore(selectedLocation, selectedPoi) { loadedComments ->
-                            comments = loadedComments
-                        }
-                        Toast.makeText(context, "Classificação submetida com sucesso!", Toast.LENGTH_LONG).show()
                     },
                     enabled = isRatingEnabled
                 ) {
@@ -312,14 +331,15 @@ fun LandscapeAddCommentsScreen(modfier: Modifier.Companion, locationViewModel: L
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         if(alreadyRated)
-            Text(text = "You already rated", color = Color.Green, fontSize = 16.sp)
+            Text(text =  stringResource(id = R.string.msgAlreadyRated), color = Color.Green, fontSize = 16.sp)
         if(alreadyComment)
-            Text(text = "You already commented", color = Color.Green, fontSize = 16.sp)
+            Text(text =  stringResource(id = R.string.msgAlreadyComment), color = Color.Green, fontSize = 16.sp)
 
         Text(
-            text = "Comentários" + selectedPoi?.name,
+            text = stringResource(id = R.string.msgComments) + " " + selectedPoi?.name,
             fontSize = 24.sp,
             textAlign = TextAlign.Center,
+            color = MaterialTheme.colorScheme.tertiary,
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(0.dp, 24.dp)
@@ -373,6 +393,7 @@ fun LandscapeAddCommentsScreen(modfier: Modifier.Companion, locationViewModel: L
             }
 
         if(!alreadyRated)
+            Spacer(modifier = Modifier.height(16.dp))
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.Center,
@@ -393,19 +414,36 @@ fun LandscapeAddCommentsScreen(modfier: Modifier.Companion, locationViewModel: L
 
                 IconButton(
                     onClick = {
-                        isRatingEnabled = false
-                        rating = myRating
-                        for (c in comments) {
-                            if (c?.userUID == firebaseViewModel.authUser.value?.uid) {
-                                commentToSubmit = c!!.description
+                        if(rating != 0) {
+                            isRatingEnabled = false
+                            rating = myRating
+                            for (c in comments) {
+                                if (c?.userUID == firebaseViewModel.authUser.value?.uid) {
+                                    commentToSubmit = c!!.description
+                                }
                             }
+                            firebaseViewModel.addCommentToFirestore(
+                                Comment(
+                                    commentToSubmit,
+                                    userName,
+                                    userUID,
+                                    date,
+                                    rating
+                                ), selectedLocation, selectedPoi
+                            )
+                            //atualizar a lista
+                            firebaseViewModel.getCommentsFromFirestore(
+                                selectedLocation,
+                                selectedPoi
+                            ) { loadedComments ->
+                                comments = loadedComments
+                            }
+                            Toast.makeText(
+                                context,
+                                "Classification sent successfully!",
+                                Toast.LENGTH_LONG
+                            ).show()
                         }
-                        firebaseViewModel.addCommentToFirestore(Comment(commentToSubmit,userName, userUID,date,rating),selectedLocation,selectedPoi)
-                        //atualizar a lista
-                        firebaseViewModel.getCommentsFromFirestore(selectedLocation, selectedPoi) { loadedComments ->
-                            comments = loadedComments
-                        }
-                        Toast.makeText(context, "Classificação submetida com sucesso!", Toast.LENGTH_LONG).show()
                     },
                     enabled = isRatingEnabled
                 ) {

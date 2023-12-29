@@ -40,4 +40,6 @@
     <string name="msgPOIS">Poins Of Interest</string>
     <string name="msgLocations">Locations</string>
     <string name="msgAddPOIPicture">Add Picture</string>
+    <string name="msgAlreadyRated">You already rated</string>
+    <string name="msgAlreadyComment">You already commented</string>
 </resources>
