@@ -318,9 +318,9 @@ fun LocationsScreen(navController: NavHostController?,viewModel : LocationViewMo
                                             firebaseViewModel.getLocationFromFirestore { loadedLocations ->
                                                 locations = loadedLocations
                                             }
-                                            Toast.makeText(context, "Localização eliminada com sucesso!", Toast.LENGTH_LONG).show()
+                                            Toast.makeText(context, "Location deleted successfully!", Toast.LENGTH_LONG).show()
                                         }else
-                                            Toast.makeText(context, "Localização não eliminada.Já existem POIS associados", Toast.LENGTH_LONG).show()
+                                            Toast.makeText(context, "Location not deleted. There are already associated Points of Interest", Toast.LENGTH_LONG).show()
 
                                     },
                                     modifier = Modifier.padding(8.dp),
@@ -599,9 +599,9 @@ fun LandscapeLocationsScreen(navController: NavHostController?, viewModel: Locat
                                             firebaseViewModel.getLocationFromFirestore { loadedLocations ->
                                                 locations = loadedLocations
                                             }
-                                            Toast.makeText(context, "Localização eliminada com sucesso!", Toast.LENGTH_LONG).show()
+                                            Toast.makeText(context, "Location deleted successfully!", Toast.LENGTH_LONG).show()
                                         }else
-                                            Toast.makeText(context, "Localização não eliminada.Já existem POIS associados", Toast.LENGTH_LONG).show()
+                                            Toast.makeText(context, "Location not deleted. There are already associated Points of Interest", Toast.LENGTH_LONG).show()
 
                                     },
                                     modifier = Modifier.padding(8.dp),

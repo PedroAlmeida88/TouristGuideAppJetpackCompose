@@ -242,9 +242,9 @@ fun ListCategoryScreen(navController: NavHostController?,modifier: Modifier = Mo
                                                 firebaseViewModel.getCategoriesFromFirestore() { loadedCategories ->
                                                     categories = loadedCategories
                                                 }
-                                                Toast.makeText(context, "Categoria eliminada com sucesso!", Toast.LENGTH_LONG).show()
+                                                Toast.makeText(context, "Category deleted successfully!", Toast.LENGTH_LONG).show()
                                             }else
-                                                Toast.makeText(context, "Categoria não eliminada.Já existem POIS associados", Toast.LENGTH_LONG).show()
+                                                Toast.makeText(context, "Category not deleted. There are already associated Points of Interest", Toast.LENGTH_LONG).show()
 
                                         },
                                         modifier = Modifier.padding(8.dp),
@@ -449,9 +449,9 @@ fun LandscapeListCategoryScreen(navController: NavHostController?, modifier: Mod
                                                 firebaseViewModel.getCategoriesFromFirestore() { loadedCategories ->
                                                     categories = loadedCategories
                                                 }
-                                                Toast.makeText(context, "Categoria eliminada com sucesso!", Toast.LENGTH_LONG).show()
+                                                Toast.makeText(context, "Category deleted successfully!", Toast.LENGTH_LONG).show()
                                             }else
-                                                Toast.makeText(context, "Categoria não eliminada.Já existem POIS associados", Toast.LENGTH_LONG).show()
+                                                Toast.makeText(context, "Category not deleted. There are already associated Points of Interest", Toast.LENGTH_LONG).show()
 
                                         },
                                         modifier = Modifier.padding(8.dp),
