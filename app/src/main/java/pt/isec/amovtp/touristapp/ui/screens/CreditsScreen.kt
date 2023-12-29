@@ -60,17 +60,20 @@ fun CreditsScreen(modifier: Modifier = Modifier) {
         )
         Text(
             text = "Departamento de Engenharia Informática e de Sistemas",
+            color = MaterialTheme.colorScheme.tertiary,
             fontSize = 12.sp,
             modifier = Modifier.padding(4.dp)
         )
         Spacer(modifier = Modifier.height(18.dp))
         Text(
             text = "Practical Work Nº1 - Mobile Arquitecture",
+            color = MaterialTheme.colorScheme.tertiary,
             fontSize = 20.sp
         )
         Text(
             text = "Done by:",
-            fontSize = 18.sp
+            fontSize = 18.sp,
+            color = MaterialTheme.colorScheme.tertiary,
         )
         Spacer(modifier = Modifier.height(18.dp))
         LazyRow (
