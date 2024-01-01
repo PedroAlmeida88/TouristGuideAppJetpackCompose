@@ -23,7 +23,6 @@ import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -48,25 +47,24 @@ import pt.isec.amovtp.touristapp.ui.viewmodels.LocationViewModel
 
 
 @Composable
-fun EditPOIScreen(modifier: Modifier.Companion, navController: NavHostController?,locationViewModel: LocationViewModel, firebaseViewModel: FirebaseViewModel) {
+fun EditPOIScreen(navController: NavHostController?,locationViewModel: LocationViewModel, firebaseViewModel: FirebaseViewModel) {
     val selectedPoi = locationViewModel.selectedPoi
     val context = LocalContext.current
     val selectedLocation = locationViewModel.selectedLocation
     locationViewModel.selectedCategory = selectedPoi!!.category
-    var selectedCategory = locationViewModel.selectedCategory
-    val location = locationViewModel.currentLocation.observeAsState()
+    val selectedCategory = locationViewModel.selectedCategory
     val focusManager = LocalFocusManager.current
     val userUID = firebaseViewModel.authUser.value!!.uid
 
-    var poiName by remember { mutableStateOf(selectedPoi!!.name) }
-    var poiDescription by remember { mutableStateOf(selectedPoi!!.description) }
-    var longitude by remember { mutableStateOf(selectedPoi!!.longitude.toString()) }
-    var latitude by remember { mutableStateOf(selectedPoi!!.latitude.toString()) }
+    val poiName by remember { mutableStateOf(selectedPoi.name) }
+    var poiDescription by remember { mutableStateOf(selectedPoi.description) }
+    var longitude by remember { mutableStateOf(selectedPoi.longitude.toString()) }
+    var latitude by remember { mutableStateOf(selectedPoi.latitude.toString()) }
 
     var isFormValid by remember { mutableStateOf(false) }
     var isInputEnabled by remember { mutableStateOf(false) }
     var isError by remember { mutableStateOf(false) }
-    var writenCoords by remember { mutableStateOf(selectedPoi!!.writenCoords) }
+    var writenCoords by remember { mutableStateOf(selectedPoi.writenCoords) }
 
     fun validateForm() {
         val longitudeDouble: Double? = longitude.toDoubleOrNull()
@@ -115,7 +113,7 @@ fun EditPOIScreen(modifier: Modifier.Companion, navController: NavHostController
             keyboardActions = KeyboardActions {
                 focusManager.clearFocus()
             },
-            label = { Text(text = stringResource(id = R.string.msgDescription),color = MaterialTheme.colorScheme.tertiary,) },
+            label = { Text(text = stringResource(id = R.string.msgDescription),color = MaterialTheme.colorScheme.tertiary) },
             modifier = Modifier.fillMaxWidth()
         )
 
@@ -169,7 +167,7 @@ fun EditPOIScreen(modifier: Modifier.Companion, navController: NavHostController
                 keyboardActions = KeyboardActions {
                     focusManager.moveFocus(FocusDirection.Next)
                 },
-                label = { Text(text = stringResource(id = R.string.msgLongitude),color = MaterialTheme.colorScheme.tertiary,) },
+                label = { Text(text = stringResource(id = R.string.msgLongitude),color = MaterialTheme.colorScheme.tertiary) },
                 enabled = isInputEnabled,
                 modifier = Modifier
                     .weight(1f, false)
@@ -185,7 +183,7 @@ fun EditPOIScreen(modifier: Modifier.Companion, navController: NavHostController
                 keyboardActions = KeyboardActions {
                     focusManager.clearFocus()
                 },
-                label = { Text(text = stringResource(id = R.string.msgLatitude),color = MaterialTheme.colorScheme.tertiary,) },
+                label = { Text(text = stringResource(id = R.string.msgLatitude),color = MaterialTheme.colorScheme.tertiary) },
                 enabled = isInputEnabled,
                 modifier = Modifier
                     .weight(1f, false)
@@ -193,7 +191,7 @@ fun EditPOIScreen(modifier: Modifier.Companion, navController: NavHostController
         }
 
         Box {
-            locationViewModel.imagePath.value = selectedPoi!!.photoUrl
+            locationViewModel.imagePath.value = selectedPoi.photoUrl
             TakePhotoOrLoadFromGallery(locationViewModel.imagePath, Modifier.fillMaxWidth())
             validateForm()
         }
@@ -203,7 +201,7 @@ fun EditPOIScreen(modifier: Modifier.Companion, navController: NavHostController
                     isError = true
                 } else {
                     isError = false
-                    var POI = PointOfInterest(
+                    val poi = PointOfInterest(
                         name = poiName,
                         description = poiDescription,
                         category = selectedCategory ?: Category("","","",0, 0,emptyList(),""),
@@ -216,7 +214,7 @@ fun EditPOIScreen(modifier: Modifier.Companion, navController: NavHostController
                         userUID = userUID
                     )
 
-                    firebaseViewModel.addPOIToFirestore(selectedLocation?.name ?: ""  ,POI)
+                    firebaseViewModel.addPOIToFirestore(selectedLocation?.name ?: ""  ,poi)
                     firebaseViewModel.uploadPOIToStorage(directory = "images/" + selectedLocation?.name +"/pois/",imageName = poiName, path = locationViewModel.imagePath.value ?: "", locationName = selectedLocation?.name ?: "" )
                     locationViewModel.imagePath.value = null
                     navController?.popBackStack()
@@ -233,25 +231,24 @@ fun EditPOIScreen(modifier: Modifier.Companion, navController: NavHostController
 }
 
 @Composable
-fun LandscapeEditPOIScreen(modifier: Modifier = Modifier, navController: NavHostController, locationViewModel: LocationViewModel, firebaseViewModel: FirebaseViewModel) {
+fun LandscapeEditPOIScreen(navController: NavHostController, locationViewModel: LocationViewModel, firebaseViewModel: FirebaseViewModel) {
     val selectedPoi = locationViewModel.selectedPoi
     val context = LocalContext.current
     val selectedLocation = locationViewModel.selectedLocation
     locationViewModel.selectedCategory = selectedPoi!!.category
-    var selectedCategory = locationViewModel.selectedCategory
-    val location = locationViewModel.currentLocation.observeAsState()
+    val selectedCategory = locationViewModel.selectedCategory
     val focusManager = LocalFocusManager.current
     val userUID = firebaseViewModel.authUser.value!!.uid
 
-    var poiName by remember { mutableStateOf(selectedPoi!!.name) }
-    var poiDescription by remember { mutableStateOf(selectedPoi!!.description) }
-    var longitude by remember { mutableStateOf(selectedPoi!!.longitude.toString()) }
-    var latitude by remember { mutableStateOf(selectedPoi!!.latitude.toString()) }
+    val poiName by remember { mutableStateOf(selectedPoi.name) }
+    var poiDescription by remember { mutableStateOf(selectedPoi.description) }
+    var longitude by remember { mutableStateOf(selectedPoi.longitude.toString()) }
+    var latitude by remember { mutableStateOf(selectedPoi.latitude.toString()) }
 
     var isFormValid by remember { mutableStateOf(false) }
     var isInputEnabled by remember { mutableStateOf(false) }
     var isError by remember { mutableStateOf(false) }
-    var writenCoords by remember { mutableStateOf(selectedPoi!!.writenCoords) }
+    var writenCoords by remember { mutableStateOf(selectedPoi.writenCoords) }
 
     fun validateForm() {
         val longitudeDouble: Double? = longitude.toDoubleOrNull()
@@ -350,7 +347,7 @@ fun LandscapeEditPOIScreen(modifier: Modifier = Modifier, navController: NavHost
                         keyboardActions = KeyboardActions {
                             focusManager.moveFocus(FocusDirection.Next)
                         },
-                        label = { Text(text = stringResource(id = R.string.msgLongitude),color = MaterialTheme.colorScheme.tertiary,) },
+                        label = { Text(text = stringResource(id = R.string.msgLongitude),color = MaterialTheme.colorScheme.tertiary) },
                         enabled = isInputEnabled,
                         modifier = Modifier
                             .weight(1f, false)
@@ -366,7 +363,7 @@ fun LandscapeEditPOIScreen(modifier: Modifier = Modifier, navController: NavHost
                         keyboardActions = KeyboardActions {
                             focusManager.clearFocus()
                         },
-                        label = { Text(text = stringResource(id = R.string.msgLatitude),color = MaterialTheme.colorScheme.tertiary,) },
+                        label = { Text(text = stringResource(id = R.string.msgLatitude),color = MaterialTheme.colorScheme.tertiary) },
                         enabled = isInputEnabled,
                         modifier = Modifier
                             .weight(1f, false)
@@ -387,7 +384,7 @@ fun LandscapeEditPOIScreen(modifier: Modifier = Modifier, navController: NavHost
                 )
                 Spacer(modifier = Modifier.height(8.dp))
                 Box {
-                    locationViewModel.imagePath.value = selectedPoi!!.photoUrl
+                    locationViewModel.imagePath.value = selectedPoi.photoUrl
                     TakePhotoOrLoadFromGallery(locationViewModel.imagePath, Modifier.fillMaxWidth())
                     validateForm()
                 }
@@ -399,7 +396,7 @@ fun LandscapeEditPOIScreen(modifier: Modifier = Modifier, navController: NavHost
                     isError = true
                 } else {
                     isError = false
-                    var POI = PointOfInterest(
+                    val poi = PointOfInterest(
                         name = poiName,
                         description = poiDescription,
                         category = selectedCategory ?: Category("","","",0, 0,emptyList(),""),
@@ -412,10 +409,10 @@ fun LandscapeEditPOIScreen(modifier: Modifier = Modifier, navController: NavHost
                         userUID = userUID
                     )
 
-                    firebaseViewModel.addPOIToFirestore(selectedLocation?.name ?: ""  ,POI)
+                    firebaseViewModel.addPOIToFirestore(selectedLocation?.name ?: ""  ,poi)
                     firebaseViewModel.uploadPOIToStorage(directory = "images/" + selectedLocation?.name +"/pois/",imageName = poiName, path = locationViewModel.imagePath.value ?: "", locationName = selectedLocation?.name ?: "" )
                     locationViewModel.imagePath.value = null
-                    navController?.popBackStack()
+                    navController.popBackStack()
                     Toast.makeText(context,"Success",Toast.LENGTH_LONG).show()
                 }
             },

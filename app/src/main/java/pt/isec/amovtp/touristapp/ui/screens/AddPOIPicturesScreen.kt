@@ -45,7 +45,7 @@ import pt.isec.amovtp.touristapp.ui.viewmodels.FirebaseViewModel
 import pt.isec.amovtp.touristapp.ui.viewmodels.LocationViewModel
 
 @Composable
-fun AddPOIPicturesScreen(modfier: Modifier.Companion, locationViewModel: LocationViewModel, firebaseViewModel: FirebaseViewModel){
+fun AddPOIPicturesScreen(locationViewModel: LocationViewModel, firebaseViewModel: FirebaseViewModel){
     val selectedLocation = locationViewModel.selectedLocation
     val selectedPoi = locationViewModel.selectedPoi
     val context = LocalContext.current
@@ -61,7 +61,7 @@ fun AddPOIPicturesScreen(modfier: Modifier.Companion, locationViewModel: Locatio
         firebaseViewModel.getPOIUniquePhotoFromFirestore(selectedLocation,selectedPoi){ loadedImages ->
             images = loadedImages
             for (i in images) {
-                if (i?.userUID == firebaseViewModel.authUser.value?.uid) {
+                if (i.userUID == firebaseViewModel.authUser.value?.uid) {
                     alreadyPosted = true
                     break
                 }
@@ -191,7 +191,7 @@ fun AddPOIPicturesScreen(modfier: Modifier.Companion, locationViewModel: Locatio
 
 
 @Composable
-fun LandscapeAddPOIPicturesScreen(modfier: Modifier.Companion, locationViewModel: LocationViewModel, firebaseViewModel: FirebaseViewModel) {
+fun LandscapeAddPOIPicturesScreen( locationViewModel: LocationViewModel, firebaseViewModel: FirebaseViewModel) {
     val selectedLocation = locationViewModel.selectedLocation
     val selectedPoi = locationViewModel.selectedPoi
     val context = LocalContext.current
@@ -207,7 +207,7 @@ fun LandscapeAddPOIPicturesScreen(modfier: Modifier.Companion, locationViewModel
         firebaseViewModel.getPOIUniquePhotoFromFirestore(selectedLocation,selectedPoi){ loadedImages ->
             images = loadedImages
             for (i in images) {
-                if (i?.userUID == firebaseViewModel.authUser.value?.uid) {
+                if (i.userUID == firebaseViewModel.authUser.value?.uid) {
                     alreadyPosted = true
                     break
                 }

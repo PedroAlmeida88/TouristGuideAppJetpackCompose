@@ -42,4 +42,5 @@
     <string name="msgAddPOIPicture">Adicionar fotografia</string>
     <string name="msgAlreadyRated">Já avaliou</string>
     <string name="msgAlreadyComment">Já comentou</string>
+    <string name="msgNoComments">Ainda não existem comentários!</string>
 </resources>

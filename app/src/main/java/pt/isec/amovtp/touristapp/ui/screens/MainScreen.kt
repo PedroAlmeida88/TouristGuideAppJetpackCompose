@@ -23,12 +23,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -72,7 +70,6 @@ fun MainScreen(navController:NavHostController = rememberNavController(),
     var showAdd by remember { mutableStateOf(false) }
 
     val currentScreen by navController.currentBackStackEntryAsState()
-    val scope = rememberCoroutineScope()
     val snackbarHostState = remember { SnackbarHostState() }
     val configuration = LocalConfiguration.current
 
@@ -168,8 +165,8 @@ fun MainScreen(navController:NavHostController = rememberNavController(),
         ) {
             composable (Screens.MENU.route) {
                 when (configuration.orientation) {
-                    Configuration.ORIENTATION_LANDSCAPE -> { LandscapeMenuScreen(stringResource(R.string.msgHomeMenu), navController, firebaseViewModel, Screens.LOCATIONS.route, Screens.CREDITS.route) }
-                    else -> MenuScreen(stringResource(R.string.msgHomeMenu), navController, firebaseViewModel, Screens.LOCATIONS.route, Screens.CREDITS.route)
+                    Configuration.ORIENTATION_LANDSCAPE -> { LandscapeMenuScreen( navController, firebaseViewModel, Screens.LOCATIONS.route, Screens.CREDITS.route) }
+                    else -> MenuScreen( navController, firebaseViewModel, Screens.LOCATIONS.route, Screens.CREDITS.route)
                 }
             }
             composable (Screens.LOGIN.route) {
@@ -198,8 +195,8 @@ fun MainScreen(navController:NavHostController = rememberNavController(),
             }
             composable (Screens.ADD_LOCATIONS.route) {
                 when (configuration.orientation) {
-                    Configuration.ORIENTATION_LANDSCAPE -> { LandscapeAddLocationScreen(modifier = Modifier, navController = navController, locationViewModel = locationViewModel, firebaseViewModel = firebaseViewModel) }
-                    else -> AddLocationScreen(modifier = Modifier, navController = navController, locationViewModel = locationViewModel, firebaseViewModel = firebaseViewModel)
+                    Configuration.ORIENTATION_LANDSCAPE -> { LandscapeAddLocationScreen( navController = navController, locationViewModel = locationViewModel, firebaseViewModel = firebaseViewModel) }
+                    else -> AddLocationScreen( navController = navController, locationViewModel = locationViewModel, firebaseViewModel = firebaseViewModel)
                 }
             }
             composable (Screens.EDIT_LOCATION.route) {
@@ -216,14 +213,14 @@ fun MainScreen(navController:NavHostController = rememberNavController(),
             }
             composable (Screens.ADD_POI.route) {
                 when (configuration.orientation) {
-                    Configuration.ORIENTATION_LANDSCAPE -> { LandscapeAddPOIScreen(modifier = Modifier, navController = navController, locationViewModel = locationViewModel, firebaseViewModel = firebaseViewModel) }
-                    else -> AddPOIScreen(modifier = Modifier, navController = navController, locationViewModel = locationViewModel, firebaseViewModel = firebaseViewModel)
+                    Configuration.ORIENTATION_LANDSCAPE -> { LandscapeAddPOIScreen( navController = navController, locationViewModel = locationViewModel, firebaseViewModel = firebaseViewModel) }
+                    else -> AddPOIScreen( navController = navController, locationViewModel = locationViewModel, firebaseViewModel = firebaseViewModel)
                 }
             }
             composable (Screens.EDIT_POI.route) {
                 when (configuration.orientation) {
-                    Configuration.ORIENTATION_LANDSCAPE -> { LandscapeEditPOIScreen(modifier = Modifier, navController = navController, locationViewModel = locationViewModel, firebaseViewModel = firebaseViewModel) }
-                    else -> EditPOIScreen(modifier = Modifier, navController = navController, locationViewModel = locationViewModel, firebaseViewModel = firebaseViewModel)
+                    Configuration.ORIENTATION_LANDSCAPE -> { LandscapeEditPOIScreen(navController = navController, locationViewModel = locationViewModel, firebaseViewModel = firebaseViewModel) }
+                    else -> EditPOIScreen(navController = navController, locationViewModel = locationViewModel, firebaseViewModel = firebaseViewModel)
                 }
             }
             composable (Screens.POI_DESCRIPTION.route) {
@@ -252,14 +249,14 @@ fun MainScreen(navController:NavHostController = rememberNavController(),
             }
             composable (Screens.ADD_COMMENTS.route) {
                 when (configuration.orientation) {
-                    Configuration.ORIENTATION_LANDSCAPE -> { LandscapeAddCommentsScreen(modfier = Modifier, locationViewModel = locationViewModel, firebaseViewModel = firebaseViewModel) }
-                    else -> AddCommentsScreen(modfier = Modifier, locationViewModel = locationViewModel, firebaseViewModel = firebaseViewModel)
+                    Configuration.ORIENTATION_LANDSCAPE -> { LandscapeAddCommentsScreen(locationViewModel = locationViewModel, firebaseViewModel = firebaseViewModel) }
+                    else -> AddCommentsScreen(locationViewModel = locationViewModel, firebaseViewModel = firebaseViewModel)
                 }
             }
             composable (Screens.ADD_POI_PICTURES.route) {
                 when (configuration.orientation) {
-                    Configuration.ORIENTATION_LANDSCAPE -> { LandscapeAddPOIPicturesScreen(modfier = Modifier, locationViewModel = locationViewModel, firebaseViewModel = firebaseViewModel) }
-                    else -> AddPOIPicturesScreen(modfier = Modifier, locationViewModel = locationViewModel, firebaseViewModel = firebaseViewModel)
+                    Configuration.ORIENTATION_LANDSCAPE -> { LandscapeAddPOIPicturesScreen(locationViewModel = locationViewModel, firebaseViewModel = firebaseViewModel) }
+                    else -> AddPOIPicturesScreen(locationViewModel = locationViewModel, firebaseViewModel = firebaseViewModel)
                 }
             }
             composable (Screens.CREDITS.route) {

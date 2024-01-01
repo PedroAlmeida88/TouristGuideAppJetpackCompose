@@ -31,7 +31,6 @@ import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material3.Button
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -73,7 +72,6 @@ val icons = listOf(
     Icons.Default.Lock
 )
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AddCategoryScreen(modifier: Modifier, navController: NavHostController?, firebaseViewModel: FirebaseViewModel) {
     val focusManager = LocalFocusManager.current

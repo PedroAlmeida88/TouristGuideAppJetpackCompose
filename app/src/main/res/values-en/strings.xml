@@ -42,4 +42,5 @@
     <string name="msgAddPOIPicture">Add Picture</string>
     <string name="msgAlreadyRated">You already rated</string>
     <string name="msgAlreadyComment">You already commented</string>
+    <string name="msgNoComments">No comments yet!</string>
 </resources>

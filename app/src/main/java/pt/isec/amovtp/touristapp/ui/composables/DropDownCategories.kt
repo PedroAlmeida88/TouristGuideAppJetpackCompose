@@ -57,7 +57,6 @@ fun getImageVectorFromName (iconName: String) : ImageVector? {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DropDownComposable(
-    modifier: Modifier = Modifier,
     navController: NavHostController?,
     viewModel : LocationViewModel,
     firebaseViewModel: FirebaseViewModel,
@@ -72,7 +71,7 @@ fun DropDownComposable(
 
     //sempre que é iniciado, carrega as categorias
     LaunchedEffect(Unit) {
-        firebaseViewModel.getCategoriesFromFirestore(){ loadedCategories ->
+        firebaseViewModel.getCategoriesFromFirestore{ loadedCategories ->
             categories = loadedCategories
         }
     }

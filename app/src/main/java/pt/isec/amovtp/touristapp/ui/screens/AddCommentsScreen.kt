@@ -50,7 +50,7 @@ import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
 @Composable
-fun AddCommentsScreen(modfier: Modifier.Companion, locationViewModel: LocationViewModel,firebaseViewModel: FirebaseViewModel) {
+fun AddCommentsScreen(locationViewModel: LocationViewModel,firebaseViewModel: FirebaseViewModel) {
     val selectedLocation = locationViewModel.selectedLocation
     val selectedPoi = locationViewModel.selectedPoi
     var commentToSubmit by remember { mutableStateOf("") }
@@ -160,7 +160,7 @@ fun AddCommentsScreen(modfier: Modifier.Companion, locationViewModel: LocationVi
                 }
             }
 
-        if(!alreadyRated)
+        if(!alreadyRated) {
             Spacer(modifier = Modifier.height(16.dp))
             Row(
                 verticalAlignment = Alignment.CenterVertically,
@@ -182,7 +182,7 @@ fun AddCommentsScreen(modfier: Modifier.Companion, locationViewModel: LocationVi
 
                 IconButton(
                     onClick = {
-                        if(rating != 0) {
+                        if (rating != 0) {
                             isRatingEnabled = false
                             rating = myRating
                             for (c in comments) {
@@ -215,13 +215,16 @@ fun AddCommentsScreen(modfier: Modifier.Companion, locationViewModel: LocationVi
                     },
                     enabled = isRatingEnabled
                 ) {
-                    Icon(Icons.Default.ThumbUp, contentDescription = stringResource(id = R.string.btnSubmit))
+                    Icon(
+                        Icons.Default.ThumbUp,
+                        contentDescription = stringResource(id = R.string.btnSubmit)
+                    )
                 }
 
             }
-
-        if(comments.size == 0){
-            Text(text = "Ainda não há comentários...", fontSize = 24.sp,color = MaterialTheme.colorScheme.tertiary,)
+        }
+        if(comments.isEmpty()){
+            Text(text = stringResource(id = R.string.msgNoComments), fontSize = 24.sp,color = MaterialTheme.colorScheme.tertiary)
         }
 
 
@@ -285,7 +288,7 @@ fun getDate(): String {
 }
 
 @Composable
-fun LandscapeAddCommentsScreen(modfier: Modifier.Companion, locationViewModel: LocationViewModel, firebaseViewModel: FirebaseViewModel) {
+fun LandscapeAddCommentsScreen( locationViewModel: LocationViewModel, firebaseViewModel: FirebaseViewModel) {
     val selectedLocation = locationViewModel.selectedLocation
     val selectedPoi = locationViewModel.selectedPoi
     var commentToSubmit by remember { mutableStateOf("") }
@@ -392,7 +395,7 @@ fun LandscapeAddCommentsScreen(modfier: Modifier.Companion, locationViewModel: L
                 }
             }
 
-        if(!alreadyRated)
+        if(!alreadyRated) {
             Spacer(modifier = Modifier.height(16.dp))
             Row(
                 verticalAlignment = Alignment.CenterVertically,
@@ -414,7 +417,7 @@ fun LandscapeAddCommentsScreen(modfier: Modifier.Companion, locationViewModel: L
 
                 IconButton(
                     onClick = {
-                        if(rating != 0) {
+                        if (rating != 0) {
                             isRatingEnabled = false
                             rating = myRating
                             for (c in comments) {
@@ -447,13 +450,16 @@ fun LandscapeAddCommentsScreen(modfier: Modifier.Companion, locationViewModel: L
                     },
                     enabled = isRatingEnabled
                 ) {
-                    Icon(Icons.Default.ThumbUp, contentDescription = stringResource(id = R.string.btnSubmit))
+                    Icon(
+                        Icons.Default.ThumbUp,
+                        contentDescription = stringResource(id = R.string.btnSubmit)
+                    )
                 }
 
             }
-
-        if(comments.size == 0){
-            Text(text = "Ainda não há comentários...", fontSize = 24.sp,color = MaterialTheme.colorScheme.tertiary)
+        }
+        if(comments.isEmpty()){
+            Text(text = stringResource(id = R.string.msgNoComments), fontSize = 24.sp,color = MaterialTheme.colorScheme.tertiary)
         }
 
 

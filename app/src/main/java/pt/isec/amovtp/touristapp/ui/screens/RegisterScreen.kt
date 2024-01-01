@@ -12,8 +12,12 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
@@ -29,6 +33,7 @@ import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
@@ -48,6 +53,7 @@ fun RegisterScreen(navController: NavHostController, firebaseViewModel: Firebase
     var isFormValid by remember { mutableStateOf(false) }
     var isError by remember { mutableStateOf(false) }
     var isButtonClicked by remember { mutableStateOf(false) }
+    var passwordVisibility by remember { mutableStateOf(false) }
 
     val focusManager = LocalFocusManager.current
 
@@ -101,7 +107,7 @@ fun RegisterScreen(navController: NavHostController, firebaseViewModel: Firebase
                     keyboardActions = KeyboardActions{
                         focusManager.moveFocus(FocusDirection.Next)
                     },
-                    label = { Text(text = stringResource(id = R.string.msgFirstName)) },
+                    label = { Text(text = stringResource(id = R.string.msgFirstName),color = MaterialTheme.colorScheme.tertiary) },
                     modifier = Modifier.weight(1f, false)
                 )
                 Spacer(modifier = Modifier.width(8.dp))
@@ -115,7 +121,7 @@ fun RegisterScreen(navController: NavHostController, firebaseViewModel: Firebase
                     keyboardActions = KeyboardActions{
                         focusManager.moveFocus(FocusDirection.Next)
                     },
-                    label = { Text(text = stringResource(id = R.string.msgLastName)) },
+                    label = { Text(text = stringResource(id = R.string.msgLastName),color = MaterialTheme.colorScheme.tertiary) },
                     modifier = Modifier.weight(1f, false)
                 )
             }
@@ -132,24 +138,38 @@ fun RegisterScreen(navController: NavHostController, firebaseViewModel: Firebase
             keyboardActions = KeyboardActions{
                 focusManager.moveFocus(FocusDirection.Next)
             },
-            label = { Text(text = stringResource(id = R.string.msgUsername)) },
+            label = { Text(text = stringResource(id = R.string.msgUsername),color = MaterialTheme.colorScheme.tertiary) },
             modifier = Modifier.fillMaxWidth()
         )
 
         Spacer(modifier = Modifier.height(20.dp))
         OutlinedTextField(
+            modifier = Modifier.fillMaxWidth(),
             value = password,
-            onValueChange = {
+            onValueChange ={
                 password = it
                 validateForm()
             },
             singleLine = true,
-            keyboardActions = KeyboardActions{
+            keyboardActions = KeyboardActions {
                 focusManager.clearFocus()
             },
-            visualTransformation = PasswordVisualTransformation(Char(42)),
-            label = { Text(text = stringResource(R.string.msgPassword),) },
-            modifier = Modifier.fillMaxWidth()
+            visualTransformation = if (passwordVisibility) {
+                VisualTransformation.None
+            } else {
+                PasswordVisualTransformation('*')
+            },
+            trailingIcon = {
+                IconButton(
+                    onClick = { passwordVisibility = !passwordVisibility }
+                ) {
+                    Icon(
+                        imageVector = if (passwordVisibility) Icons.Filled.Visibility else Icons.Filled.VisibilityOff,
+                        contentDescription = null
+                    )
+                }
+            },
+            label = { Text(text = stringResource(R.string.msgPassword),color = MaterialTheme.colorScheme.tertiary) }
         )
 
         Spacer(modifier = Modifier.height(20.dp))
@@ -182,6 +202,7 @@ fun LandscapeRegisterScreen(navController: NavHostController, firebaseViewModel:
     var isFormValid by remember { mutableStateOf(false) }
     var isError by remember { mutableStateOf(false) }
     var isButtonClicked by remember { mutableStateOf(false) }
+    var passwordVisibility by remember { mutableStateOf(false) }
 
     val focusManager = LocalFocusManager.current
 
@@ -215,6 +236,7 @@ fun LandscapeRegisterScreen(navController: NavHostController, firebaseViewModel:
         Text(
             text = stringResource(id = R.string.msgCreateAccount),
             fontSize = 26.sp,
+            color = MaterialTheme.colorScheme.tertiary,
             modifier = Modifier.padding(24.dp, 0.dp, 24.dp, 24.dp)
         )
 
@@ -235,7 +257,7 @@ fun LandscapeRegisterScreen(navController: NavHostController, firebaseViewModel:
                     keyboardActions = KeyboardActions{
                         focusManager.moveFocus(FocusDirection.Next)
                     },
-                    label = { Text(text = stringResource(id = R.string.msgFirstName)) },
+                    label = { Text(text = stringResource(id = R.string.msgFirstName),color = MaterialTheme.colorScheme.tertiary) },
                     modifier = Modifier.weight(1f, false)
                 )
                 Spacer(modifier = Modifier.width(24.dp))
@@ -249,7 +271,7 @@ fun LandscapeRegisterScreen(navController: NavHostController, firebaseViewModel:
                     keyboardActions = KeyboardActions{
                         focusManager.moveFocus(FocusDirection.Next)
                     },
-                    label = { Text(text = stringResource(id = R.string.msgLastName)) },
+                    label = { Text(text = stringResource(id = R.string.msgLastName),color = MaterialTheme.colorScheme.tertiary) },
                     modifier = Modifier.weight(1f, false)
                 )
             }
@@ -266,24 +288,38 @@ fun LandscapeRegisterScreen(navController: NavHostController, firebaseViewModel:
             keyboardActions = KeyboardActions{
                 focusManager.moveFocus(FocusDirection.Next)
             },
-            label = { Text(text = stringResource(id = R.string.msgUsername)) },
+            label = { Text(text = stringResource(id = R.string.msgUsername),color = MaterialTheme.colorScheme.tertiary) },
             modifier = Modifier.fillMaxWidth()
         )
 
         Spacer(modifier = Modifier.height(10.dp))
         OutlinedTextField(
+            modifier = Modifier.fillMaxWidth(),
             value = password,
-            onValueChange = {
+            onValueChange ={
                 password = it
                 validateForm()
             },
             singleLine = true,
-            keyboardActions = KeyboardActions{
+            keyboardActions = KeyboardActions {
                 focusManager.clearFocus()
             },
-            visualTransformation = PasswordVisualTransformation(Char(42)),
-            label = { Text(text = stringResource(R.string.msgPassword),) },
-            modifier = Modifier.fillMaxWidth()
+            visualTransformation = if (passwordVisibility) {
+                VisualTransformation.None
+            } else {
+                PasswordVisualTransformation('*')
+            },
+            trailingIcon = {
+                IconButton(
+                    onClick = { passwordVisibility = !passwordVisibility }
+                ) {
+                    Icon(
+                        imageVector = if (passwordVisibility) Icons.Filled.Visibility else Icons.Filled.VisibilityOff,
+                        contentDescription = null
+                    )
+                }
+            },
+            label = { Text(text = stringResource(R.string.msgPassword),color = MaterialTheme.colorScheme.tertiary) }
         )
 
         Spacer(modifier = Modifier.height(10.dp))

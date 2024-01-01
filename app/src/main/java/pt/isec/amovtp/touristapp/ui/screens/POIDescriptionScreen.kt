@@ -79,7 +79,7 @@ fun POIDescriptionScreen(modifier: Modifier = Modifier, viewModel: LocationViewM
                 AndroidView(
                     factory = { context ->
                         MapView(context).apply {
-                            setTileSource(TileSourceFactory.MAPNIK);//==TileSourceFactory.DEFAULT_TILE_SOURCE
+                            setTileSource(TileSourceFactory.MAPNIK)//==TileSourceFactory.DEFAULT_TILE_SOURCE
                             setMultiTouchControls(true)
                             controller.setCenter(currentGeoPoint)
                             controller.setZoom(13.0)
@@ -91,7 +91,7 @@ fun POIDescriptionScreen(modifier: Modifier = Modifier, viewModel: LocationViewM
                                         subDescription = poi.description
                                         //icon = ShapeDrawable(OvalShape())
                                     }
-                                    if(! poi.name.equals(currentPoi?.name))
+                                    if(poi.name != currentPoi.name)
                                         marker.icon = ShapeDrawable(OvalShape()).apply {
                                             intrinsicHeight = 40 // Altura do círculo em pixels
                                             intrinsicWidth = 40 // Largura do círculo em pixels
@@ -154,7 +154,7 @@ fun LandscapePOIDescriptionScreen(modifier: Modifier = Modifier, viewModel: Loca
                 AndroidView(
                     factory = { context ->
                         MapView(context).apply {
-                            setTileSource(TileSourceFactory.MAPNIK);//==TileSourceFactory.DEFAULT_TILE_SOURCE
+                            setTileSource(TileSourceFactory.MAPNIK)//==TileSourceFactory.DEFAULT_TILE_SOURCE
                             setMultiTouchControls(true)
                             controller.setCenter(currentGeoPoint)
                             controller.setZoom(13.0)
@@ -165,7 +165,7 @@ fun LandscapePOIDescriptionScreen(modifier: Modifier = Modifier, viewModel: Loca
                                     title = poi.name
                                     subDescription = poi.description
                                 }
-                                if(! poi.name.equals(currentPoi?.name))
+                                if(poi.name != currentPoi.name)
                                     marker.icon = ShapeDrawable(OvalShape()).apply {
                                         intrinsicHeight = 40 // Altura do círculo em pixels
                                         intrinsicWidth = 40 // Largura do círculo em pixels
