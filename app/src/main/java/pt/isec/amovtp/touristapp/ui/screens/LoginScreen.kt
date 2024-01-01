@@ -103,7 +103,7 @@ fun LoginScreen(
                 keyboardActions = KeyboardActions {
                     focusManager.moveFocus(FocusDirection.Next)
                 },
-                label = { Text(text = stringResource(R.string.msgUsername),color = MaterialTheme.colorScheme.tertiary,) }
+                label = { Text(text = stringResource(R.string.msgUsername),color = MaterialTheme.colorScheme.tertiary) }
             )
             Spacer(modifier = Modifier.height(16.dp))
             OutlinedTextField(
@@ -187,6 +187,7 @@ fun LandscapeLoginScreen(navController: NavHostController?, firebaseViewModel: F
     val authUser by remember { firebaseViewModel.authUser }
     var isFormValid by remember { mutableStateOf(false) }
     var isError by remember { mutableStateOf(false) }
+    var passwordVisibility by remember { mutableStateOf(false) }
 
     val focusManager = LocalFocusManager.current
 
@@ -216,6 +217,7 @@ fun LandscapeLoginScreen(navController: NavHostController?, firebaseViewModel: F
         Text(
             text = stringResource(R.string.msgWB),
             fontSize = 26.sp,
+            color = MaterialTheme.colorScheme.tertiary,
             modifier = Modifier
                 .align(Alignment.TopCenter)
                 .padding(24.dp)
@@ -234,7 +236,7 @@ fun LandscapeLoginScreen(navController: NavHostController?, firebaseViewModel: F
                 keyboardActions = KeyboardActions {
                     focusManager.moveFocus(FocusDirection.Next)
                 },
-                label = { Text(text = stringResource(R.string.msgUsername),) }
+                label = { Text(text = stringResource(R.string.msgUsername)) }
             )
             Spacer(modifier = Modifier.height(4.dp))
             OutlinedTextField(
@@ -247,8 +249,22 @@ fun LandscapeLoginScreen(navController: NavHostController?, firebaseViewModel: F
                 keyboardActions = KeyboardActions {
                     focusManager.clearFocus()
                 },
-                visualTransformation = PasswordVisualTransformation(Char(42)),
-                label = { Text(text = stringResource(R.string.msgPassword),) }
+                visualTransformation = if (passwordVisibility) {
+                    VisualTransformation.None
+                } else {
+                    PasswordVisualTransformation('*')
+                },
+                trailingIcon = {
+                    IconButton(
+                        onClick = { passwordVisibility = !passwordVisibility }
+                    ) {
+                        Icon(
+                            imageVector = if (passwordVisibility) Icons.Filled.Visibility else Icons.Filled.VisibilityOff,
+                            contentDescription = null
+                        )
+                    }
+                },
+                label = { Text(text = stringResource(R.string.msgPassword),color = MaterialTheme.colorScheme.tertiary) }
             )
             Spacer(modifier = Modifier.height(4.dp))
             Button(
@@ -280,6 +296,7 @@ fun LandscapeLoginScreen(navController: NavHostController?, firebaseViewModel: F
             Text(
                 text = stringResource(id = R.string.msgRegisterPhrase),
                 textAlign = TextAlign.Center,
+                color = MaterialTheme.colorScheme.tertiary,
                 softWrap = true,
                 //modifier = Modifier.weight(3f, true)
             )

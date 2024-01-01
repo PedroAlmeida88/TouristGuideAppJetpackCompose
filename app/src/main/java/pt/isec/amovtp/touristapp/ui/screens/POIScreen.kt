@@ -31,7 +31,6 @@ import androidx.compose.material.icons.filled.RestartAlt
 import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -61,9 +60,8 @@ import pt.isec.amovtp.touristapp.ui.viewmodels.FirebaseViewModel
 import pt.isec.amovtp.touristapp.ui.viewmodels.LocationViewModel
 
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun POIScreen(modifier: Modifier = Modifier, navController: NavHostController?, viewModel : LocationViewModel,firebaseViewModel: FirebaseViewModel) {
+fun POIScreen( navController: NavHostController?, viewModel : LocationViewModel,firebaseViewModel: FirebaseViewModel) {
     val selectedLocation = viewModel.selectedLocation
     val selectedCategory = viewModel.selectedCategory
     val userUID = firebaseViewModel.authUser.value!!.uid
@@ -88,7 +86,7 @@ fun POIScreen(modifier: Modifier = Modifier, navController: NavHostController?, 
             }
         }
 
-        firebaseViewModel.getCategoriesFromFirestore(){ loadedCategories ->
+        firebaseViewModel.getCategoriesFromFirestore{ loadedCategories ->
             categories = loadedCategories
         }
     }
@@ -375,7 +373,7 @@ fun LandscapePOIScreen(navController: NavHostController?, viewModel: LocationVie
             }
         }
 
-        firebaseViewModel.getCategoriesFromFirestore(){ loadedCategories ->
+        firebaseViewModel.getCategoriesFromFirestore{ loadedCategories ->
             categories = loadedCategories
         }
     }

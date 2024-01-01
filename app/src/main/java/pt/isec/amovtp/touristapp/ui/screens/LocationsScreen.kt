@@ -29,7 +29,6 @@ import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -58,7 +57,6 @@ import pt.isec.amovtp.touristapp.ui.viewmodels.FirebaseViewModel
 import pt.isec.amovtp.touristapp.ui.viewmodels.LocationViewModel
 import pt.isec.amovtp.touristapp.utils.location.LocationUtils
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LocationsScreen(navController: NavHostController?,viewModel : LocationViewModel,firebaseViewModel: FirebaseViewModel) {
     //geopoin

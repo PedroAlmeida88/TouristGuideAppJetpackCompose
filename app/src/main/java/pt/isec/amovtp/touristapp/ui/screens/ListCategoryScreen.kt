@@ -63,7 +63,7 @@ fun ListCategoryScreen(navController: NavHostController?,modifier: Modifier = Mo
 
     //sempre que é iniciado, carrega as categorias
     LaunchedEffect(Unit) {
-        firebaseViewModel.getCategoriesFromFirestore(){ loadedCategories ->
+        firebaseViewModel.getCategoriesFromFirestore{ loadedCategories ->
             categories = loadedCategories
             for (c in categories) {
                 if (userUID in c.userUIDsApprovals || userUID == c.userUID) {
@@ -195,7 +195,7 @@ fun ListCategoryScreen(navController: NavHostController?,modifier: Modifier = Mo
                                                 category,
                                                 userUID
                                             )
-                                            firebaseViewModel.getCategoriesFromFirestore() { loadedCategories ->
+                                            firebaseViewModel.getCategoriesFromFirestore { loadedCategories ->
                                                 categories = loadedCategories
                                                 for (c in categories) {
                                                     if (userUID in c.userUIDsApprovals || userUID == c.userUID) {
@@ -239,7 +239,7 @@ fun ListCategoryScreen(navController: NavHostController?,modifier: Modifier = Mo
                                         onClick = {
                                             if(category.totalPois == 0) {
                                                 firebaseViewModel.deleteCategoryFromFirestore(category)
-                                                firebaseViewModel.getCategoriesFromFirestore() { loadedCategories ->
+                                                firebaseViewModel.getCategoriesFromFirestore { loadedCategories ->
                                                     categories = loadedCategories
                                                 }
                                                 Toast.makeText(context, "Category deleted successfully!", Toast.LENGTH_LONG).show()
@@ -280,7 +280,7 @@ fun LandscapeListCategoryScreen(navController: NavHostController?, modifier: Mod
 
     //sempre que é iniciado, carrega as categorias
     LaunchedEffect(Unit) {
-        firebaseViewModel.getCategoriesFromFirestore(){ loadedCategories ->
+        firebaseViewModel.getCategoriesFromFirestore{ loadedCategories ->
             categories = loadedCategories
             for (c in categories) {
                 if (userUID in c.userUIDsApprovals || userUID == c.userUID) {
@@ -402,7 +402,7 @@ fun LandscapeListCategoryScreen(navController: NavHostController?, modifier: Mod
                                                 category,
                                                 userUID
                                             )
-                                            firebaseViewModel.getCategoriesFromFirestore() { loadedCategories ->
+                                            firebaseViewModel.getCategoriesFromFirestore { loadedCategories ->
                                                 categories = loadedCategories
                                                 for (c in categories) {
                                                     if (userUID in c.userUIDsApprovals || userUID == c.userUID) {
@@ -446,7 +446,7 @@ fun LandscapeListCategoryScreen(navController: NavHostController?, modifier: Mod
                                         onClick = {
                                             if(category.totalPois == 0) {
                                                 firebaseViewModel.deleteCategoryFromFirestore(category)
-                                                firebaseViewModel.getCategoriesFromFirestore() { loadedCategories ->
+                                                firebaseViewModel.getCategoriesFromFirestore { loadedCategories ->
                                                     categories = loadedCategories
                                                 }
                                                 Toast.makeText(context, "Category deleted successfully!", Toast.LENGTH_LONG).show()

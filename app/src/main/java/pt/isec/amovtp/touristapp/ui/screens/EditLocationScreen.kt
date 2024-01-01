@@ -23,7 +23,6 @@ import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -50,10 +49,9 @@ fun EditLocationScreen( navController: NavHostController?, locationViewModel: Lo
     val selectedLocation = locationViewModel.selectedLocation
     val userUID = firebaseViewModel.authUser.value!!.uid
     val focusManager = LocalFocusManager.current
-    val location = locationViewModel.currentLocation.observeAsState()
 
     val context = LocalContext.current
-    var locationName by remember { mutableStateOf(selectedLocation!!.name) }
+    val locationName by remember { mutableStateOf(selectedLocation!!.name) }
     var locationDescription by remember { mutableStateOf(selectedLocation!!.description) }
     var longitude by remember { mutableStateOf(selectedLocation!!.longitude.toString()) }
     var latitude by remember { mutableStateOf(selectedLocation!!.latitude.toString()) }
@@ -202,7 +200,7 @@ fun EditLocationScreen( navController: NavHostController?, locationViewModel: Lo
                         totalPois = selectedLocation.totalPois
                     )
                     firebaseViewModel.addLocationsToFirestore(location)
-                    firebaseViewModel.uploadLocationToStorage(directory = "images/"+locationName ,imageName = locationName, path = locationViewModel.imagePath.value ?: "")
+                    firebaseViewModel.uploadLocationToStorage(directory = "images/$locationName",imageName = locationName, path = locationViewModel.imagePath.value ?: "")
                     locationViewModel.imagePath.value = null
                     navController?.popBackStack()
                     Toast.makeText(context,"Success", Toast.LENGTH_LONG).show()
@@ -222,10 +220,9 @@ fun LandscapeEditLocationScreen(navController: NavHostController?, locationViewM
     val selectedLocation = locationViewModel.selectedLocation
     val userUID = firebaseViewModel.authUser.value!!.uid
     val focusManager = LocalFocusManager.current
-    val location = locationViewModel.currentLocation.observeAsState()
 
     val context = LocalContext.current
-    var locationName by remember { mutableStateOf(selectedLocation!!.name) }
+    val locationName by remember { mutableStateOf(selectedLocation!!.name) }
     var locationDescription by remember { mutableStateOf(selectedLocation!!.description) }
     var longitude by remember { mutableStateOf(selectedLocation!!.longitude.toString()) }
     var latitude by remember { mutableStateOf(selectedLocation!!.latitude.toString()) }
@@ -385,7 +382,7 @@ fun LandscapeEditLocationScreen(navController: NavHostController?, locationViewM
                         totalPois = selectedLocation.totalPois
                     )
                     firebaseViewModel.addLocationsToFirestore(location)
-                    firebaseViewModel.uploadLocationToStorage(directory = "images/"+locationName ,imageName = locationName, path = locationViewModel.imagePath.value ?: "")
+                    firebaseViewModel.uploadLocationToStorage(directory = "images/$locationName",imageName = locationName, path = locationViewModel.imagePath.value ?: "")
                     locationViewModel.imagePath.value = null
                     navController?.popBackStack()
                     Toast.makeText(context,"Success", Toast.LENGTH_LONG).show()

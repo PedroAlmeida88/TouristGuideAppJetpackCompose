@@ -46,7 +46,7 @@ import pt.isec.amovtp.touristapp.ui.viewmodels.LocationViewModel
 
 
 @Composable
-fun AddLocationScreen(modifier: Modifier.Companion, navController: NavHostController?,locationViewModel: LocationViewModel, firebaseViewModel: FirebaseViewModel) {
+fun AddLocationScreen( navController: NavHostController?,locationViewModel: LocationViewModel, firebaseViewModel: FirebaseViewModel) {
     val context = LocalContext.current
     val userUID = firebaseViewModel.authUser.value!!.uid
     val focusManager = LocalFocusManager.current
@@ -106,7 +106,7 @@ fun AddLocationScreen(modifier: Modifier.Companion, navController: NavHostContro
             keyboardActions = KeyboardActions {
                 focusManager.moveFocus(FocusDirection.Next)
             },
-            label = { Text(text = stringResource(id = R.string.msgName),color = MaterialTheme.colorScheme.tertiary,) },
+            label = { Text(text = stringResource(id = R.string.msgName),color = MaterialTheme.colorScheme.tertiary) },
             modifier = Modifier.fillMaxWidth()
         )
 
@@ -121,7 +121,7 @@ fun AddLocationScreen(modifier: Modifier.Companion, navController: NavHostContro
             keyboardActions = KeyboardActions {
                 focusManager.clearFocus()
             },
-            label = { Text(text = stringResource(id = R.string.msgDescription),color = MaterialTheme.colorScheme.tertiary,) },
+            label = { Text(text = stringResource(id = R.string.msgDescription),color = MaterialTheme.colorScheme.tertiary) },
             modifier = Modifier.fillMaxWidth()
         )
 
@@ -202,7 +202,7 @@ fun AddLocationScreen(modifier: Modifier.Companion, navController: NavHostContro
                     isError = true
                 } else {
                     isError = false
-                    var location = Location(
+                    val newLocation = Location(
                         name = locationName,
                         description = locationDescription,
                         latitude = latitude.toDouble(),
@@ -214,8 +214,8 @@ fun AddLocationScreen(modifier: Modifier.Companion, navController: NavHostContro
                         userUID = userUID,
                         totalPois = 0
                     )
-                    firebaseViewModel.addLocationsToFirestore(location)
-                    firebaseViewModel.uploadLocationToStorage(directory = "images/"+locationName ,imageName = locationName, path = locationViewModel.imagePath.value ?: "")
+                    firebaseViewModel.addLocationsToFirestore(newLocation)
+                    firebaseViewModel.uploadLocationToStorage(directory = "images/$locationName",imageName = locationName, path = locationViewModel.imagePath.value ?: "")
                     locationViewModel.imagePath.value = null
                     navController?.popBackStack()
                     Toast.makeText(context, "Success",Toast.LENGTH_LONG).show()
@@ -231,7 +231,7 @@ fun AddLocationScreen(modifier: Modifier.Companion, navController: NavHostContro
 }
 
 @Composable
-fun LandscapeAddLocationScreen(modifier: Modifier, navController: NavHostController?, locationViewModel: LocationViewModel, firebaseViewModel: FirebaseViewModel) {
+fun LandscapeAddLocationScreen( navController: NavHostController?, locationViewModel: LocationViewModel, firebaseViewModel: FirebaseViewModel) {
     val context = LocalContext.current
     val userUID = firebaseViewModel.authUser.value!!.uid
     val focusManager = LocalFocusManager.current
@@ -309,7 +309,7 @@ fun LandscapeAddLocationScreen(modifier: Modifier, navController: NavHostControl
                     keyboardActions = KeyboardActions {
                         focusManager.clearFocus()
                     },
-                    label = { Text(text = stringResource(id = R.string.msgDescription),color = MaterialTheme.colorScheme.tertiary,) },
+                    label = { Text(text = stringResource(id = R.string.msgDescription),color = MaterialTheme.colorScheme.tertiary) },
                     modifier = Modifier.fillMaxWidth()
                 )
 
@@ -398,7 +398,7 @@ fun LandscapeAddLocationScreen(modifier: Modifier, navController: NavHostControl
                     isError = true
                 } else {
                     isError = false
-                    var location = Location(
+                    val newLocation = Location(
                         name = locationName,
                         description = locationDescription,
                         latitude = latitude.toDouble(),
@@ -410,8 +410,8 @@ fun LandscapeAddLocationScreen(modifier: Modifier, navController: NavHostControl
                         userUID = userUID,
                         totalPois = 0
                     )
-                    firebaseViewModel.addLocationsToFirestore(location)
-                    firebaseViewModel.uploadLocationToStorage(directory = "images/"+locationName ,imageName = locationName, path = locationViewModel.imagePath.value ?: "")
+                    firebaseViewModel.addLocationsToFirestore(newLocation)
+                    firebaseViewModel.uploadLocationToStorage(directory = "images/$locationName",imageName = locationName, path = locationViewModel.imagePath.value ?: "")
                     locationViewModel.imagePath.value = null
                     navController?.popBackStack()
                     Toast.makeText(context, "Success",Toast.LENGTH_LONG).show()

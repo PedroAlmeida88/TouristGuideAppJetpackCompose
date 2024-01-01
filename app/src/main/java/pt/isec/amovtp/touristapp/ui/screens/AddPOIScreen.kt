@@ -48,10 +48,10 @@ import pt.isec.amovtp.touristapp.ui.viewmodels.LocationViewModel
 
 
 @Composable
-fun AddPOIScreen(modifier: Modifier.Companion, navController: NavHostController?,locationViewModel: LocationViewModel, firebaseViewModel: FirebaseViewModel) {
+fun AddPOIScreen( navController: NavHostController?,locationViewModel: LocationViewModel, firebaseViewModel: FirebaseViewModel) {
     val context = LocalContext.current
     val selectedLocation = locationViewModel.selectedLocation
-    var selectedCategory = locationViewModel.selectedCategory
+    val selectedCategory = locationViewModel.selectedCategory
     val location = locationViewModel.currentLocation.observeAsState()
     val focusManager = LocalFocusManager.current
 
@@ -112,7 +112,7 @@ fun AddPOIScreen(modifier: Modifier.Companion, navController: NavHostController?
             keyboardActions = KeyboardActions {
                 focusManager.moveFocus(FocusDirection.Next)
             },
-            label = { Text(text = stringResource(id = R.string.msgName),color = MaterialTheme.colorScheme.tertiary,) },
+            label = { Text(text = stringResource(id = R.string.msgName),color = MaterialTheme.colorScheme.tertiary) },
             modifier = Modifier.fillMaxWidth()
         )
 
@@ -127,7 +127,7 @@ fun AddPOIScreen(modifier: Modifier.Companion, navController: NavHostController?
             keyboardActions = KeyboardActions {
                 focusManager.clearFocus()
             },
-            label = { Text(text = stringResource(id = R.string.msgDescription),color = MaterialTheme.colorScheme.tertiary,) },
+            label = { Text(text = stringResource(id = R.string.msgDescription),color = MaterialTheme.colorScheme.tertiary) },
             modifier = Modifier.fillMaxWidth()
         )
 
@@ -181,7 +181,7 @@ fun AddPOIScreen(modifier: Modifier.Companion, navController: NavHostController?
                 keyboardActions = KeyboardActions {
                     focusManager.moveFocus(FocusDirection.Next)
                 },
-                label = { Text(text = stringResource(id = R.string.msgLongitude),color = MaterialTheme.colorScheme.tertiary,) },
+                label = { Text(text = stringResource(id = R.string.msgLongitude),color = MaterialTheme.colorScheme.tertiary) },
                 enabled = isInputEnabled,
                 modifier = Modifier
                     .weight(1f, false)
@@ -197,7 +197,7 @@ fun AddPOIScreen(modifier: Modifier.Companion, navController: NavHostController?
                 keyboardActions = KeyboardActions {
                     focusManager.clearFocus()
                 },
-                label = { Text(text = stringResource(id = R.string.msgLatitude),color = MaterialTheme.colorScheme.tertiary,) },
+                label = { Text(text = stringResource(id = R.string.msgLatitude),color = MaterialTheme.colorScheme.tertiary) },
                 enabled = isInputEnabled,
                 modifier = Modifier
                     .weight(1f, false)
@@ -215,7 +215,7 @@ fun AddPOIScreen(modifier: Modifier.Companion, navController: NavHostController?
                     isError = true
                 } else {
                     isError = false
-                    var POI = PointOfInterest(
+                    val poi = PointOfInterest(
                         name = poiName,
                         description = poiDescription,
                         category = selectedCategory ?: Category("","","",0,0, emptyList(),""),
@@ -228,7 +228,7 @@ fun AddPOIScreen(modifier: Modifier.Companion, navController: NavHostController?
                         userUID = userUID
                     )
 
-                    firebaseViewModel.addPOIToFirestore(selectedLocation?.name ?: ""  ,POI)
+                    firebaseViewModel.addPOIToFirestore(selectedLocation?.name ?: ""  ,poi)
                     firebaseViewModel.uploadPOIToStorage(directory = "images/" + selectedLocation?.name +"/pois/",imageName = poiName, path = locationViewModel.imagePath.value ?: "", locationName = selectedLocation?.name ?: "" )
                     locationViewModel.imagePath.value = null
                     navController?.popBackStack()
@@ -245,10 +245,10 @@ fun AddPOIScreen(modifier: Modifier.Companion, navController: NavHostController?
 }
 
 @Composable
-fun LandscapeAddPOIScreen(modifier: Modifier = Modifier, navController: NavHostController?, locationViewModel: LocationViewModel, firebaseViewModel: FirebaseViewModel) {
+fun LandscapeAddPOIScreen(navController: NavHostController?, locationViewModel: LocationViewModel, firebaseViewModel: FirebaseViewModel) {
     val context = LocalContext.current
     val selectedLocation = locationViewModel.selectedLocation
-    var selectedCategory = locationViewModel.selectedCategory
+    val selectedCategory = locationViewModel.selectedCategory
     val location = locationViewModel.currentLocation.observeAsState()
     val focusManager = LocalFocusManager.current
 
@@ -312,7 +312,7 @@ fun LandscapeAddPOIScreen(modifier: Modifier = Modifier, navController: NavHostC
                     keyboardActions = KeyboardActions {
                         focusManager.moveFocus(FocusDirection.Next)
                     },
-                    label = { Text(text = stringResource(id = R.string.msgName),color = MaterialTheme.colorScheme.tertiary,) },
+                    label = { Text(text = stringResource(id = R.string.msgName),color = MaterialTheme.colorScheme.tertiary) },
                     modifier = Modifier.fillMaxWidth()
                 )
 
@@ -327,7 +327,7 @@ fun LandscapeAddPOIScreen(modifier: Modifier = Modifier, navController: NavHostC
                     keyboardActions = KeyboardActions {
                         focusManager.clearFocus()
                     },
-                    label = { Text(text = stringResource(id = R.string.msgDescription),color = MaterialTheme.colorScheme.tertiary,) },
+                    label = { Text(text = stringResource(id = R.string.msgDescription),color = MaterialTheme.colorScheme.tertiary) },
                     modifier = Modifier.fillMaxWidth()
                 )
                 Spacer(modifier = Modifier.height(16.dp))
@@ -375,7 +375,7 @@ fun LandscapeAddPOIScreen(modifier: Modifier = Modifier, navController: NavHostC
                         keyboardActions = KeyboardActions {
                             focusManager.moveFocus(FocusDirection.Next)
                         },
-                        label = { Text(text = stringResource(id = R.string.msgLongitude),color = MaterialTheme.colorScheme.tertiary,) },
+                        label = { Text(text = stringResource(id = R.string.msgLongitude),color = MaterialTheme.colorScheme.tertiary) },
                         enabled = isInputEnabled,
                         modifier = Modifier
                             .weight(1f, false)
@@ -391,7 +391,7 @@ fun LandscapeAddPOIScreen(modifier: Modifier = Modifier, navController: NavHostC
                         keyboardActions = KeyboardActions {
                             focusManager.clearFocus()
                         },
-                        label = { Text(text = stringResource(id = R.string.msgLatitude),color = MaterialTheme.colorScheme.tertiary,) },
+                        label = { Text(text = stringResource(id = R.string.msgLatitude),color = MaterialTheme.colorScheme.tertiary) },
                         enabled = isInputEnabled,
                         modifier = Modifier
                             .weight(1f, false)
@@ -423,7 +423,7 @@ fun LandscapeAddPOIScreen(modifier: Modifier = Modifier, navController: NavHostC
                     isError = true
                 } else {
                     isError = false
-                    var POI = PointOfInterest(
+                    val poi = PointOfInterest(
                         name = poiName,
                         description = poiDescription,
                         category = selectedCategory ?: Category("","","",0,0, emptyList(),""),
@@ -436,7 +436,7 @@ fun LandscapeAddPOIScreen(modifier: Modifier = Modifier, navController: NavHostC
                         userUID = userUID
                     )
 
-                    firebaseViewModel.addPOIToFirestore(selectedLocation?.name ?: ""  ,POI)
+                    firebaseViewModel.addPOIToFirestore(selectedLocation?.name ?: ""  ,poi)
                     firebaseViewModel.uploadPOIToStorage(directory = "images/" + selectedLocation?.name +"/pois/",imageName = poiName, path = locationViewModel.imagePath.value ?: "", locationName = selectedLocation?.name ?: "" )
                     locationViewModel.imagePath.value = null
                     navController?.popBackStack()

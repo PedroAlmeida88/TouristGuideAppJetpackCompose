@@ -29,7 +29,6 @@ import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material3.Button
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
@@ -73,10 +72,9 @@ fun getImageVectorFromName (iconName: String) : ImageVector? {
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun EditCategoryScreen(modifier: Modifier, navController: NavHostController?, locationViewModel: LocationViewModel,firebaseViewModel: FirebaseViewModel) {
-    var selectedCategory = locationViewModel.selectedCategory
+    val selectedCategory = locationViewModel.selectedCategory
     val scrollState = rememberScrollState()
     val focusManager = LocalFocusManager.current
     val userUID = firebaseViewModel.authUser.value!!.uid
@@ -84,7 +82,7 @@ fun EditCategoryScreen(modifier: Modifier, navController: NavHostController?, lo
     var expanded by remember { mutableStateOf(false) }
 
     var selectedIcon by remember { mutableStateOf(getImageVectorFromName(selectedCategory!!.icon)) }
-    var categoryName by remember { mutableStateOf(selectedCategory!!.name) }
+    val categoryName by remember { mutableStateOf(selectedCategory!!.name) }
     var categoryDescription by remember { mutableStateOf(selectedCategory!!.description) }
 
     var isValidForm by remember { mutableStateOf(false) }
@@ -204,8 +202,8 @@ fun EditCategoryScreen(modifier: Modifier, navController: NavHostController?, lo
 }
 
 @Composable
-fun LandscapeEditCategoryScreen(navController: NavHostController, modifier: Modifier.Companion, locationViewModel: LocationViewModel, firebaseViewModel: FirebaseViewModel) {
-    var selectedCategory = locationViewModel.selectedCategory
+fun LandscapeEditCategoryScreen(navController: NavHostController, modifier: Modifier, locationViewModel: LocationViewModel, firebaseViewModel: FirebaseViewModel) {
+    val selectedCategory = locationViewModel.selectedCategory
     val scrollState = rememberScrollState()
     val focusManager = LocalFocusManager.current
     val userUID = firebaseViewModel.authUser.value!!.uid
@@ -213,7 +211,7 @@ fun LandscapeEditCategoryScreen(navController: NavHostController, modifier: Modi
     var expanded by remember { mutableStateOf(false) }
 
     var selectedIcon by remember { mutableStateOf(getImageVectorFromName(selectedCategory!!.icon)) }
-    var categoryName by remember { mutableStateOf(selectedCategory!!.name) }
+    val categoryName by remember { mutableStateOf(selectedCategory!!.name) }
     var categoryDescription by remember { mutableStateOf(selectedCategory!!.description) }
 
     var isValidForm by remember { mutableStateOf(false) }
@@ -317,7 +315,7 @@ fun LandscapeEditCategoryScreen(navController: NavHostController, modifier: Modi
                         emptyList(), userUID
                     )
                     firebaseViewModel.addCategoryToFirestore(category) {
-                        navController?.popBackStack()
+                        navController.popBackStack()
                     }
                 }
             }
