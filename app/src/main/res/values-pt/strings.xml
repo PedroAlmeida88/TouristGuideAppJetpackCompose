@@ -46,4 +46,12 @@
     <string name="msgPracticalWork">Trabalho Prático Nº1 - Arquiteturas Móveis</string>
     <string name="msgDone">Feito por:</string>
     <string name="msgDepartment">Departamento de Engenharia Informática e de Sistemas</string>
+    <string name="msgLocationNotApproved">Atenção: esta localização ainda não foi aprovada</string>
+    <string name="msgSelectCategory">Seleciona uma categoria</string>
+    <string name="msgError">Preencha os espaços corretamente</string>
+    <string name="msgTakePhoto">Tirar Foto</string>
+    <string name="msgLoadImage">Carregar Imagem</string>
+    <string name="msgCategoryNotApproved">Atenção: esta categoria ainda não foi aprovada</string>
+    <string name="msgPOINotApproved">Atenção: este POI ainda não foi aprovado</string>
+    <string name="msgAlreadyPosted">Você já publicou</string>
 </resources>

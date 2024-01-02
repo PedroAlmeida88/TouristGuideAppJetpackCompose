@@ -53,6 +53,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
+import pt.isec.amovtp.touristapp.R
 import pt.isec.amovtp.touristapp.data.Category
 import pt.isec.amovtp.touristapp.data.PointOfInterest
 import pt.isec.amovtp.touristapp.ui.composables.DropDownComposable
@@ -160,7 +161,7 @@ fun POIScreen( navController: NavHostController?, viewModel : LocationViewModel,
                             )
                             Spacer(modifier = Modifier.width(8.dp)) // Adiciona espaço entre o ícone e o texto
                             Text(
-                                text = "Atenção: este POI ainda não foi aprovado (${poi.approvals}/2)",
+                                text = stringResource(id = R.string.msgPOINotApproved) + "(${poi.approvals}/2)",
                                 fontSize = 12.sp,
                                 color = MaterialTheme.colorScheme.tertiary,
                             )
@@ -208,13 +209,13 @@ fun POIScreen( navController: NavHostController?, viewModel : LocationViewModel,
                                 Text(text = "${poi.latitude} ${poi.longitude}", fontSize = 8.sp,color = MaterialTheme.colorScheme.tertiary)
                                 if (poi.writenCoords) {
                                     Text(
-                                        text = stringResource(id = pt.isec.amovtp.touristapp.R.string.msgCoordsWritten),
+                                        text = stringResource(id = R.string.msgCoordsWritten),
                                         fontSize = 6.sp,
                                         color = MaterialTheme.colorScheme.tertiary
                                     )
                                 }else{
                                     Text(
-                                        text = stringResource(id = pt.isec.amovtp.touristapp.R.string.msgCoordsLocation),
+                                        text = stringResource(id = R.string.msgCoordsLocation),
                                         fontSize = 6.sp,
                                         color = MaterialTheme.colorScheme.tertiary
                                     )
@@ -450,7 +451,7 @@ fun LandscapePOIScreen(navController: NavHostController?, viewModel: LocationVie
                             )
                             Spacer(modifier = Modifier.width(8.dp)) // Adiciona espaço entre o ícone e o texto
                             Text(
-                                text = "Atenção: este POI ainda não foi aprovado (${poi.approvals}/2)",
+                                text = stringResource(id = R.string.msgPOINotApproved) + "(${poi.approvals}/2)",
                                 fontSize = 12.sp,
                                 color = MaterialTheme.colorScheme.tertiary,
                             )
@@ -498,13 +499,13 @@ fun LandscapePOIScreen(navController: NavHostController?, viewModel: LocationVie
                                 Text(text = "${poi.latitude} ${poi.longitude}", fontSize = 8.sp,color = MaterialTheme.colorScheme.tertiary)
                                 if (poi.writenCoords) {
                                     Text(
-                                        text = stringResource(id = pt.isec.amovtp.touristapp.R.string.msgCoordsWritten),
+                                        text = stringResource(id = R.string.msgCoordsWritten),
                                         fontSize = 6.sp,
                                         color = MaterialTheme.colorScheme.tertiary
                                     )
                                 }else{
                                     Text(
-                                        text = stringResource(id = pt.isec.amovtp.touristapp.R.string.msgCoordsLocation),
+                                        text = stringResource(id = R.string.msgCoordsLocation),
                                         fontSize = 6.sp,
                                         color = MaterialTheme.colorScheme.tertiary
                                     )

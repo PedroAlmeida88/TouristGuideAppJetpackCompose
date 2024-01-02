@@ -175,7 +175,7 @@ fun LocationsScreen(navController: NavHostController?,viewModel : LocationViewMo
                                 )
                                 Spacer(modifier = Modifier.width(8.dp)) // Adiciona espaço entre o ícone e o texto
                                 Text(
-                                    text = "Atenção: esta localização ainda não foi aprovada (${location.approvals}/2)",
+                                    text = stringResource(id = R.string.msgLocationNotApproved) +"(${location.approvals}/2)",
                                     fontSize = 12.sp,
                                     color = MaterialTheme.colorScheme.tertiary,
                                 )
@@ -461,7 +461,7 @@ fun LandscapeLocationsScreen(navController: NavHostController?, viewModel: Locat
                                 )
                                 Spacer(modifier = Modifier.width(8.dp)) // Adiciona espaço entre o ícone e o texto
                                 Text(
-                                    text = "Atenção: esta localização ainda não foi aprovada (${location.approvals}/2)",
+                                    text = stringResource(id = R.string.msgLocationNotApproved) +"(${location.approvals}/2)",
                                     fontSize = 12.sp,
                                     color = MaterialTheme.colorScheme.tertiary,
                                 )

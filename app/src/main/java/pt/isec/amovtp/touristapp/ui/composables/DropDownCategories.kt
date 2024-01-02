@@ -29,7 +29,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavHostController
+import pt.isec.amovtp.touristapp.R
 import pt.isec.amovtp.touristapp.data.Category
 import pt.isec.amovtp.touristapp.ui.screens.Screens
 import pt.isec.amovtp.touristapp.ui.viewmodels.FirebaseViewModel
@@ -88,7 +90,7 @@ fun DropDownComposable(
             },
             colors = ExposedDropdownMenuDefaults.textFieldColors(),
             modifier = Modifier.menuAnchor(),
-            placeholder = { Text(text = "Select a category...") }
+            placeholder = { Text(text = stringResource(id = R.string.msgSelectCategory)) }
         )
         ExposedDropdownMenu(
             expanded = isExpanded,
@@ -104,7 +106,7 @@ fun DropDownComposable(
                     },
                     leadingIcon = { Icon(getImageVectorFromName(c.icon)!!, contentDescription = c.name) }                )
             DropdownMenuItem(
-                text = { Text(text = "Add new category") },
+                text = { Text(text = stringResource(id = R.string.msgAddCategory)) },
                 onClick = {
                     isExpanded=false
                     navController?.navigate(Screens.ADD_CATEGORY.route)

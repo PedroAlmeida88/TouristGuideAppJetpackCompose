@@ -43,10 +43,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import pt.isec.amovtp.touristapp.R
 import pt.isec.amovtp.touristapp.data.Category
 import pt.isec.amovtp.touristapp.ui.viewmodels.FirebaseViewModel
 import pt.isec.amovtp.touristapp.ui.viewmodels.LocationViewModel
@@ -126,7 +128,7 @@ fun ListCategoryScreen(navController: NavHostController?,modifier: Modifier = Mo
                                 )
                                 Spacer(modifier = Modifier.width(8.dp)) // Adiciona espaço entre o ícone e o texto
                                 Text(
-                                    text = "Atenção: esta categoria ainda não foi aprovada (${category.approvals}/2)",
+                                    text = stringResource(id = R.string.msgCategoryNotApproved) + " (${category.approvals}/2)",
                                     fontSize = 12.sp,
                                     color = MaterialTheme.colorScheme.tertiary,
                                 )
@@ -342,7 +344,7 @@ fun LandscapeListCategoryScreen(navController: NavHostController?, modifier: Mod
                                 )
                                 Spacer(modifier = Modifier.width(8.dp)) // Adiciona espaço entre o ícone e o texto
                                 Text(
-                                    text = "Atenção: esta categoria ainda não foi aprovada (${category.approvals}/2)",
+                                    text = stringResource(id = R.string.msgCategoryNotApproved) + " (${category.approvals}/2)",
                                     fontSize = 12.sp,
                                     color = MaterialTheme.colorScheme.tertiary,
                                 )

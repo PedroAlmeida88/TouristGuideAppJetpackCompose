@@ -20,9 +20,11 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.core.content.FileProvider
 import coil.compose.AsyncImage
+import pt.isec.amovtp.touristapp.R
 import pt.isec.amovtp.touristapp.utils.FileUtils
 import java.io.File
 @Composable
@@ -83,7 +85,7 @@ fun TakePhotoOrLoadFromGallery(
                 },
                 modifier = Modifier.padding(8.dp)
             ) {
-                Text(text = "Take Photo")
+                Text(text = stringResource(id = R.string.msgTakePhoto))
             }
 
             Button(
@@ -92,7 +94,7 @@ fun TakePhotoOrLoadFromGallery(
                 },
                 modifier = Modifier.padding(8.dp)
             ) {
-                Text(text = "Load Image")
+                Text(text = stringResource(id = R.string.msgLoadImage))
             }
         }
     }

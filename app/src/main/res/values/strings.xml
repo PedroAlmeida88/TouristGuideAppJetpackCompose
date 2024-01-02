@@ -45,4 +45,12 @@
     <string name="msgPracticalWork">Practical Work Nº1 - Mobile Arquitecture</string>
     <string name="msgDone">Done by:</string>
     <string name="msgDepartment">Department of Computer and Systems Engineering</string>
+    <string name="msgLocationNotApproved">Atention: Location not approved</string>
+    <string name="msgSelectCategory">Select a category</string>
+    <string name="msgError">Fill the spaces correctly</string>
+    <string name="msgTakePhoto">Take Photo</string>
+    <string name="msgLoadImage">Load Image</string>
+    <string name="msgCategoryNotApproved">Atention: Category not approved</string>
+    <string name="msgPOINotApproved">Atention: POI not approved</string>
+    <string name="msgAlreadyPosted">You Already Posted</string>
 </resources>

@@ -8,6 +8,8 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
+import pt.isec.amovtp.touristapp.R
 
 @Composable
 fun ErrorAlertDialog(onAction: () -> Unit) {
@@ -22,7 +24,7 @@ fun ErrorAlertDialog(onAction: () -> Unit) {
                 Text(text = "Ok")
             }
         },
-        text = { Text(text = "Preencha os campos (corretamente)") },
+        text = { Text(text = stringResource(id = R.string.msgError)) },
         icon = {
             Icon(
                 imageVector = Icons.Default.Warning,

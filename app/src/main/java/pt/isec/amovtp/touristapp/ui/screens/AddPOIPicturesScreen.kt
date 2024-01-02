@@ -36,9 +36,11 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
+import pt.isec.amovtp.touristapp.R
 import pt.isec.amovtp.touristapp.data.ImagesPOIs
 import pt.isec.amovtp.touristapp.ui.composables.TakePhotoOrLoadFromGallery
 import pt.isec.amovtp.touristapp.ui.viewmodels.FirebaseViewModel
@@ -78,7 +80,7 @@ fun AddPOIPicturesScreen(locationViewModel: LocationViewModel, firebaseViewModel
     ) {
         if (alreadyPosted)
             Text(
-                text = "You already posted",
+                text = stringResource(id = R.string.msgAlreadyPosted),
                 color = Color.Green, fontSize = 16.sp,
                 modifier = Modifier.align(Alignment.CenterHorizontally)
             )
@@ -166,7 +168,7 @@ fun AddPOIPicturesScreen(locationViewModel: LocationViewModel, firebaseViewModel
                         Row(
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .background(color =MaterialTheme.colorScheme.primary)
+                                .background(color = MaterialTheme.colorScheme.primary)
                                 .padding(8.dp),
                             horizontalArrangement = Arrangement.SpaceBetween,
                             verticalAlignment = Alignment.CenterVertically
@@ -224,7 +226,7 @@ fun LandscapeAddPOIPicturesScreen( locationViewModel: LocationViewModel, firebas
     ) {
         if (alreadyPosted)
             Text(
-                text = "You already posted",
+                text = stringResource(id = R.string.msgAlreadyPosted),
                 color = Color.Green, fontSize = 16.sp,
                 modifier = Modifier.align(Alignment.CenterHorizontally)
             )
@@ -312,7 +314,7 @@ fun LandscapeAddPOIPicturesScreen( locationViewModel: LocationViewModel, firebas
                         Row(
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .background(color =MaterialTheme.colorScheme.primary)
+                                .background(color = MaterialTheme.colorScheme.primary)
                                 .padding(8.dp),
                             horizontalArrangement = Arrangement.SpaceBetween,
                             verticalAlignment = Alignment.CenterVertically
