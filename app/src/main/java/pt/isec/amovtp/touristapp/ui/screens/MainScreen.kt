@@ -166,7 +166,7 @@ fun MainScreen(navController:NavHostController = rememberNavController(),
             composable (Screens.MENU.route) {
                 when (configuration.orientation) {
                     Configuration.ORIENTATION_LANDSCAPE -> { LandscapeMenuScreen( navController, firebaseViewModel, Screens.LOCATIONS.route, Screens.CREDITS.route) }
-                    else -> MenuScreen( navController, firebaseViewModel, Screens.LOCATIONS.route, Screens.CREDITS.route)
+                    else -> MenuScreen( navController, firebaseViewModel)
                 }
             }
             composable (Screens.LOGIN.route) {

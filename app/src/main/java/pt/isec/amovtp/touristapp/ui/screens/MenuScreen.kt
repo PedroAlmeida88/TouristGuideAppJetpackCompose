@@ -35,8 +35,6 @@ import pt.isec.amovtp.touristapp.ui.viewmodels.FirebaseViewModel
 fun MenuScreen(
     navController: NavHostController?,
     firebaseViewModel: FirebaseViewModel,
-    vararg options: String,
-
 ) {
     Box(
         modifier = Modifier
@@ -85,23 +83,36 @@ fun MenuScreen(
                 .padding(24.dp, 250.dp, 24.dp, 24.dp)
                 .align(Alignment.Center)
         ) {
-            for (btnName in options) {
-                Button(
-                    onClick = { navController?.navigate(btnName) },
-                    shape = CutCornerShape(percent = 0),
+            Button(
+                onClick = { navController?.navigate(Screens.LOCATIONS.route) },
+                shape = CutCornerShape(percent = 0),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(24.dp, 0.dp, 24.dp, 0.dp)
+            ) {
+                Text(
+                    text = stringResource(id = R.string.btnLocations),
+                    fontSize = 20.sp,
                     modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(24.dp, 0.dp, 24.dp, 0.dp)
-                ) {
-                    Text(
-                        text = btnName,
-                        fontSize = 20.sp,
-                        modifier = Modifier
-                            .padding(16.dp)
-                    )
-                }
-                Spacer(modifier = Modifier.height(16.dp))
+                        .padding(16.dp)
+                )
             }
+            Spacer(modifier = Modifier.height(16.dp))
+            Button(
+                onClick = { navController?.navigate(Screens.CREDITS.route) },
+                shape = CutCornerShape(percent = 0),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(24.dp, 0.dp, 24.dp, 0.dp)
+            ) {
+                Text(
+                    text = stringResource(id = R.string.btnCredits),
+                    fontSize = 20.sp,
+                    modifier = Modifier
+                        .padding(16.dp)
+                )
+            }
+            Spacer(modifier = Modifier.height(16.dp))
         }
     }
 }
@@ -132,22 +143,35 @@ fun LandscapeMenuScreen(navController: NavHostController?, firebaseViewModel: Fi
                 trackColor = MaterialTheme.colorScheme.surfaceVariant,
             )
 
-        for (btnName in options) {
-            Button(
-                onClick = { navController?.navigate(btnName) },
-                shape = CutCornerShape(percent = 0),
+        Button(
+            onClick = { navController?.navigate(Screens.LOCATIONS.route) },
+            shape = CutCornerShape(percent = 0),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(24.dp, 0.dp, 24.dp, 0.dp)
+        ) {
+            Text(
+                text = stringResource(id = R.string.btnLocations),
+                fontSize = 20.sp,
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(24.dp, 0.dp, 24.dp, 0.dp)
-            ) {
-                Text(
-                    text = btnName,
-                    fontSize = 20.sp,
-                    modifier = Modifier
-                        .padding(16.dp)
-                )
-            }
-            Spacer(modifier = Modifier.height(16.dp))
+                    .padding(16.dp)
+            )
         }
+        Spacer(modifier = Modifier.height(16.dp))
+        Button(
+            onClick = { navController?.navigate(Screens.CREDITS.route) },
+            shape = CutCornerShape(percent = 0),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(24.dp, 0.dp, 24.dp, 0.dp)
+        ) {
+            Text(
+                text = stringResource(id = R.string.btnCredits),
+                fontSize = 20.sp,
+                modifier = Modifier
+                    .padding(16.dp)
+            )
+        }
+        Spacer(modifier = Modifier.height(16.dp))
     }
 }
