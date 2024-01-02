@@ -30,6 +30,7 @@ import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -59,19 +60,19 @@ fun CreditsScreen(modifier: Modifier = Modifier) {
                 .size(120.dp)
         )
         Text(
-            text = "Departamento de Engenharia Informática e de Sistemas",
+            text = stringResource(id = R.string.msgDepartment),
             color = MaterialTheme.colorScheme.tertiary,
             fontSize = 12.sp,
             modifier = Modifier.padding(4.dp)
         )
         Spacer(modifier = Modifier.height(18.dp))
         Text(
-            text = "Practical Work Nº1 - Mobile Arquitecture",
+            text = stringResource(id = R.string.msgPracticalWork),
             color = MaterialTheme.colorScheme.tertiary,
             fontSize = 20.sp
         )
         Text(
-            text = "Done by:",
+            text = stringResource(id = R.string.msgDone),
             fontSize = 18.sp,
             color = MaterialTheme.colorScheme.tertiary,
         )
@@ -153,19 +154,19 @@ fun LandscapeCreditsScreen() {
                     .size(120.dp)
             )
             Text(
-                text = "Departamento de Engenharia Informática e de Sistemas",
+                text = stringResource(id = R.string.msgDepartment),
                 fontSize = 12.sp,
                 textAlign = TextAlign.Center,
                 modifier = Modifier.padding(4.dp)
             )
             Spacer(modifier = Modifier.height(18.dp))
             Text(
-                text = "Practical Work Nº1 - Mobile Arquitecture",
+                text = stringResource(id = R.string.msgPracticalWork),
                 textAlign = TextAlign.Center,
                 fontSize = 20.sp
             )
             Text(
-                text = "Done by:",
+                text = stringResource(id = R.string.msgDone),
                 textAlign = TextAlign.Center,
                 fontSize = 18.sp
             )

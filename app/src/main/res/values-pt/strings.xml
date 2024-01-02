@@ -43,4 +43,7 @@
     <string name="msgAlreadyRated">Já avaliou</string>
     <string name="msgAlreadyComment">Já comentou</string>
     <string name="msgNoComments">Ainda não existem comentários!</string>
+    <string name="msgPracticalWork">Trabalho Prático Nº1 - Arquiteturas Móveis</string>
+    <string name="msgDone">Feito por:</string>
+    <string name="msgDepartment">Departamento de Engenharia Informática e de Sistemas</string>
 </resources>
