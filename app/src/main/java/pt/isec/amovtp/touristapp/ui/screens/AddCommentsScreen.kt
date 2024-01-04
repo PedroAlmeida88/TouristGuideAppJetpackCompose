@@ -182,7 +182,7 @@ fun AddCommentsScreen(locationViewModel: LocationViewModel,firebaseViewModel: Fi
 
                 IconButton(
                     onClick = {
-                        if (rating != 0) {
+                        if (rating == 0) {
                             isRatingEnabled = false
                             rating = myRating
                             for (c in comments) {
@@ -417,7 +417,7 @@ fun LandscapeAddCommentsScreen( locationViewModel: LocationViewModel, firebaseVi
 
                 IconButton(
                     onClick = {
-                        if (rating != 0) {
+                        if (rating == 0) {
                             isRatingEnabled = false
                             rating = myRating
                             for (c in comments) {
