@@ -41,10 +41,10 @@ The app was developed using **Jetpack Compose** for the UI.
 
 All data is stored and shared via **Firebase** services, ensuring real-time synchronization between users. Firebase Authentication handles user registration and login, ensuring the traceability of all user actions, such as adding, rating, and commenting on points of interest.
 
-The app uses **Firestore**, **Realtime Database**, and **Firebase Storage** for storing and retrieving data efficiently.
+The app uses **Firestore**, and **Firebase Storage** for storing and retrieving data efficiently.
 
 ## Technologies Used
 
 - **Android**: Jetpack Compose
-- **Backend**: Firebase (Firestore, Realtime Database, Storage)
+- **Backend**: Firebase (Firestore, Storage)
 - **Authentication**: Firebase Authentication
